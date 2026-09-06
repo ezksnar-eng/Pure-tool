@@ -3,257 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 1 | Pure Tool 1</title>
-
-<!-- خطوط عربية: Tajawal للواجهة، Amiri للشعار -->
+<title>أداة بيور 2 | Pure Tool 2</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-
 <style>
-  :root{
-    /* ====== نظام الألوان: مستوحى من شعار فريق بيور ====== */
-    --pure-pink-light:#FBD9E9;   /* الحلقة الوردية الفاتحة حول الشعار */
-    --pure-pink:#F2A6C8;         /* وردي أساسي */
-    --pure-rose:#E85C9C;         /* وردي غامق - نص الشعار PURE */
-    --pure-magenta:#C23E86;      /* تدرج أغمق للتباين والأزرار */
-    --pure-plum:#3D1A2C;         /* بنفسجي غامق تقريبا أسود - نص أساسي */
-    --pure-cream:#FFF6FA;        /* خلفية فاتحة دافئة وردية */
-    --pure-white:#FFFFFF;
-    --pure-line:#F0CBE0;         /* خطوط فاصلة هادئة */
-    --pure-ok:#5FA88A;           /* أخضر هادئ لحالة "تم" */
-    --pure-warn:#D98C3D;         /* برتقالي هادئ للتحذير */
-    --radius-card:18px;
-    --radius-pill:999px;
-  }
+:root{
+  --pure-pink-light:#FBD9E9; --pure-pink:#F2A6C8; --pure-rose:#E85C9C;
+  --pure-magenta:#C23E86; --pure-plum:#3D1A2C; --pure-cream:#FFF6FA;
+  --pure-white:#FFFFFF; --pure-line:#F0CBE0;
+  --pure-ok:#5FA88A; --pure-warn:#D98C3D; --pure-bad:#C2503E;
+  --pure-sfx:#8E86C8; --pure-wm:#5B6EC2;
+  --radius-card:18px; --radius-pill:999px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{background:linear-gradient(180deg,var(--pure-cream) 0%, #FFFFFF 55%); color:var(--pure-plum);
+  font-family:'Tajawal',sans-serif; line-height:1.6; min-height:100vh;}
+::selection{background:var(--pure-pink); color:var(--pure-plum);}
+a{color:var(--pure-magenta);}
+.wrap{max-width:1120px; margin:0 auto; padding:28px 20px 80px;}
 
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:linear-gradient(180deg,var(--pure-cream) 0%, #FFFFFF 55%);
-    color:var(--pure-plum);
-    font-family:'Tajawal',sans-serif;
-    line-height:1.6;
-    min-height:100vh;
-  }
-  ::selection{ background:var(--pure-pink); color:var(--pure-plum); }
+header.hero{display:flex; align-items:center; gap:22px; padding:22px 26px;
+  background:var(--pure-white); border:1px solid var(--pure-line); border-radius:24px; margin-bottom:28px;}
+.badge{flex:0 0 auto; width:78px; height:78px; border-radius:50%; background:var(--pure-pink-light);
+  border:6px solid var(--pure-pink-light); box-shadow:0 0 0 3px var(--pure-pink) inset;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;}
+.badge svg{width:100%; height:100%;}
+.hero-text h1{font-family:'Amiri', serif; margin:0 0 4px; font-size:30px; color:var(--pure-magenta);}
+.hero-text p{margin:0; color:#7A5468; font-size:15px;}
 
-  a{ color:var(--pure-magenta); }
+section.card{background:var(--pure-white); border:1px solid var(--pure-line); border-radius:var(--radius-card);
+  padding:26px; margin-bottom:22px;}
+section.card > h2{margin:0 0 6px; font-size:19px;}
+section.card > .hint{margin:0 0 20px; font-size:13.5px; color:#9A7288;}
 
-  .wrap{ max-width:1080px; margin:0 auto; padding:28px 20px 80px; }
+#dropzone{border:2px dashed var(--pure-pink); border-radius:14px; padding:30px 20px; text-align:center;
+  background:var(--pure-cream); cursor:pointer;}
+#dropzone.drag{background:#FDEBF3; border-color:var(--pure-magenta);}
+#dropzone .big{font-size:16px; font-weight:700; color:var(--pure-magenta); margin:6px 0;}
+#dropzone .small{font-size:13px; color:#A883A0; margin:4px 0;}
+#fileInput{display:none;}
+#fileCountWarn{font-size:12.5px; color:var(--pure-warn); margin-top:8px; display:none;}
 
-  /* ====================== الهيدر / الهوية ====================== */
-  header.hero{
-    display:flex; align-items:center; gap:22px;
-    padding:22px 26px;
-    background:var(--pure-white);
-    border:1px solid var(--pure-line);
-    border-radius:24px;
-    margin-bottom:34px;
-  }
-  .badge{
-    flex:0 0 auto;
-    width:78px; height:78px; border-radius:50%;
-    background:var(--pure-pink-light);
-    border:6px solid var(--pure-pink-light);
-    box-shadow:0 0 0 3px var(--pure-pink) inset;
-    display:flex; align-items:center; justify-content:center;
-    position:relative; overflow:hidden;
-  }
-  .badge svg{ width:100%; height:100%; }
-  .hero-text h1{
-    font-family:'Amiri', serif;
-    margin:0 0 4px;
-    font-size:30px;
-    color:var(--pure-magenta);
-    letter-spacing:.5px;
-  }
-  .hero-text p{
-    margin:0; color:#7A5468; font-size:15px;
-  }
+#thumbs{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; max-height:300px; overflow-y:auto;}
+#thumbs .th{width:58px; height:80px; border-radius:7px; overflow:hidden; border:1px solid var(--pure-line);
+  position:relative; background:#eee;}
+#thumbs .th img{width:100%; height:100%; object-fit:cover;}
+#thumbs .th .rm{position:absolute; top:2px; left:2px; background:rgba(61,26,44,.7); color:#fff; border:none;
+  border-radius:50%; width:16px; height:16px; font-size:10px; cursor:pointer; line-height:1;}
 
-  /* ====================== أقسام عامة ====================== */
-  section.card{
-    background:var(--pure-white);
-    border:1px solid var(--pure-line);
-    border-radius:var(--radius-card);
-    padding:26px;
-    margin-bottom:24px;
-  }
-  section.card > h2{
-    margin:0 0 6px; font-size:19px; color:var(--pure-plum);
-  }
-  section.card > .hint{
-    margin:0 0 20px; font-size:13.5px; color:#9A7288;
-  }
+.settings-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+@media (max-width:640px){.settings-grid{grid-template-columns:1fr;}}
+.field label{display:block; font-size:13px; color:#7A5468; margin-bottom:6px;}
+.field select, .field input[type="text"], .field textarea{width:100%; padding:10px 12px; border-radius:10px;
+  border:1px solid var(--pure-line); font-family:inherit; font-size:14px; background:#fff; color:var(--pure-plum);}
+.field textarea{resize:vertical; min-height:54px;}
+.toggle-row{display:flex; align-items:center; gap:8px; margin:10px 0 0; font-size:13.5px; color:#7A5468;}
+#hfFields{display:none; margin-top:12px;}
+#hfFields.show{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
 
-  /* ====================== منطقة رفع الصور ====================== */
-  #dropzone{
-    border:2px dashed var(--pure-pink);
-    border-radius:14px;
-    padding:34px 20px;
-    text-align:center;
-    background:var(--pure-cream);
-    cursor:pointer;
-    transition:background .15s ease, border-color .15s ease;
-  }
-  #dropzone.drag{ background:#FDEBF3; border-color:var(--pure-magenta); }
-  #dropzone p{ margin:6px 0; }
-  #dropzone .big{ font-size:16px; font-weight:700; color:var(--pure-magenta); }
-  #dropzone .small{ font-size:13px; color:#A883A0; }
-  #fileInput{ display:none; }
+.actions{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
+button.primary{background:var(--pure-magenta); color:#fff; border:none; padding:12px 26px;
+  border-radius:var(--radius-pill); font-family:inherit; font-weight:700; font-size:15px; cursor:pointer;}
+button.primary:disabled{background:#E3B9CE; cursor:not-allowed;}
+button.secondary{background:transparent; color:var(--pure-magenta); border:1.5px solid var(--pure-pink);
+  padding:11px 22px; border-radius:var(--radius-pill); font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;}
+button.tiny{background:var(--pure-pink-light); color:var(--pure-magenta); border:none; padding:6px 12px;
+  border-radius:var(--radius-pill); font-family:inherit; font-weight:700; font-size:12px; cursor:pointer;}
 
-  #thumbs{
-    display:flex; flex-wrap:wrap; gap:10px; margin-top:16px;
-  }
-  #thumbs .th{
-    width:70px; height:96px; border-radius:8px; overflow:hidden;
-    border:1px solid var(--pure-line); position:relative; background:#eee;
-  }
-  #thumbs .th img{ width:100%; height:100%; object-fit:cover; }
-  #thumbs .th .rm{
-    position:absolute; top:2px; left:2px; background:rgba(61,26,44,.7);
-    color:#fff; border:none; border-radius:50%; width:18px; height:18px;
-    font-size:11px; cursor:pointer; line-height:1;
-  }
+ol.pipeline{list-style:none; margin:0; padding:0; counter-reset:step;}
+ol.pipeline li{counter-increment:step; display:grid; grid-template-columns:36px 1fr auto; align-items:center;
+  gap:12px; padding:10px 6px; border-bottom:1px solid var(--pure-line);}
+ol.pipeline li:last-child{border-bottom:none;}
+ol.pipeline li::before{content:counter(step); width:30px; height:30px; border-radius:50%;
+  background:var(--pure-pink-light); color:var(--pure-magenta); display:flex; align-items:center;
+  justify-content:center; font-weight:700; font-size:13px;}
+ol.pipeline li.active::before{background:var(--pure-magenta); color:#fff;}
+ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff;}
+.step-title{font-weight:700; font-size:14px;}
+.step-sub{font-size:12px; color:#9A7288; margin-top:2px;}
+.step-state{font-size:12px; color:#B993AA; white-space:nowrap;}
 
-  /* ====================== الإعدادات ====================== */
-  .settings-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:16px;
-  }
-  @media (max-width:640px){ .settings-grid{ grid-template-columns:1fr; } }
-  .field label{
-    display:block; font-size:13px; color:#7A5468; margin-bottom:6px;
-  }
-  .field select, .field input[type="text"]{
-    width:100%; padding:10px 12px; border-radius:10px;
-    border:1px solid var(--pure-line); font-family:inherit; font-size:14px;
-    background:#fff; color:var(--pure-plum);
-  }
-  .toggle-row{
-    display:flex; align-items:center; gap:8px; margin-top:4px; font-size:13.5px; color:#7A5468;
-  }
-  #hfFields{ display:none; margin-top:12px; }
-  #hfFields.show{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+#progressWrap{margin-top:16px;}
+#progressBar{height:10px; border-radius:var(--radius-pill); background:var(--pure-pink-light); overflow:hidden;}
+#progressFill{height:100%; width:0%; background:linear-gradient(90deg,var(--pure-pink),var(--pure-magenta));
+  transition:width .2s ease;}
+#progressLabel{font-size:13px; color:#7A5468; margin-top:8px;}
 
-  /* ====================== زر التشغيل ====================== */
-  .actions{ display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
-  button.primary, a.primary{
-    background:var(--pure-magenta); color:#fff; border:none;
-    padding:12px 26px; border-radius:var(--radius-pill);
-    font-family:inherit; font-weight:700; font-size:15px; cursor:pointer;
-    text-decoration:none; display:inline-flex; align-items:center; gap:8px;
-  }
-  button.primary:disabled{ background:#E3B9CE; cursor:not-allowed; }
-  button.secondary{
-    background:transparent; color:var(--pure-magenta); border:1.5px solid var(--pure-pink);
-    padding:11px 22px; border-radius:var(--radius-pill); font-family:inherit;
-    font-weight:700; font-size:15px; cursor:pointer;
-  }
+#log{background:#2C1522; color:#F6D9E7; border-radius:12px; padding:14px 16px; height:210px; overflow-y:auto;
+  font-size:12px; line-height:1.85;}
+#log .line{direction:ltr; text-align:left; unicode-bidi:plaintext;}
+#log .ok{color:#9BE3C4;} #log .warn{color:#F3C382;} #log .bad{color:#F0A0A0;} #log .info{color:#B9C7F6;}
 
-  /* ====================== خطوات الـ Pipeline (تسلسل حقيقي => ترقيم مبرر) ====================== */
-  ol.pipeline{ list-style:none; margin:0; padding:0; counter-reset:step; }
-  ol.pipeline li{
-    counter-increment:step;
-    display:grid; grid-template-columns:38px 1fr auto; align-items:center;
-    gap:14px; padding:12px 6px; border-bottom:1px solid var(--pure-line);
-  }
-  ol.pipeline li:last-child{ border-bottom:none; }
-  ol.pipeline li::before{
-    content:counter(step);
-    width:32px; height:32px; border-radius:50%;
-    background:var(--pure-pink-light); color:var(--pure-magenta);
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700; font-size:14px;
-  }
-  ol.pipeline li.active::before{ background:var(--pure-magenta); color:#fff; }
-  ol.pipeline li.done::before{ content:"✓"; background:var(--pure-ok); color:#fff; }
-  .step-title{ font-weight:700; font-size:14.5px; }
-  .step-sub{ font-size:12.5px; color:#9A7288; margin-top:2px; }
-  .step-state{ font-size:12.5px; color:#B993AA; white-space:nowrap; }
+/* أداة الإزالة اليدوية */
+#eraserWrap{position:relative; display:inline-block; max-width:100%; border:1px solid var(--pure-line); border-radius:10px; overflow:hidden;}
+#eraserCanvas{max-width:100%; display:block; cursor:crosshair;}
+#eraserPicker{margin-top:10px;}
 
-  /* ====================== شريط التقدم العام ====================== */
-  #progressWrap{ margin-top:18px; }
-  #progressBar{
-    height:10px; border-radius:var(--radius-pill); background:var(--pure-pink-light);
-    overflow:hidden;
-  }
-  #progressFill{
-    height:100%; width:0%; background:linear-gradient(90deg,var(--pure-pink),var(--pure-magenta));
-    transition:width .25s ease;
-  }
-  #progressLabel{ font-size:13px; color:#7A5468; margin-top:8px; }
+/* بطاقات النتائج + إحصائيات */
+#resultsGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;}
+.result-card{border:1px solid var(--pure-line); border-radius:12px; overflow:hidden; background:#fff;}
+.result-card img{width:100%; display:block;}
+.result-card .foot{padding:7px 9px; display:flex; justify-content:space-between; align-items:center; gap:6px;}
+.result-card .foot a{font-size:12px; font-weight:700;}
+.badge-status{font-size:10.5px; padding:2px 8px; border-radius:var(--radius-pill); font-weight:700;}
+.badge-status.done{background:#E4F5EC; color:var(--pure-ok);}
+.badge-status.error{background:#FBE4E1; color:var(--pure-bad);}
+.badge-status.processing{background:var(--pure-pink-light); color:var(--pure-magenta);}
 
-  /* ====================== سجل التنفيذ الحي ====================== */
-  #log{
-    background:#2C1522; color:#F6D9E7; border-radius:12px;
-    padding:14px 16px; height:190px; overflow-y:auto;
-    font-size:12.5px; line-height:1.9;
-  }
-  #log .line{ direction:ltr; text-align:left; unicode-bidi:plaintext; }
-  #log .ok{ color:#9BE3C4; }
-  #log .warn{ color:#F3C382; }
+#summaryGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:14px;}
+.stat-box{background:var(--pure-cream); border:1px solid var(--pure-line); border-radius:12px; padding:14px; text-align:center;}
+.stat-box .num{font-size:22px; font-weight:900; color:var(--pure-magenta);}
+.stat-box .lbl{font-size:12px; color:#9A7288; margin-top:2px;}
 
-  /* ====================== معرض النتائج ====================== */
-  #resultsGrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:16px; }
-  .result-card{
-    border:1px solid var(--pure-line); border-radius:12px; overflow:hidden; background:#fff;
-  }
-  .result-card .compare{ position:relative; }
-  .result-card img{ width:100%; display:block; }
-  .result-card .foot{ padding:8px 10px; display:flex; justify-content:space-between; align-items:center; }
-  .result-card .foot a{ font-size:12.5px; font-weight:700; }
-
-  footer.note{
-    text-align:center; font-size:12.5px; color:#B993AA; margin-top:30px;
-  }
+footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- ============================================================
-       الهيدر: شعار الفريق (مُعاد بناؤه بـ SVG بنفس هوية الألوان)
-       ============================================================ -->
   <header class="hero">
     <div class="badge">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="48" fill="#FBD9E9"/>
         <circle cx="50" cy="50" r="40" fill="#ffffff"/>
-        <text x="50" y="58" text-anchor="middle" font-family="Amiri, serif" font-weight="700"
-              font-size="22" fill="#E85C9C">P</text>
+        <text x="50" y="58" text-anchor="middle" font-family="Amiri, serif" font-weight="700" font-size="22" fill="#E85C9C">P</text>
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 1</h1>
-      <p>خط إنتاج ذكي لتبييض وترجمة صفحات المانهوا — فريق بيور · نسخة ملف واحد (Single-File)</p>
+      <h1>أداة بيور 2</h1>
+      <p>خط إنتاج ذكي لتبييض وترجمة الحوار فقط، مع تصنيف المؤثرات الصوتية وإزالة العلامات المائية — فريق بيور</p>
     </div>
   </header>
 
-  <!-- ============================================================
-       1) رفع الصور
-       ============================================================ -->
+  <!-- 1) رفع الصور -->
   <section class="card">
     <h2>1. رفع صفحات المانهوا</h2>
-    <p class="hint">اسحب صور الفصل هنا أو اضغط للاختيار. يدعم JPG / PNG / WEBP، صفحة واحدة أو أكثر.</p>
-
+    <p class="hint">يدعم حتى <b>70</b> صورة دفعة واحدة (JPG / PNG / WEBP).</p>
     <div id="dropzone">
       <p class="big">📥 اسحب الصور هنا أو اضغط للاختيار</p>
-      <p class="small">لن يتم رفع أي صورة لأي خادم خارجي — كل المعالجة تتم داخل متصفحك</p>
+      <p class="small">كل المعالجة تتم محلياً داخل متصفحك — لا رفع لأي خادم خارجي</p>
     </div>
     <input id="fileInput" type="file" accept="image/*" multiple>
+    <div id="fileCountWarn"></div>
     <div id="thumbs"></div>
   </section>
 
-  <!-- ============================================================
-       2) إعدادات خط الترجمة
-       ============================================================ -->
+  <!-- 2) الإعدادات -->
   <section class="card">
-    <h2>2. إعدادات الترجمة والتنضيد</h2>
-    <p class="hint">اختر لغة النص الأصلي في الصور، ولغة الترجمة الهدف.</p>
-
+    <h2>2. إعدادات المعالجة والترجمة</h2>
     <div class="settings-grid">
       <div class="field">
-        <label>لغة النص الأصلي (للـ OCR)</label>
+        <label>لغة النص الأصلي (OCR)</label>
         <select id="srcLang">
           <option value="eng">إنجليزي (Eng)</option>
           <option value="jpn">ياباني (Jpn)</option>
@@ -269,104 +170,131 @@
       </div>
     </div>
 
-    <div class="toggle-row">
-      <input type="checkbox" id="useHF">
-      <label for="useHF">استخدام Hugging Face Inference API لترجمة أدق (اختياري، يتطلب توكن مجاني من حسابك)</label>
+    <div class="toggle-row"><input type="checkbox" id="skipSfx" checked>
+      <label for="skipSfx">تجاهل المؤثرات الصوتية والعناصر غير الحوارية تلقائياً (لا تبييض ولا ترجمة لها)</label></div>
+    <div class="toggle-row"><input type="checkbox" id="autoWatermark" checked>
+      <label for="autoWatermark">إزالة العلامات المائية النصية المعروفة تلقائياً (روابط مواقع / أسماء فرق أخرى)</label></div>
+
+    <div class="field" style="margin-top:12px;">
+      <label>كلمات علامة مائية إضافية (اختياري، افصل بينها بفاصلة)</label>
+      <textarea id="extraWm" placeholder="مثال: mysite.com, فريق كذا, scan by"></textarea>
     </div>
+
+    <div class="toggle-row"><input type="checkbox" id="useHF">
+      <label for="useHF">استخدام Hugging Face Inference API لترجمة أدق (اختياري، توكن مجاني من حسابك)</label></div>
     <div class="settings-grid" id="hfFields">
-      <div class="field">
-        <label>HF API Token</label>
-        <input type="text" id="hfToken" placeholder="hf_xxxxxxxxxxxxxxxx">
-      </div>
-      <div class="field">
-        <label>معرّف النموذج (Model ID)</label>
-        <input type="text" id="hfModel" value="Helsinki-NLP/opus-mt-en-ar">
-      </div>
+      <div class="field"><label>HF API Token</label><input type="text" id="hfToken" placeholder="hf_xxxxxxxxxxxxxxxx"></div>
+      <div class="field"><label>معرّف النموذج</label><input type="text" id="hfModel" value="Helsinki-NLP/opus-mt-en-ar"></div>
     </div>
   </section>
 
-  <!-- ============================================================
-       3) خط الإنتاج (Pipeline) + التشغيل
-       ============================================================ -->
+  <!-- 3) خط الإنتاج -->
   <section class="card">
     <h2>3. خط الإنتاج (Pipeline)</h2>
-    <p class="hint">تعمل كل صورة عبر هذه المراحل بالتسلسل. كل مرحلة تُقسَّم داخلياً لخطوات فرعية لكل فقاعة نص مكتشَفة، وتظهر أولاً بأول في السجل بالأسفل.</p>
-
+    <p class="hint">تُعالَج كل صورة عبر هذه المراحل. المرحلة الرابعة (التصنيف) هي ما يمنع تبييض/ترجمة المؤثرات الصوتية والعلامات المائية بالخطأ.</p>
     <ol class="pipeline" id="pipelineList">
-      <li data-key="prep"><div><div class="step-title">تحضير وتحسين الصورة</div><div class="step-sub">توحيد الحجم، تحسين التباين لتسهيل قراءة النص</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="detect"><div><div class="step-title">كشف مناطق النص</div><div class="step-sub">Tesseract.js لتحديد الكلمات وصناديق الإحداثيات</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="ocr"><div><div class="step-title">استخراج النص (OCR)</div><div class="step-sub">تحويل كل صندوق مكتشَف إلى نص قابل للترجمة</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="merge"><div><div class="step-title">تجميع الفقاعات</div><div class="step-sub">دمج الصناديق المتقاربة لتكوين فقاعة كلام واحدة</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="clean"><div><div class="step-title">التبييض / إزالة النص الأصلي</div><div class="step-sub">تعبئة كل فقاعة بلون خلفيتها المحسوب من إطارها</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="translate"><div><div class="step-title">الترجمة</div><div class="step-sub">إرسال النص المستخرج لمحرك الترجمة المختار</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="typeset"><div><div class="step-title">التنضيد (وضع النص المترجم)</div><div class="step-sub">لف النص وتوسيطه داخل الفقاعة المنظّفة بالخط واتجاه القراءة الصحيح</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="export"><div><div class="step-title">التصدير النهائي</div><div class="step-sub">تجميع كل الصفحات في ملف ZIP جاهز للتنزيل</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="prep"><div><div class="step-title">تحضير الصورة</div><div class="step-sub">تحسين تباين + نسخة مصغّرة سريعة لفحص OCR</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="ocr"><div><div class="step-title">كشف واستخراج النص</div><div class="step-sub">Tesseract.js مع درجة ثقة لكل كلمة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="merge"><div><div class="step-title">تجميع الفقاعات</div><div class="step-sub">دمج الكلمات المتقاربة لتكوين وحدات نصية</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="classify"><div><div class="step-title">تصنيف المحتوى</div><div class="step-sub">حوار حقيقي / مؤثر صوتي / علامة مائية / ضوضاء</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="watermark"><div><div class="step-title">إزالة العلامات المائية</div><div class="step-sub">تلقائي بالكلمات المفتاحية + يدوي إن وُجد</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="clean"><div><div class="step-title">تبييض الحوار فقط</div><div class="step-sub">حساب لون الخلفية بالوسيط (median) لتفادي الألوان الخاطئة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="translate"><div><div class="step-title">الترجمة</div><div class="step-sub">فقاعات الحوار الحقيقية فقط</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="typeset"><div><div class="step-title">التنضيد</div><div class="step-sub">لف النص المترجم داخل الفقاعة المنظّفة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="export"><div><div class="step-title">التصدير والإحصائيات</div><div class="step-sub">ZIP + أرقام حقيقية فقط</div></div><div class="step-state">بالانتظار</div></li>
     </ol>
-
     <div id="progressWrap">
       <div id="progressBar"><div id="progressFill"></div></div>
       <div id="progressLabel">لم يبدأ التشغيل بعد</div>
     </div>
-
     <div class="actions">
       <button class="primary" id="runBtn" disabled>▶ تشغيل خط الإنتاج</button>
       <button class="secondary" id="resetBtn">إعادة تعيين</button>
     </div>
   </section>
 
-  <!-- ============================================================
-       4) سجل التنفيذ الحي
-       ============================================================ -->
+  <!-- 4) إزالة علامة مائية يدوياً -->
   <section class="card">
-    <h2>4. سجل التنفيذ المباشر</h2>
-    <div id="log"><div class="line">بانتظار رفع الصور والضغط على "تشغيل خط الإنتاج"…</div></div>
-  </section>
-
-  <!-- ============================================================
-       5) النتائج
-       ============================================================ -->
-  <section class="card">
-    <h2>5. الصفحات الناتجة</h2>
-    <p class="hint">بعد انتهاء المعالجة، تظهر هنا كل صفحة مع رابط تنزيل مفرد، بالإضافة لزر تنزيل الكل كملف ZIP.</p>
-    <div id="resultsGrid"></div>
+    <h2>4. إزالة علامة مائية يدوياً (لشعارات/رسومات لا يلتقطها OCR)</h2>
+    <p class="hint">اختر صورة، ثم ارسم مربعاً فوق العلامة المائية واضغط "امسح المنطقة". يمكن تطبيق نفس الإحداثيات على كل الصفحات دفعة واحدة إذا كانت العلامة بنفس المكان في كل الصور.</p>
+    <div class="field" id="eraserPicker">
+      <label>اختر الصفحة للمعاينة</label>
+      <select id="eraserImageSelect"></select>
+    </div>
+    <div id="eraserWrap"><canvas id="eraserCanvas"></canvas></div>
     <div class="actions">
-      <button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button>
+      <button class="secondary" id="eraseBtn">🧹 امسح المنطقة المحددة</button>
+      <button class="secondary" id="eraseAllBtn">🧹 طبّق نفس الإحداثيات على كل الصفحات</button>
     </div>
   </section>
 
-  <footer class="note">أداة بيور 1 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
+  <!-- 5) السجل -->
+  <section class="card">
+    <h2>5. سجل التنفيذ المباشر</h2>
+    <div id="log"><div class="line">بانتظار رفع الصور والضغط على "تشغيل خط الإنتاج"…</div></div>
+  </section>
+
+  <!-- 6) النتائج -->
+  <section class="card">
+    <h2>6. الصفحات الناتجة والإحصائيات</h2>
+    <div id="summaryGrid">
+      <div class="stat-box"><div class="num" id="statPages">0</div><div class="lbl">صفحة مُعالجة</div></div>
+      <div class="stat-box"><div class="num" id="statDialogue">0</div><div class="lbl">فقاعة حوار تُرجمت</div></div>
+      <div class="stat-box"><div class="num" id="statSfx">0</div><div class="lbl">مؤثر صوتي تم تجاهله</div></div>
+      <div class="stat-box"><div class="num" id="statWm">0</div><div class="lbl">علامة مائية أُزيلت</div></div>
+      <div class="stat-box"><div class="num" id="statErrors">0</div><div class="lbl">صفحة فشلت</div></div>
+    </div>
+    <div id="resultsGrid" style="margin-top:18px;"></div>
+    <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
+  </section>
+
+  <footer class="note">أداة بيور 2 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
 </div>
 
-<!-- ============================================================
-     مكتبات خارجية مجانية ومفتوحة المصدر (عبر CDN):
-     - Tesseract.js : محرك OCR يعمل داخل المتصفح (WASM)
-     - JSZip        : لتجميع الصور الناتجة في ملف ZIP واحد
-     ============================================================ -->
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
 <script>
 /* =====================================================================
-   أداة بيور 1 — المنطق الرئيسي
-   الكود مقسم لأقسام واضحة بالتعليقات لتسهيل التعديل مستقبلاً:
-   1) حالة عامة (state)
+   أداة بيور 2 — الأقسام:
+   0) الإعدادات العامة (CONFIG)
+   1) الحالة العامة (state)
    2) أدوات مساعدة (log / progress / pipeline UI)
-   3) التعامل مع رفع الصور
-   4) محرك الترجمة (مجاني بدون مفتاح + خيار Hugging Face)
-   5) مراحل الـ Pipeline (كل مرحلة = دالة async مستقلة)
-   6) دالة التشغيل الرئيسية التي تصل كل شيء ببعض
+   3) رفع الصور
+   4) محرك الترجمة
+   5) دوال المعالجة: تحضير / OCR / تجميع / تصنيف / إزالة علامة مائية / تبييض / تنضيد
+   6) أداة الإزالة اليدوية للعلامة المائية
+   7) دالة التشغيل الرئيسية runPipeline (مع معالجة أخطاء لكل صورة على حدة)
+   8) الإحصائيات والتصدير
    ===================================================================== */
 
-// ---------------------- 1) حالة عامة ----------------------
-const state = {
-  files: [],        // ملفات الصور المرفوعة (File objects)
-  results: []        // نتائج كل صورة بعد المعالجة { name, blobUrl }
+// ---------------------- 0) CONFIG ----------------------
+const CONFIG = {
+  MAX_IMAGES: 70,
+  MIN_WORD_CONF: 45,           // أقل ثقة OCR مقبولة للاعتبار كحوار حقيقي
+  MIN_TEXT_LEN: 2,             // أقل عدد أحرف/أرقام فعلية بالنص
+  BG_UNIFORMITY_STD: 42,       // أعلى انحراف معياري مسموح للون خلفية "فقاعة حوار"
+  MAX_BUBBLE_AREA_RATIO: 0.32, // أعلى نسبة مساحة صندوق من مساحة الصفحة قبل اعتباره مؤثر ضخم
+  OCR_MAX_WIDTH: 1400,         // أقصى عرض لنسخة الفحص السريع (لتسريع 70 صورة)
+  WATERMARK_KEYWORDS: [
+    'read this series at','support us','scan by','scanlation','translated by',
+    'kaynscan','likemanga','like manga','mangadex','asura','reaper','flame scans',
+    'zeroscans','webtoon','tapas','.com','.net','.org','discord.gg'
+  ]
 };
 
-// ---------------------- 2) أدوات مساعدة ----------------------
+// ---------------------- 1) الحالة العامة ----------------------
+const state = {
+  files: [],      // File objects
+  pages: [],      // { file, name, canvas, ctx, status, stats:{dialogue,sfx,wm,noise}, error }
+  results: []     // { name, blob, url } — نتائج نهائية جاهزة للتصدير
+};
+
+// ---------------------- 2) عناصر الواجهة + أدوات مساعدة ----------------------
 const els = {
   dropzone: document.getElementById('dropzone'),
   fileInput: document.getElementById('fileInput'),
+  fileCountWarn: document.getElementById('fileCountWarn'),
   thumbs: document.getElementById('thumbs'),
   runBtn: document.getElementById('runBtn'),
   resetBtn: document.getElementById('resetBtn'),
@@ -378,6 +306,18 @@ const els = {
   zipBtn: document.getElementById('zipBtn'),
   useHF: document.getElementById('useHF'),
   hfFields: document.getElementById('hfFields'),
+  skipSfx: document.getElementById('skipSfx'),
+  autoWatermark: document.getElementById('autoWatermark'),
+  extraWm: document.getElementById('extraWm'),
+  eraserImageSelect: document.getElementById('eraserImageSelect'),
+  eraserCanvas: document.getElementById('eraserCanvas'),
+  eraseBtn: document.getElementById('eraseBtn'),
+  eraseAllBtn: document.getElementById('eraseAllBtn'),
+  statPages: document.getElementById('statPages'),
+  statDialogue: document.getElementById('statDialogue'),
+  statSfx: document.getElementById('statSfx'),
+  statWm: document.getElementById('statWm'),
+  statErrors: document.getElementById('statErrors'),
 };
 
 function logLine(text, cls){
@@ -387,30 +327,28 @@ function logLine(text, cls){
   els.log.appendChild(div);
   els.log.scrollTop = els.log.scrollHeight;
 }
-
 function setProgress(pct, label){
   els.progressFill.style.width = Math.max(0, Math.min(100, pct)) + '%';
   if (label) els.progressLabel.textContent = label;
 }
-
-// يضبط حالة خطوة معيّنة في قائمة الـ Pipeline المرئية: 'active' | 'done' | ''
 function setStepState(key, mode, note){
   const li = els.pipelineList.querySelector(`[data-key="${key}"]`);
   if (!li) return;
   li.classList.remove('active','done');
   if (mode) li.classList.add(mode);
-  const stateEl = li.querySelector('.step-state');
-  stateEl.textContent = note || (mode === 'active' ? 'جارٍ التنفيذ…' : mode === 'done' ? 'تم' : 'بالانتظار');
+  li.querySelector('.step-state').textContent = note || (mode === 'active' ? 'جارٍ التنفيذ…' : mode === 'done' ? 'تم' : 'بالانتظار');
 }
+els.useHF.addEventListener('change', () => els.hfFields.classList.toggle('show', els.useHF.checked));
 
-els.useHF.addEventListener('change', () => {
-  els.hfFields.classList.toggle('show', els.useHF.checked);
-});
-
-// ---------------------- 3) التعامل مع رفع الصور ----------------------
+// ---------------------- 3) رفع الصور ----------------------
 function addFiles(fileList){
-  [...fileList].forEach(f => {
-    if (!f.type.startsWith('image/')) return;
+  const incoming = [...fileList].filter(f => f.type.startsWith('image/'));
+  let room = CONFIG.MAX_IMAGES - state.files.length;
+  if (incoming.length > room){
+    els.fileCountWarn.style.display = 'block';
+    els.fileCountWarn.textContent = `تم قبول ${Math.max(0, room)} صورة فقط — الحد الأقصى ${CONFIG.MAX_IMAGES} صورة دفعة واحدة.`;
+  }
+  incoming.slice(0, Math.max(0, room)).forEach(f => {
     state.files.push(f);
     const url = URL.createObjectURL(f);
     const wrap = document.createElement('div');
@@ -421,26 +359,22 @@ function addFiles(fileList){
       if (idx > -1) state.files.splice(idx, 1);
       wrap.remove();
       els.runBtn.disabled = state.files.length === 0;
+      refreshEraserOptions();
     });
     els.thumbs.appendChild(wrap);
   });
   els.runBtn.disabled = state.files.length === 0;
+  refreshEraserOptions();
 }
-
 els.dropzone.addEventListener('click', () => els.fileInput.click());
 els.fileInput.addEventListener('change', e => addFiles(e.target.files));
-['dragenter','dragover'].forEach(ev => els.dropzone.addEventListener(ev, e => {
-  e.preventDefault(); els.dropzone.classList.add('drag');
-}));
-['dragleave','drop'].forEach(ev => els.dropzone.addEventListener(ev, e => {
-  e.preventDefault(); els.dropzone.classList.remove('drag');
-}));
+['dragenter','dragover'].forEach(ev => els.dropzone.addEventListener(ev, e => { e.preventDefault(); els.dropzone.classList.add('drag'); }));
+['dragleave','drop'].forEach(ev => els.dropzone.addEventListener(ev, e => { e.preventDefault(); els.dropzone.classList.remove('drag'); }));
 els.dropzone.addEventListener('drop', e => addFiles(e.dataTransfer.files));
-
 els.resetBtn.addEventListener('click', () => location.reload());
 
-// ---------------------- 4) محرك الترجمة ----------------------
-// خيار افتراضي مجاني بدون أي مفتاح: MyMemory Translation API
+// ---------------------- 4) محرك الترجمة (مع كاش لتفادي تكرار نفس الطلب) ----------------------
+const translationCache = new Map();
 async function translateFree(text, srcLang, tgtLang){
   const langpair = `${srcLang === 'eng' ? 'en' : srcLang}|${tgtLang}`;
   const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}`;
@@ -448,85 +382,94 @@ async function translateFree(text, srcLang, tgtLang){
   const data = await res.json();
   return (data && data.responseData && data.responseData.translatedText) || text;
 }
-
-// خيار اختياري أدق: Hugging Face Inference API (يتطلب توكن المستخدم الخاص)
 async function translateHF(text, token, model){
   const res = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    },
+    method:'POST',
+    headers:{ 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json' },
     body: JSON.stringify({ inputs: text })
   });
   const data = await res.json();
   if (Array.isArray(data) && data[0] && data[0].translation_text) return data[0].translation_text;
   throw new Error('تعذّر الحصول على ترجمة من Hugging Face — تحقق من التوكن أو معرّف النموذج');
 }
-
 async function translateText(text, srcLang, tgtLang){
+  const cacheKey = srcLang + '|' + tgtLang + '|' + text;
+  if (translationCache.has(cacheKey)) return translationCache.get(cacheKey);
+  let out;
   if (els.useHF.checked){
     const token = document.getElementById('hfToken').value.trim();
     const model = document.getElementById('hfModel').value.trim();
     if (!token) throw new Error('الرجاء إدخال HF API Token أو إلغاء تفعيل الخيار');
-    return translateHF(text, token, model);
+    out = await translateHF(text, token, model);
+  } else {
+    out = await translateFree(text, srcLang, tgtLang);
   }
-  return translateFree(text, srcLang, tgtLang);
+  translationCache.set(cacheKey, out);
+  return out;
 }
 
-// ---------------------- 5) مراحل الـ Pipeline ----------------------
+// ---------------------- 5) دوال المعالجة ----------------------
 
-// 5.1 تحميل الصورة إلى Canvas
 function loadImageToCanvas(file){
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
+      canvas.width = img.width; canvas.height = img.height;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0);
       resolve({ canvas, ctx, width: img.width, height: img.height });
     };
-    img.onerror = reject;
+    img.onerror = () => reject(new Error('تعذّر فتح الصورة — الملف قد يكون تالفاً'));
     img.src = URL.createObjectURL(file);
   });
 }
 
-// 5.2 تحسين مبسّط للتباين (خطوة "تحضير الصورة") — يحسّن دقة الـ OCR
 function enhanceContrast(ctx, w, h){
   const imgData = ctx.getImageData(0, 0, w, h);
   const d = imgData.data;
-  const factor = 1.15; // مقدار تكبير التباين
+  const factor = 1.15;
   for (let i = 0; i < d.length; i += 4){
     for (let c = 0; c < 3; c++){
-      let v = d[i + c];
-      v = (v - 128) * factor + 128;
-      d[i + c] = Math.max(0, Math.min(255, v));
+      let v = (d[i+c] - 128) * factor + 128;
+      d[i+c] = Math.max(0, Math.min(255, v));
     }
   }
   ctx.putImageData(imgData, 0, 0);
 }
 
-// 5.3 دمج صناديق الكلمات المتقاربة إلى صناديق "فقاعات" أكبر
-function mergeBoxes(words){
+// نسخة مصغّرة سريعة للفحص فقط (يسرّع OCR على دفعات كبيرة من الصور)
+function makeOcrCanvas(sourceCanvas){
+  const w = sourceCanvas.width, h = sourceCanvas.height;
+  if (w <= CONFIG.OCR_MAX_WIDTH) return { canvas: sourceCanvas, scale: 1 };
+  const scale = CONFIG.OCR_MAX_WIDTH / w;
+  const small = document.createElement('canvas');
+  small.width = Math.round(w * scale);
+  small.height = Math.round(h * scale);
+  small.getContext('2d').drawImage(sourceCanvas, 0, 0, small.width, small.height);
+  return { canvas: small, scale };
+}
+
+// دمج الكلمات المتقاربة لتكوين وحدات نصية (فقاعات محتملة) + متوسط الثقة
+function mergeBoxes(words, invScale){
   const boxes = words.map(w => ({
-    x0: w.bbox.x0, y0: w.bbox.y0, x1: w.bbox.x1, y1: w.bbox.y1, text: w.text
+    x0:w.bbox.x0*invScale, y0:w.bbox.y0*invScale, x1:w.bbox.x1*invScale, y1:w.bbox.y1*invScale,
+    text:w.text, conf:w.confidence
   }));
-  const merged = [];
   const used = new Array(boxes.length).fill(false);
-  const closeEnough = (a, b) => {
-    const gapX = 22, gapY = 16;
-    return !(a.x1 + gapX < b.x0 || b.x1 + gapX < a.x0 || a.y1 + gapY < b.y0 || b.y1 + gapY < a.y0);
+  const merged = [];
+  const closeEnough = (a,b) => {
+    const gapX = 22*invScale, gapY = 16*invScale;
+    return !(a.x1+gapX < b.x0 || b.x1+gapX < a.x0 || a.y1+gapY < b.y0 || b.y1+gapY < a.y0);
   };
-  for (let i = 0; i < boxes.length; i++){
+  for (let i=0;i<boxes.length;i++){
     if (used[i]) continue;
-    let group = { ...boxes[i], words:[boxes[i].text] };
+    let group = { ...boxes[i], words:[boxes[i].text], confs:[boxes[i].conf] };
     used[i] = true;
     let grown = true;
     while (grown){
       grown = false;
-      for (let j = 0; j < boxes.length; j++){
+      for (let j=0;j<boxes.length;j++){
         if (used[j]) continue;
         if (closeEnough(group, boxes[j])){
           group.x0 = Math.min(group.x0, boxes[j].x0);
@@ -534,37 +477,100 @@ function mergeBoxes(words){
           group.x1 = Math.max(group.x1, boxes[j].x1);
           group.y1 = Math.max(group.y1, boxes[j].y1);
           group.words.push(boxes[j].text);
-          used[j] = true;
-          grown = true;
+          group.confs.push(boxes[j].conf);
+          used[j] = true; grown = true;
         }
       }
     }
-    merged.push({ ...group, text: group.words.join(' ') });
+    const avgConf = group.confs.reduce((a,b)=>a+b,0) / group.confs.length;
+    merged.push({ x0:group.x0, y0:group.y0, x1:group.x1, y1:group.y1, text:group.words.join(' '), avgConf });
   }
   return merged;
 }
 
-// 5.4 التبييض: تعبئة صندوق الفقاعة بلون خلفيتها الفعلي (مأخوذ من حواف الصندوق)
-function whitenBox(ctx, box, pad){
-  const x = Math.max(0, box.x0 - pad);
-  const y = Math.max(0, box.y0 - pad);
-  const w = (box.x1 - box.x0) + pad * 2;
-  const h = (box.y1 - box.y0) + pad * 2;
-
-  // نأخذ عينة لون من زوايا الإطار الخارجي (عادة لون خلفية الفقاعة)
-  const sample = ctx.getImageData(x, y, Math.max(1, w), 1).data;
-  let r = 0, g = 0, b = 0, n = 0;
-  for (let i = 0; i < sample.length; i += 4){
-    r += sample[i]; g += sample[i+1]; b += sample[i+2]; n++;
-  }
-  r = Math.round(r / n); g = Math.round(g / n); b = Math.round(b / n);
-
-  ctx.fillStyle = `rgb(${r},${g},${b})`;
-  ctx.fillRect(x, y, w, h);
-  return { x, y, w, h, bgColor: `rgb(${r},${g},${b})` };
+// حساب الانحراف المعياري للون خلفية محيط الصندوق (لمعرفة إن كان "فقاعة" فعلاً)
+function backgroundUniformity(ctx, box){
+  const pad = 5;
+  const x = Math.max(0, Math.round(box.x0 - pad));
+  const y = Math.max(0, Math.round(box.y0 - pad));
+  const w = Math.max(1, Math.round((box.x1 - box.x0) + pad*2));
+  const h = Math.max(1, Math.round((box.y1 - box.y0) + pad*2));
+  let data;
+  try { data = ctx.getImageData(x, y, w, h).data; } catch(e){ return { uniform:false, std:999, samples:[] }; }
+  // نأخذ فقط بكسلات الإطار الخارجي (حدود المنطقة) لا الداخل (لأن الداخل فيه النص نفسه)
+  const border = [];
+  for (let i=0;i<w;i++){ border.push([i,0]); border.push([i,h-1]); }
+  for (let j=0;j<h;j++){ border.push([0,j]); border.push([w-1,j]); }
+  const vals = border.map(([bx,by]) => {
+    const idx = (by*w + bx) * 4;
+    return (data[idx] + data[idx+1] + data[idx+2]) / 3;
+  });
+  const mean = vals.reduce((a,b)=>a+b,0) / vals.length;
+  const variance = vals.reduce((a,b)=>a + (b-mean)*(b-mean), 0) / vals.length;
+  const std = Math.sqrt(variance);
+  return { uniform: std <= CONFIG.BG_UNIFORMITY_STD, std, mean };
 }
 
-// 5.5 التنضيد: كتابة النص المترجم داخل الصندوق المنظّف مع لف تلقائي للسطور
+// تصنيف كل وحدة نصية: dialogue / sfx / watermark / noise
+function classifyBox(ctx, box, pageArea, extraKeywords){
+  const lower = box.text.toLowerCase();
+  const allKeywords = CONFIG.WATERMARK_KEYWORDS.concat(extraKeywords);
+  if (els.autoWatermark.checked && allKeywords.some(k => k && lower.includes(k.toLowerCase().trim()))){
+    return { type:'watermark', reason:'مطابقة كلمة مفتاحية لعلامة مائية' };
+  }
+  const cleanLen = box.text.replace(/[^\p{L}\p{N}]/gu,'').length;
+  if (cleanLen < CONFIG.MIN_TEXT_LEN){
+    return { type:'noise', reason:'نص قصير جداً/ضوضاء OCR' };
+  }
+  if (!els.skipSfx.checked){
+    return { type:'dialogue', reason:'فحص المؤثرات الصوتية معطّل يدوياً' };
+  }
+  const boxArea = (box.x1-box.x0) * (box.y1-box.y0);
+  if (boxArea / pageArea > CONFIG.MAX_BUBBLE_AREA_RATIO){
+    return { type:'sfx', reason:'مساحة كبيرة جداً بالنسبة للصفحة' };
+  }
+  if (box.avgConf < CONFIG.MIN_WORD_CONF){
+    return { type:'sfx', reason:`ثقة OCR منخفضة (${Math.round(box.avgConf)}%)` };
+  }
+  const bg = backgroundUniformity(ctx, box);
+  if (!bg.uniform){
+    return { type:'sfx', reason:`خلفية غير موحّدة (على الرسم مباشرة، ليست فقاعة)` };
+  }
+  return { type:'dialogue', reason:'اجتاز كل الفحوصات' };
+}
+
+// تبييض فقاعة حوار حقيقية فقط — بالوسيط (median) لتفادي الألوان الخاطئة
+function medianOf(arr){
+  const s = [...arr].sort((a,b)=>a-b);
+  return s[Math.floor(s.length/2)];
+}
+function cleanDialogueBox(ctx, box){
+  const pad = 4;
+  const x = Math.max(0, Math.round(box.x0 - pad));
+  const y = Math.max(0, Math.round(box.y0 - pad));
+  const w = Math.max(1, Math.round((box.x1-box.x0) + pad*2));
+  const h = Math.max(1, Math.round((box.y1-box.y0) + pad*2));
+  const data = ctx.getImageData(x, y, w, h).data;
+  const rs=[], gs=[], bs=[];
+  for (let i=0;i<w;i++){
+    [0, h-1].forEach(yy => {
+      const idx = (yy*w+i)*4; rs.push(data[idx]); gs.push(data[idx+1]); bs.push(data[idx+2]);
+    });
+  }
+  const r = medianOf(rs), g = medianOf(gs), b = medianOf(bs);
+  ctx.fillStyle = `rgb(${r},${g},${b})`;
+  ctx.fillRect(x, y, w, h);
+  return { x, y, w, h };
+}
+
+// إزالة علامة مائية: "ختم نسخ" بسيط — ينسخ شريحة من أعلى المنطقة مباشرة فوقها
+// (أفضل من التعبئة اللونية المسطحة على خلفيات فيها رسم/تفاصيل)
+function cloneStampFill(ctx, rect){
+  const { x, y, w, h } = rect;
+  const srcY = Math.max(0, y - h - 4); // نأخذ منطقة مطابقة بالحجم من فوق مباشرة
+  ctx.drawImage(ctx.canvas, x, srcY, w, h, x, y, w, h);
+}
+
 function typesetText(ctx, text, box, lang){
   const isRTL = lang === 'ar';
   ctx.save();
@@ -572,45 +578,123 @@ function typesetText(ctx, text, box, lang){
   ctx.fillStyle = '#111111';
   ctx.direction = isRTL ? 'rtl' : 'ltr';
   ctx.textAlign = 'center';
-
   let fontSize = Math.max(14, Math.min(26, Math.floor(box.h / 4)));
-  ctx.font = `${fontSize}px Tajawal, sans-serif`;
-
-  // تقسيم النص لأسطر تناسب عرض الصندوق
   function wrapLines(size){
     ctx.font = `${size}px Tajawal, sans-serif`;
     const words = text.split(' ');
-    const lines = [];
-    let line = '';
+    const lines = []; let line = '';
     words.forEach(word => {
       const test = line ? line + ' ' + word : word;
-      if (ctx.measureText(test).width > box.w - 12 && line){
-        lines.push(line);
-        line = word;
-      } else {
-        line = test;
-      }
+      if (ctx.measureText(test).width > box.w - 12 && line){ lines.push(line); line = word; }
+      else line = test;
     });
     if (line) lines.push(line);
     return lines;
   }
-
   let lines = wrapLines(fontSize);
-  // تصغير الخط تدريجياً إذا كان النص أطول من ارتفاع الصندوق
-  while (lines.length * (fontSize * 1.25) > box.h && fontSize > 10){
-    fontSize -= 1;
-    lines = wrapLines(fontSize);
-  }
-
-  const lineHeight = fontSize * 1.25;
-  const startY = box.y + box.h / 2 - (lines.length - 1) * lineHeight / 2;
-  lines.forEach((ln, i) => {
-    ctx.fillText(ln, box.x + box.w / 2, startY + i * lineHeight);
-  });
+  while (lines.length * (fontSize*1.25) > box.h && fontSize > 10){ fontSize--; lines = wrapLines(fontSize); }
+  const lineHeight = fontSize*1.25;
+  const startY = box.y + box.h/2 - (lines.length-1)*lineHeight/2;
+  lines.forEach((ln,i) => ctx.fillText(ln, box.x + box.w/2, startY + i*lineHeight));
   ctx.restore();
 }
 
-// ---------------------- 6) دالة التشغيل الرئيسية ----------------------
+// ---------------------- 6) أداة الإزالة اليدوية للعلامة المائية ----------------------
+let eraserRect = null, eraserDrag = null;
+function refreshEraserOptions(){
+  els.eraserImageSelect.innerHTML = '';
+  state.files.forEach((f,i) => {
+    const opt = document.createElement('option');
+    opt.value = i; opt.textContent = `صفحة ${i+1}: ${f.name}`;
+    els.eraserImageSelect.appendChild(opt);
+  });
+  if (state.files.length) drawEraserPreview(0);
+}
+async function drawEraserPreview(index){
+  if (!state.pages[index]){
+    const file = state.files[index];
+    if (!file) return;
+    const { canvas } = await loadImageToCanvas(file);
+    state.pages[index] = { file, name: file.name, canvas, ctx: canvas.getContext('2d'), status:'pending' };
+  }
+  const page = state.pages[index];
+  const prevCanvas = els.eraserCanvas;
+  const maxW = 500;
+  const scale = Math.min(1, maxW / page.canvas.width);
+  prevCanvas.width = page.canvas.width * scale;
+  prevCanvas.height = page.canvas.height * scale;
+  prevCanvas.dataset.scale = scale;
+  prevCanvas.dataset.index = index;
+  const pctx = prevCanvas.getContext('2d');
+  pctx.drawImage(page.canvas, 0, 0, prevCanvas.width, prevCanvas.height);
+  eraserRect = null;
+}
+els.eraserImageSelect.addEventListener('change', e => drawEraserPreview(Number(e.target.value)));
+
+els.eraserCanvas.addEventListener('mousedown', e => {
+  const r = els.eraserCanvas.getBoundingClientRect();
+  eraserDrag = { x0:e.clientX-r.left, y0:e.clientY-r.top };
+});
+els.eraserCanvas.addEventListener('mousemove', e => {
+  if (!eraserDrag) return;
+  const r = els.eraserCanvas.getBoundingClientRect();
+  const x1 = e.clientX-r.left, y1 = e.clientY-r.top;
+  eraserRect = { x:Math.min(eraserDrag.x0,x1), y:Math.min(eraserDrag.y0,y1), w:Math.abs(x1-eraserDrag.x0), h:Math.abs(y1-eraserDrag.y0) };
+  redrawEraserOverlay();
+});
+window.addEventListener('mouseup', () => { eraserDrag = null; });
+
+function redrawEraserOverlay(){
+  const index = Number(els.eraserCanvas.dataset.index || 0);
+  const page = state.pages[index];
+  if (!page) return;
+  const scale = Number(els.eraserCanvas.dataset.scale || 1);
+  const pctx = els.eraserCanvas.getContext('2d');
+  pctx.drawImage(page.canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
+  if (eraserRect){
+    pctx.strokeStyle = '#C23E86'; pctx.lineWidth = 2;
+    pctx.strokeRect(eraserRect.x, eraserRect.y, eraserRect.w, eraserRect.h);
+    pctx.fillStyle = 'rgba(194,62,134,.15)';
+    pctx.fillRect(eraserRect.x, eraserRect.y, eraserRect.w, eraserRect.h);
+  }
+}
+
+function applyManualErase(index, rectOnCanvasScale, scale){
+  const page = state.pages[index];
+  if (!page) return;
+  const rect = {
+    x: Math.round(rectOnCanvasScale.x / scale),
+    y: Math.round(rectOnCanvasScale.y / scale),
+    w: Math.round(rectOnCanvasScale.w / scale),
+    h: Math.round(rectOnCanvasScale.h / scale)
+  };
+  cloneStampFill(page.ctx, rect);
+}
+
+els.eraseBtn.addEventListener('click', () => {
+  if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
+  const index = Number(els.eraserCanvas.dataset.index || 0);
+  const scale = Number(els.eraserCanvas.dataset.scale || 1);
+  applyManualErase(index, eraserRect, scale);
+  logLine(`تم مسح المنطقة المحددة يدوياً من الصفحة ${index+1}`, 'ok');
+  drawEraserPreview(index);
+});
+els.eraseAllBtn.addEventListener('click', async () => {
+  if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
+  const scale = Number(els.eraserCanvas.dataset.scale || 1);
+  for (let i=0;i<state.files.length;i++){
+    if (!state.pages[i]){
+      const file = state.files[i];
+      const { canvas } = await loadImageToCanvas(file);
+      state.pages[i] = { file, name:file.name, canvas, ctx:canvas.getContext('2d'), status:'pending' };
+    }
+    applyManualErase(i, eraserRect, scale);
+  }
+  logLine(`تم تطبيق نفس إحداثيات المسح على كل الصفحات (${state.files.length})`, 'ok');
+  drawEraserPreview(Number(els.eraserCanvas.dataset.index || 0));
+});
+
+// ---------------------- 7) دالة التشغيل الرئيسية ----------------------
 els.runBtn.addEventListener('click', runPipeline);
 
 async function runPipeline(){
@@ -620,109 +704,148 @@ async function runPipeline(){
 
   const srcLang = document.getElementById('srcLang').value;
   const tgtLang = document.getElementById('tgtLang').value;
+  const extraKeywords = els.extraWm.value.split(',').map(s=>s.trim()).filter(Boolean);
   const total = state.files.length;
 
+  const totals = { dialogue:0, sfx:0, wm:0, noise:0, errors:0, pages:0 };
+
   logLine(`بدء التشغيل: ${total} صفحة — من "${srcLang}" إلى "${tgtLang}"`, 'ok');
-
-  // تحميل Tesseract worker مرة واحدة لكل الصور
-  setStepState('detect', 'active');
+  setStepState('prep','active');
   const worker = await Tesseract.createWorker(srcLang);
-  setStepState('detect', 'done');
+  setStepState('prep','done');
 
-  for (let i = 0; i < total; i++){
+  for (let i=0;i<total;i++){
     const file = state.files[i];
-    const baseProgress = (i / total) * 100;
-    setProgress(baseProgress, `معالجة الصفحة ${i + 1} من ${total}: ${file.name}`);
-    logLine(`— الصفحة ${i + 1}/${total}: ${file.name}`);
+    setProgress((i/total)*100, `معالجة الصفحة ${i+1} من ${total}: ${file.name}`);
+    logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
 
-    // 1) تحضير الصورة
-    setStepState('prep', 'active');
-    const { canvas, ctx, width, height } = await loadImageToCanvas(file);
-    enhanceContrast(ctx, width, height);
-    setStepState('prep', 'done');
-    logLine(`  ✓ تم تحضير الصورة (${width}×${height})`, 'ok');
-
-    // 2) كشف واستخراج النص عبر Tesseract.js
-    setStepState('ocr', 'active');
-    const { data } = await worker.recognize(canvas);
-    const words = (data.words || []).filter(w => w.text.trim().length > 0);
-    setStepState('ocr', 'done', `${words.length} كلمة`);
-    logLine(`  ✓ تم استخراج ${words.length} كلمة نصية`, 'ok');
-
-    // 3) تجميع الفقاعات
-    setStepState('merge', 'active');
-    const boxes = mergeBoxes(words);
-    setStepState('merge', 'done', `${boxes.length} فقاعة`);
-    logLine(`  ✓ تم تجميع النص في ${boxes.length} فقاعة كلام`, 'ok');
-
-    // 4) التبييض + 5) الترجمة + 6) التنضيد — لكل فقاعة على حدة
-    setStepState('clean', 'active');
-    setStepState('translate', 'active');
-    setStepState('typeset', 'active');
-
-    for (let b = 0; b < boxes.length; b++){
-      const box = boxes[b];
-      const cleaned = whitenBox(ctx, box, 6);
-      logLine(`    · فقاعة ${b + 1}: تبييض المنطقة`);
-
-      let translated = box.text;
-      try{
-        translated = await translateText(box.text, srcLang, tgtLang);
-        logLine(`    · فقاعة ${b + 1}: تُرجمت إلى "${translated.slice(0,30)}${translated.length>30?'…':''}"`, 'ok');
-      } catch(err){
-        logLine(`    · فقاعة ${b + 1}: تعذرت الترجمة (${err.message}) — سيُبقى النص الأصلي`, 'warn');
+    try{
+      // إعادة استخدام الصورة إذا كانت مفتوحة مسبقاً من أداة المسح اليدوي
+      let page = state.pages[i];
+      if (!page){
+        const { canvas, ctx } = await loadImageToCanvas(file);
+        page = { file, name:file.name, canvas, ctx, status:'pending' };
+        state.pages[i] = page;
       }
+      const { canvas, ctx } = page;
+      enhanceContrast(ctx, canvas.width, canvas.height);
 
-      typesetText(ctx, translated, cleaned, tgtLang);
+      // OCR على نسخة مصغّرة لتسريع الدفعات الكبيرة، ثم تحويل الإحداثيات للحجم الأصلي
+      setStepState('ocr','active');
+      const { canvas: ocrCanvas, scale } = makeOcrCanvas(canvas);
+      const { data } = await worker.recognize(ocrCanvas);
+      const words = (data.words || []).filter(w => w.text.trim().length > 0);
+      setStepState('ocr','done', `${words.length} كلمة`);
+
+      setStepState('merge','active');
+      const boxes = mergeBoxes(words, 1/scale);
+      setStepState('merge','done', `${boxes.length} وحدة`);
+
+      setStepState('classify','active');
+      const pageArea = canvas.width * canvas.height;
+      const classified = boxes.map(box => ({ box, cls: classifyBox(ctx, box, pageArea, extraKeywords) }));
+      const dialogueBoxes = classified.filter(c => c.cls.type === 'dialogue');
+      const sfxBoxes = classified.filter(c => c.cls.type === 'sfx');
+      const wmBoxes = classified.filter(c => c.cls.type === 'watermark');
+      const noiseBoxes = classified.filter(c => c.cls.type === 'noise');
+      setStepState('classify','done', `حوار:${dialogueBoxes.length} مؤثر:${sfxBoxes.length} علامة:${wmBoxes.length}`);
+      logLine(`  ✓ التصنيف: ${dialogueBoxes.length} حوار حقيقي، ${sfxBoxes.length} مؤثر صوتي (تم تجاهله)، ${wmBoxes.length} علامة مائية`, 'info');
+
+      // إزالة العلامات المائية النصية المكتشفة تلقائياً
+      setStepState('watermark','active');
+      wmBoxes.forEach(({box}) => {
+        const rect = { x:Math.round(box.x0)-4, y:Math.round(box.y0)-4, w:Math.round(box.x1-box.x0)+8, h:Math.round(box.y1-box.y0)+8 };
+        cloneStampFill(ctx, rect);
+      });
+      setStepState('watermark','done', `${wmBoxes.length} أُزيلت`);
+
+      // تبييض فقاعات الحوار فقط
+      setStepState('clean','active');
+      const cleanedBoxes = dialogueBoxes.map(({box}) => ({ box, cleaned: cleanDialogueBox(ctx, box) }));
+      setStepState('clean','done');
+
+      // الترجمة
+      setStepState('translate','active');
+      for (const item of cleanedBoxes){
+        try{
+          item.translated = await translateText(item.box.text, srcLang, tgtLang);
+        } catch(err){
+          item.translated = item.box.text;
+          logLine(`    · تعذرت ترجمة فقاعة: ${err.message}`, 'warn');
+        }
+      }
+      setStepState('translate','done');
+
+      // التنضيد
+      setStepState('typeset','active');
+      cleanedBoxes.forEach(item => typesetText(ctx, item.translated, item.cleaned, tgtLang));
+      setStepState('typeset','done');
+
+      // حفظ النتيجة
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      const url = URL.createObjectURL(blob);
+      const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
+      state.results.push({ name: outName, blob, url });
+      page.status = 'done';
+
+      totals.dialogue += dialogueBoxes.length;
+      totals.sfx += sfxBoxes.length;
+      totals.wm += wmBoxes.length;
+      totals.noise += noiseBoxes.length;
+      totals.pages++;
+
+      addResultCard({ name: outName, url, status:'done' });
+      logLine(`  ✓ اكتملت الصفحة (${dialogueBoxes.length} فقاعة حوار مترجمة فعلياً)`, 'ok');
+
+    } catch(err){
+      totals.errors++;
+      logLine(`  ✗ فشلت معالجة ${file.name}: ${err.message}`, 'bad');
+      addResultCard({ name:file.name, url:null, status:'error', errorMsg: err.message });
     }
-    setStepState('clean', 'done');
-    setStepState('translate', 'done');
-    setStepState('typeset', 'done');
 
-    // حفظ نتيجة هذه الصفحة
-    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    const url = URL.createObjectURL(blob);
-    state.results.push({ name: file.name.replace(/\.[^.]+$/, '') + '_pure.png', blob, url });
-
-    addResultCard(state.results[state.results.length - 1]);
-    setProgress(((i + 1) / total) * 100, `تم الانتهاء من ${i + 1} من ${total}`);
+    setProgress(((i+1)/total)*100, `تم الانتهاء من ${i+1} من ${total}`);
+    updateSummary(totals);
   }
 
   await worker.terminate();
-
-  // 7) التصدير
-  setStepState('export', 'active');
-  els.zipBtn.style.display = 'inline-flex';
-  setStepState('export', 'done');
-  setProgress(100, 'اكتملت جميع الصفحات ✅');
-  logLine('انتهى تنفيذ خط الإنتاج بنجاح لكل الصفحات.', 'ok');
-
+  setStepState('export','done');
+  if (state.results.length) els.zipBtn.style.display = 'inline-flex';
+  setProgress(100, 'اكتمل تشغيل خط الإنتاج ✅');
+  logLine(`انتهى التشغيل — ${totals.pages} صفحة ناجحة، ${totals.errors} صفحة فشلت.`, totals.errors ? 'warn' : 'ok');
   els.runBtn.disabled = false;
 }
 
-function addResultCard(result){
+// ---------------------- 8) الإحصائيات + بطاقات النتائج + التصدير ----------------------
+function updateSummary(totals){
+  els.statPages.textContent = totals.pages;
+  els.statDialogue.textContent = totals.dialogue;
+  els.statSfx.textContent = totals.sfx;
+  els.statWm.textContent = totals.wm;
+  els.statErrors.textContent = totals.errors;
+}
+
+function addResultCard({ name, url, status, errorMsg }){
   const card = document.createElement('div');
   card.className = 'result-card';
+  const badgeClass = status === 'done' ? 'done' : status === 'error' ? 'error' : 'processing';
+  const badgeText = status === 'done' ? 'تم' : status === 'error' ? 'فشل' : 'قيد المعالجة';
   card.innerHTML = `
-    <div class="compare"><img src="${result.url}"></div>
+    ${url ? `<img src="${url}">` : `<div style="padding:20px;font-size:12px;color:var(--pure-bad);">${errorMsg||'خطأ غير معروف'}</div>`}
     <div class="foot">
-      <span style="font-size:12px;color:#9A7288;">${result.name}</span>
-      <a href="${result.url}" download="${result.name}">تنزيل</a>
+      <span class="badge-status ${badgeClass}">${badgeText}</span>
+      ${url ? `<a href="${url}" download="${name}">تنزيل</a>` : ''}
     </div>`;
   els.resultsGrid.appendChild(card);
 }
 
-// ---------------------- تنزيل الكل كملف ZIP ----------------------
 els.zipBtn.addEventListener('click', async () => {
   logLine('تجهيز ملف ZIP لكل الصفحات…');
   const zip = new JSZip();
   state.results.forEach(r => zip.file(r.name, r.blob));
-  const content = await zip.generateAsync({ type: 'blob' });
+  const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = 'اداة_بيور_1_النتائج.zip';
-  a.click();
+  a.href = url; a.download = 'اداة_بيور_2_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
 });
 </script>
