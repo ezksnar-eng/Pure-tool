@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 2 | Pure Tool 2</title>
+<title>أداة بيور 3 | Pure Tool 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -12,7 +12,6 @@
   --pure-magenta:#C23E86; --pure-plum:#3D1A2C; --pure-cream:#FFF6FA;
   --pure-white:#FFFFFF; --pure-line:#F0CBE0;
   --pure-ok:#5FA88A; --pure-warn:#D98C3D; --pure-bad:#C2503E;
-  --pure-sfx:#8E86C8; --pure-wm:#5B6EC2;
   --radius-card:18px; --radius-pill:999px;
 }
 *{box-sizing:border-box;}
@@ -68,8 +67,6 @@ button.primary{background:var(--pure-magenta); color:#fff; border:none; padding:
 button.primary:disabled{background:#E3B9CE; cursor:not-allowed;}
 button.secondary{background:transparent; color:var(--pure-magenta); border:1.5px solid var(--pure-pink);
   padding:11px 22px; border-radius:var(--radius-pill); font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;}
-button.tiny{background:var(--pure-pink-light); color:var(--pure-magenta); border:none; padding:6px 12px;
-  border-radius:var(--radius-pill); font-family:inherit; font-weight:700; font-size:12px; cursor:pointer;}
 
 ol.pipeline{list-style:none; margin:0; padding:0; counter-reset:step;}
 ol.pipeline li{counter-increment:step; display:grid; grid-template-columns:36px 1fr auto; align-items:center;
@@ -95,12 +92,9 @@ ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff
 #log .line{direction:ltr; text-align:left; unicode-bidi:plaintext;}
 #log .ok{color:#9BE3C4;} #log .warn{color:#F3C382;} #log .bad{color:#F0A0A0;} #log .info{color:#B9C7F6;}
 
-/* أداة الإزالة اليدوية */
 #eraserWrap{position:relative; display:inline-block; max-width:100%; border:1px solid var(--pure-line); border-radius:10px; overflow:hidden;}
 #eraserCanvas{max-width:100%; display:block; cursor:crosshair;}
-#eraserPicker{margin-top:10px;}
 
-/* بطاقات النتائج + إحصائيات */
 #resultsGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;}
 .result-card{border:1px solid var(--pure-line); border-radius:12px; overflow:hidden; background:#fff;}
 .result-card img{width:100%; display:block;}
@@ -109,12 +103,14 @@ ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff
 .badge-status{font-size:10.5px; padding:2px 8px; border-radius:var(--radius-pill); font-weight:700;}
 .badge-status.done{background:#E4F5EC; color:var(--pure-ok);}
 .badge-status.error{background:#FBE4E1; color:var(--pure-bad);}
-.badge-status.processing{background:var(--pure-pink-light); color:var(--pure-magenta);}
 
 #summaryGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:14px;}
 .stat-box{background:var(--pure-cream); border:1px solid var(--pure-line); border-radius:12px; padding:14px; text-align:center;}
 .stat-box .num{font-size:22px; font-weight:900; color:var(--pure-magenta);}
 .stat-box .lbl{font-size:12px; color:#9A7288; margin-top:2px;}
+
+.fontlist{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+.fontchip{background:var(--pure-pink-light); color:var(--pure-magenta); font-size:12.5px; padding:5px 12px; border-radius:var(--radius-pill);}
 
 footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;}
 </style>
@@ -131,8 +127,8 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 2</h1>
-      <p>خط إنتاج ذكي لتبييض وترجمة الحوار فقط، مع تصنيف المؤثرات الصوتية وإزالة العلامات المائية — فريق بيور</p>
+      <h1>أداة بيور 3</h1>
+      <p>تنظيف بشكل الفقاعة الحقيقي (لا مربعات) + خط أوضح + رفع خطوط مخصصة + كشف علامات مائية شريطية — فريق بيور</p>
     </div>
   </header>
 
@@ -141,7 +137,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     <h2>1. رفع صفحات المانهوا</h2>
     <p class="hint">يدعم حتى <b>70</b> صورة دفعة واحدة (JPG / PNG / WEBP).</p>
     <div id="dropzone">
-      <p class="big">📥 اسحب الصور هنا أو اضغط للاختيار</p>
+      <p class="big">?? اسحب الصور هنا أو اضغط للاختيار</p>
       <p class="small">كل المعالجة تتم محلياً داخل متصفحك — لا رفع لأي خادم خارجي</p>
     </div>
     <input id="fileInput" type="file" accept="image/*" multiple>
@@ -173,7 +169,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     <div class="toggle-row"><input type="checkbox" id="skipSfx" checked>
       <label for="skipSfx">تجاهل المؤثرات الصوتية والعناصر غير الحوارية تلقائياً (لا تبييض ولا ترجمة لها)</label></div>
     <div class="toggle-row"><input type="checkbox" id="autoWatermark" checked>
-      <label for="autoWatermark">إزالة العلامات المائية النصية المعروفة تلقائياً (روابط مواقع / أسماء فرق أخرى)</label></div>
+      <label for="autoWatermark">إزالة العلامات المائية تلقائياً (نصوص مواقع + أشرطة شعارات داكنة)</label></div>
 
     <div class="field" style="margin-top:12px;">
       <label>كلمات علامة مائية إضافية (اختياري، افصل بينها بفاصلة)</label>
@@ -188,19 +184,31 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     </div>
   </section>
 
-  <!-- 3) خط الإنتاج -->
+  <!-- 3) خطوط مخصصة -->
   <section class="card">
-    <h2>3. خط الإنتاج (Pipeline)</h2>
-    <p class="hint">تُعالَج كل صورة عبر هذه المراحل. المرحلة الرابعة (التصنيف) هي ما يمنع تبييض/ترجمة المؤثرات الصوتية والعلامات المائية بالخطأ.</p>
+    <h2>3. رفع حزمة خطوط مخصصة (ZIP)</h2>
+    <p class="hint">ارفع ملف ZIP يحتوي على خطوط (.ttf / .otf / .woff / .woff2) — اسم كل ملف (حتى لو بالعربي) سيظهر باللائحة أدناه لاختيار خط التنضيد.</p>
+    <input type="file" id="fontZipInput" accept=".zip">
+    <div class="field" style="margin-top:12px;">
+      <label>الخط المستخدم في التنضيد</label>
+      <select id="fontSelect"><option value="">افتراضي (Tajawal)</option></select>
+    </div>
+    <div class="fontlist" id="fontList"></div>
+  </section>
+
+  <!-- 4) خط الإنتاج -->
+  <section class="card">
+    <h2>4. خط الإنتاج (Pipeline)</h2>
+    <p class="hint">مرحلة "التبييض" الآن تملأ شكل الفقاعة الحقيقي (Flood Fill) بدل رسم مربع، مع رجوع تلقائي للتعبئة المستطيلة فقط إذا فشل الملء الذكي.</p>
     <ol class="pipeline" id="pipelineList">
       <li data-key="prep"><div><div class="step-title">تحضير الصورة</div><div class="step-sub">تحسين تباين + نسخة مصغّرة سريعة لفحص OCR</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="ocr"><div><div class="step-title">كشف واستخراج النص</div><div class="step-sub">Tesseract.js مع درجة ثقة لكل كلمة</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="merge"><div><div class="step-title">تجميع الفقاعات</div><div class="step-sub">دمج الكلمات المتقاربة لتكوين وحدات نصية</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="classify"><div><div class="step-title">تصنيف المحتوى</div><div class="step-sub">حوار حقيقي / مؤثر صوتي / علامة مائية / ضوضاء</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="watermark"><div><div class="step-title">إزالة العلامات المائية</div><div class="step-sub">تلقائي بالكلمات المفتاحية + يدوي إن وُجد</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="clean"><div><div class="step-title">تبييض الحوار فقط</div><div class="step-sub">حساب لون الخلفية بالوسيط (median) لتفادي الألوان الخاطئة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="watermark"><div><div class="step-title">إزالة العلامات المائية</div><div class="step-sub">كلمات مفتاحية + شريط شعار داكن + يدوي إن وُجد</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="clean"><div><div class="step-title">تنظيف شكل الفقاعة الحقيقي</div><div class="step-sub">Flood Fill يتبع حدود الفقاعة الفعلية، مع خط أمان مستطيل عند الفشل</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="translate"><div><div class="step-title">الترجمة</div><div class="step-sub">فقاعات الحوار الحقيقية فقط</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="typeset"><div><div class="step-title">التنضيد</div><div class="step-sub">لف النص المترجم داخل الفقاعة المنظّفة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="typeset"><div><div class="step-title">التنضيد</div><div class="step-sub">خط أثخن وأوضح + حد أبيض للمقروئية، بالخط المختار</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="export"><div><div class="step-title">التصدير والإحصائيات</div><div class="step-sub">ZIP + أرقام حقيقية فقط</div></div><div class="step-state">بالانتظار</div></li>
     </ol>
     <div id="progressWrap">
@@ -213,11 +221,11 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     </div>
   </section>
 
-  <!-- 4) إزالة علامة مائية يدوياً -->
+  <!-- 5) إزالة علامة مائية يدوياً -->
   <section class="card">
-    <h2>4. إزالة علامة مائية يدوياً (لشعارات/رسومات لا يلتقطها OCR)</h2>
-    <p class="hint">اختر صورة، ثم ارسم مربعاً فوق العلامة المائية واضغط "امسح المنطقة". يمكن تطبيق نفس الإحداثيات على كل الصفحات دفعة واحدة إذا كانت العلامة بنفس المكان في كل الصور.</p>
-    <div class="field" id="eraserPicker">
+    <h2>5. إزالة علامة مائية يدوياً (لشعارات رسومية لا يلتقطها الكشف التلقائي)</h2>
+    <p class="hint">اختر صورة، ارسم مربعاً فوق العلامة، ثم اضغط "امسح المنطقة". يمكن تطبيق نفس الإحداثيات على كل الصفحات دفعة واحدة.</p>
+    <div class="field">
       <label>اختر الصفحة للمعاينة</label>
       <select id="eraserImageSelect"></select>
     </div>
@@ -228,15 +236,15 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     </div>
   </section>
 
-  <!-- 5) السجل -->
+  <!-- 6) السجل -->
   <section class="card">
-    <h2>5. سجل التنفيذ المباشر</h2>
+    <h2>6. سجل التنفيذ المباشر</h2>
     <div id="log"><div class="line">بانتظار رفع الصور والضغط على "تشغيل خط الإنتاج"…</div></div>
   </section>
 
-  <!-- 6) النتائج -->
+  <!-- 7) النتائج -->
   <section class="card">
-    <h2>6. الصفحات الناتجة والإحصائيات</h2>
+    <h2>7. الصفحات الناتجة والإحصائيات</h2>
     <div id="summaryGrid">
       <div class="stat-box"><div class="num" id="statPages">0</div><div class="lbl">صفحة مُعالجة</div></div>
       <div class="stat-box"><div class="num" id="statDialogue">0</div><div class="lbl">فقاعة حوار تُرجمت</div></div>
@@ -248,7 +256,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
   </section>
 
-  <footer class="note">أداة بيور 2 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
+  <footer class="note">أداة بيور 3 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -256,26 +264,32 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
 
 <script>
 /* =====================================================================
-   أداة بيور 2 — الأقسام:
-   0) الإعدادات العامة (CONFIG)
-   1) الحالة العامة (state)
-   2) أدوات مساعدة (log / progress / pipeline UI)
+   أداة بيور 3 — الأقسام:
+   0) CONFIG
+   1) الحالة العامة
+   2) عناصر الواجهة + أدوات مساعدة
    3) رفع الصور
-   4) محرك الترجمة
-   5) دوال المعالجة: تحضير / OCR / تجميع / تصنيف / إزالة علامة مائية / تبييض / تنضيد
-   6) أداة الإزالة اليدوية للعلامة المائية
-   7) دالة التشغيل الرئيسية runPipeline (مع معالجة أخطاء لكل صورة على حدة)
-   8) الإحصائيات والتصدير
+   4) رفع حزمة الخطوط (ZIP) وتسجيلها عبر FontFace API
+   5) محرك الترجمة (مع كاش)
+   6) دوال المعالجة: تحضير / OCR / تجميع / تصنيف
+   7) إزالة العلامات المائية (كلمات مفتاحية + كشف شريط داكن)
+   8) التنظيف بشكل الفقاعة الحقيقي (Flood Fill) + خط أمان مستطيل
+   9) التنضيد (خط أثخن وأوضح)
+   10) أداة الإزالة اليدوية للعلامة المائية
+   11) دالة التشغيل الرئيسية runPipeline
+   12) الإحصائيات + بطاقات النتائج + التصدير
    ===================================================================== */
 
 // ---------------------- 0) CONFIG ----------------------
 const CONFIG = {
   MAX_IMAGES: 70,
-  MIN_WORD_CONF: 45,           // أقل ثقة OCR مقبولة للاعتبار كحوار حقيقي
-  MIN_TEXT_LEN: 2,             // أقل عدد أحرف/أرقام فعلية بالنص
-  BG_UNIFORMITY_STD: 42,       // أعلى انحراف معياري مسموح للون خلفية "فقاعة حوار"
-  MAX_BUBBLE_AREA_RATIO: 0.32, // أعلى نسبة مساحة صندوق من مساحة الصفحة قبل اعتباره مؤثر ضخم
-  OCR_MAX_WIDTH: 1400,         // أقصى عرض لنسخة الفحص السريع (لتسريع 70 صورة)
+  MIN_WORD_CONF: 45,
+  MIN_TEXT_LEN: 2,
+  BG_UNIFORMITY_STD: 42,
+  MAX_BUBBLE_AREA_RATIO: 0.32,
+  OCR_MAX_WIDTH: 1400,
+  FLOOD_TOLERANCE: 34,
+  BANNER_SCAN_RATIO: 0.06,     // نسبة ارتفاع الشريط المفحوص أعلى/أسفل الصفحة
   WATERMARK_KEYWORDS: [
     'read this series at','support us','scan by','scanlation','translated by',
     'kaynscan','likemanga','like manga','mangadex','asura','reaper','flame scans',
@@ -284,13 +298,10 @@ const CONFIG = {
 };
 
 // ---------------------- 1) الحالة العامة ----------------------
-const state = {
-  files: [],      // File objects
-  pages: [],      // { file, name, canvas, ctx, status, stats:{dialogue,sfx,wm,noise}, error }
-  results: []     // { name, blob, url } — نتائج نهائية جاهزة للتصدير
-};
+const state = { files: [], pages: [], results: [] };
+const customFonts = []; // { label, family }
 
-// ---------------------- 2) عناصر الواجهة + أدوات مساعدة ----------------------
+// ---------------------- 2) عناصر الواجهة ----------------------
 const els = {
   dropzone: document.getElementById('dropzone'),
   fileInput: document.getElementById('fileInput'),
@@ -309,6 +320,9 @@ const els = {
   skipSfx: document.getElementById('skipSfx'),
   autoWatermark: document.getElementById('autoWatermark'),
   extraWm: document.getElementById('extraWm'),
+  fontZipInput: document.getElementById('fontZipInput'),
+  fontSelect: document.getElementById('fontSelect'),
+  fontList: document.getElementById('fontList'),
   eraserImageSelect: document.getElementById('eraserImageSelect'),
   eraserCanvas: document.getElementById('eraserCanvas'),
   eraseBtn: document.getElementById('eraseBtn'),
@@ -373,7 +387,52 @@ els.fileInput.addEventListener('change', e => addFiles(e.target.files));
 els.dropzone.addEventListener('drop', e => addFiles(e.dataTransfer.files));
 els.resetBtn.addEventListener('click', () => location.reload());
 
-// ---------------------- 4) محرك الترجمة (مع كاش لتفادي تكرار نفس الطلب) ----------------------
+// ---------------------- 4) رفع حزمة الخطوط (ZIP) ----------------------
+els.fontZipInput.addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try{
+    const zip = await JSZip.loadAsync(file);
+    let count = 0;
+    for (const relPath in zip.files){
+      const entry = zip.files[relPath];
+      if (entry.dir) continue;
+      if (!/\.(ttf|otf|woff2?)$/i.test(relPath)) continue;
+      const buf = await entry.async('arraybuffer');
+      const baseName = relPath.split('/').pop().replace(/\.[^.]+$/, '');
+      const familySlug = 'pureFont' + (customFonts.length + 1);
+      try{
+        const face = new FontFace(familySlug, buf);
+        await face.load();
+        document.fonts.add(face);
+        customFonts.push({ label: baseName, family: familySlug });
+        count++;
+      } catch(err){
+        logLine(`تعذّر تحميل الخط "${baseName}": ${err.message}`, 'warn');
+      }
+    }
+    refreshFontSelect();
+    logLine(`تم تحميل ${count} خط من حزمة الخطوط بنجاح`, 'ok');
+  } catch(err){
+    logLine(`تعذّر قراءة ملف ZIP للخطوط: ${err.message}`, 'bad');
+  }
+});
+function refreshFontSelect(){
+  els.fontSelect.innerHTML = '<option value="">افتراضي (Tajawal)</option>';
+  els.fontList.innerHTML = '';
+  customFonts.forEach(f => {
+    const opt = document.createElement('option');
+    opt.value = f.family; opt.textContent = f.label;
+    els.fontSelect.appendChild(opt);
+    const chip = document.createElement('span');
+    chip.className = 'fontchip';
+    chip.textContent = f.label;
+    chip.style.fontFamily = f.family;
+    els.fontList.appendChild(chip);
+  });
+}
+
+// ---------------------- 5) محرك الترجمة (مع كاش) ----------------------
 const translationCache = new Map();
 async function translateFree(text, srcLang, tgtLang){
   const langpair = `${srcLang === 'eng' ? 'en' : srcLang}|${tgtLang}`;
@@ -384,8 +443,7 @@ async function translateFree(text, srcLang, tgtLang){
 }
 async function translateHF(text, token, model){
   const res = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-    method:'POST',
-    headers:{ 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json' },
+    method:'POST', headers:{ 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json' },
     body: JSON.stringify({ inputs: text })
   });
   const data = await res.json();
@@ -408,8 +466,7 @@ async function translateText(text, srcLang, tgtLang){
   return out;
 }
 
-// ---------------------- 5) دوال المعالجة ----------------------
-
+// ---------------------- 6) تحضير / OCR / تجميع / تصنيف ----------------------
 function loadImageToCanvas(file){
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -424,7 +481,6 @@ function loadImageToCanvas(file){
     img.src = URL.createObjectURL(file);
   });
 }
-
 function enhanceContrast(ctx, w, h){
   const imgData = ctx.getImageData(0, 0, w, h);
   const d = imgData.data;
@@ -437,8 +493,6 @@ function enhanceContrast(ctx, w, h){
   }
   ctx.putImageData(imgData, 0, 0);
 }
-
-// نسخة مصغّرة سريعة للفحص فقط (يسرّع OCR على دفعات كبيرة من الصور)
 function makeOcrCanvas(sourceCanvas){
   const w = sourceCanvas.width, h = sourceCanvas.height;
   if (w <= CONFIG.OCR_MAX_WIDTH) return { canvas: sourceCanvas, scale: 1 };
@@ -449,8 +503,6 @@ function makeOcrCanvas(sourceCanvas){
   small.getContext('2d').drawImage(sourceCanvas, 0, 0, small.width, small.height);
   return { canvas: small, scale };
 }
-
-// دمج الكلمات المتقاربة لتكوين وحدات نصية (فقاعات محتملة) + متوسط الثقة
 function mergeBoxes(words, invScale){
   const boxes = words.map(w => ({
     x0:w.bbox.x0*invScale, y0:w.bbox.y0*invScale, x1:w.bbox.x1*invScale, y1:w.bbox.y1*invScale,
@@ -472,46 +524,32 @@ function mergeBoxes(words, invScale){
       for (let j=0;j<boxes.length;j++){
         if (used[j]) continue;
         if (closeEnough(group, boxes[j])){
-          group.x0 = Math.min(group.x0, boxes[j].x0);
-          group.y0 = Math.min(group.y0, boxes[j].y0);
-          group.x1 = Math.max(group.x1, boxes[j].x1);
-          group.y1 = Math.max(group.y1, boxes[j].y1);
-          group.words.push(boxes[j].text);
-          group.confs.push(boxes[j].conf);
-          used[j] = true; grown = true;
+          group.x0=Math.min(group.x0,boxes[j].x0); group.y0=Math.min(group.y0,boxes[j].y0);
+          group.x1=Math.max(group.x1,boxes[j].x1); group.y1=Math.max(group.y1,boxes[j].y1);
+          group.words.push(boxes[j].text); group.confs.push(boxes[j].conf);
+          used[j]=true; grown=true;
         }
       }
     }
-    const avgConf = group.confs.reduce((a,b)=>a+b,0) / group.confs.length;
+    const avgConf = group.confs.reduce((a,b)=>a+b,0)/group.confs.length;
     merged.push({ x0:group.x0, y0:group.y0, x1:group.x1, y1:group.y1, text:group.words.join(' '), avgConf });
   }
   return merged;
 }
-
-// حساب الانحراف المعياري للون خلفية محيط الصندوق (لمعرفة إن كان "فقاعة" فعلاً)
 function backgroundUniformity(ctx, box){
   const pad = 5;
-  const x = Math.max(0, Math.round(box.x0 - pad));
-  const y = Math.max(0, Math.round(box.y0 - pad));
-  const w = Math.max(1, Math.round((box.x1 - box.x0) + pad*2));
-  const h = Math.max(1, Math.round((box.y1 - box.y0) + pad*2));
+  const x = Math.max(0, Math.round(box.x0-pad)), y = Math.max(0, Math.round(box.y0-pad));
+  const w = Math.max(1, Math.round((box.x1-box.x0)+pad*2)), h = Math.max(1, Math.round((box.y1-box.y0)+pad*2));
   let data;
-  try { data = ctx.getImageData(x, y, w, h).data; } catch(e){ return { uniform:false, std:999, samples:[] }; }
-  // نأخذ فقط بكسلات الإطار الخارجي (حدود المنطقة) لا الداخل (لأن الداخل فيه النص نفسه)
+  try { data = ctx.getImageData(x,y,w,h).data; } catch(e){ return { uniform:false, std:999 }; }
   const border = [];
   for (let i=0;i<w;i++){ border.push([i,0]); border.push([i,h-1]); }
   for (let j=0;j<h;j++){ border.push([0,j]); border.push([w-1,j]); }
-  const vals = border.map(([bx,by]) => {
-    const idx = (by*w + bx) * 4;
-    return (data[idx] + data[idx+1] + data[idx+2]) / 3;
-  });
-  const mean = vals.reduce((a,b)=>a+b,0) / vals.length;
-  const variance = vals.reduce((a,b)=>a + (b-mean)*(b-mean), 0) / vals.length;
-  const std = Math.sqrt(variance);
-  return { uniform: std <= CONFIG.BG_UNIFORMITY_STD, std, mean };
+  const vals = border.map(([bx,by]) => { const idx=(by*w+bx)*4; return (data[idx]+data[idx+1]+data[idx+2])/3; });
+  const mean = vals.reduce((a,b)=>a+b,0)/vals.length;
+  const variance = vals.reduce((a,b)=>a+(b-mean)*(b-mean),0)/vals.length;
+  return { uniform: Math.sqrt(variance) <= CONFIG.BG_UNIFORMITY_STD, std: Math.sqrt(variance) };
 }
-
-// تصنيف كل وحدة نصية: dialogue / sfx / watermark / noise
 function classifyBox(ctx, box, pageArea, extraKeywords){
   const lower = box.text.toLowerCase();
   const allKeywords = CONFIG.WATERMARK_KEYWORDS.concat(extraKeywords);
@@ -519,87 +557,178 @@ function classifyBox(ctx, box, pageArea, extraKeywords){
     return { type:'watermark', reason:'مطابقة كلمة مفتاحية لعلامة مائية' };
   }
   const cleanLen = box.text.replace(/[^\p{L}\p{N}]/gu,'').length;
-  if (cleanLen < CONFIG.MIN_TEXT_LEN){
-    return { type:'noise', reason:'نص قصير جداً/ضوضاء OCR' };
-  }
-  if (!els.skipSfx.checked){
-    return { type:'dialogue', reason:'فحص المؤثرات الصوتية معطّل يدوياً' };
-  }
-  const boxArea = (box.x1-box.x0) * (box.y1-box.y0);
-  if (boxArea / pageArea > CONFIG.MAX_BUBBLE_AREA_RATIO){
-    return { type:'sfx', reason:'مساحة كبيرة جداً بالنسبة للصفحة' };
-  }
-  if (box.avgConf < CONFIG.MIN_WORD_CONF){
-    return { type:'sfx', reason:`ثقة OCR منخفضة (${Math.round(box.avgConf)}%)` };
-  }
+  if (cleanLen < CONFIG.MIN_TEXT_LEN) return { type:'noise', reason:'نص قصير جداً/ضوضاء OCR' };
+  if (!els.skipSfx.checked) return { type:'dialogue', reason:'فحص المؤثرات الصوتية معطّل يدوياً' };
+  const boxArea = (box.x1-box.x0)*(box.y1-box.y0);
+  if (boxArea/pageArea > CONFIG.MAX_BUBBLE_AREA_RATIO) return { type:'sfx', reason:'مساحة كبيرة جداً بالنسبة للصفحة' };
+  if (box.avgConf < CONFIG.MIN_WORD_CONF) return { type:'sfx', reason:`ثقة OCR منخفضة (${Math.round(box.avgConf)}%)` };
   const bg = backgroundUniformity(ctx, box);
-  if (!bg.uniform){
-    return { type:'sfx', reason:`خلفية غير موحّدة (على الرسم مباشرة، ليست فقاعة)` };
-  }
+  if (!bg.uniform) return { type:'sfx', reason:'خلفية غير موحّدة (على الرسم مباشرة، ليست فقاعة)' };
   return { type:'dialogue', reason:'اجتاز كل الفحوصات' };
 }
 
-// تبييض فقاعة حوار حقيقية فقط — بالوسيط (median) لتفادي الألوان الخاطئة
-function medianOf(arr){
-  const s = [...arr].sort((a,b)=>a-b);
-  return s[Math.floor(s.length/2)];
-}
-function cleanDialogueBox(ctx, box){
-  const pad = 4;
-  const x = Math.max(0, Math.round(box.x0 - pad));
-  const y = Math.max(0, Math.round(box.y0 - pad));
-  const w = Math.max(1, Math.round((box.x1-box.x0) + pad*2));
-  const h = Math.max(1, Math.round((box.y1-box.y0) + pad*2));
-  const data = ctx.getImageData(x, y, w, h).data;
-  const rs=[], gs=[], bs=[];
-  for (let i=0;i<w;i++){
-    [0, h-1].forEach(yy => {
-      const idx = (yy*w+i)*4; rs.push(data[idx]); gs.push(data[idx+1]); bs.push(data[idx+2]);
-    });
-  }
-  const r = medianOf(rs), g = medianOf(gs), b = medianOf(bs);
-  ctx.fillStyle = `rgb(${r},${g},${b})`;
-  ctx.fillRect(x, y, w, h);
-  return { x, y, w, h };
-}
-
-// إزالة علامة مائية: "ختم نسخ" بسيط — ينسخ شريحة من أعلى المنطقة مباشرة فوقها
-// (أفضل من التعبئة اللونية المسطحة على خلفيات فيها رسم/تفاصيل)
+// ---------------------- 7) إزالة العلامات المائية ----------------------
 function cloneStampFill(ctx, rect){
   const { x, y, w, h } = rect;
-  const srcY = Math.max(0, y - h - 4); // نأخذ منطقة مطابقة بالحجم من فوق مباشرة
+  const srcY = Math.max(0, y - h - 4);
   ctx.drawImage(ctx.canvas, x, srcY, w, h, x, y, w, h);
 }
+// كشف شريط علامة مائية داكن (شعار + نص) أعلى/أسفل الصفحة عبر تحليل نسبة الدكنة/الفاتحة
+function detectBannerWatermarks(ctx, width, height){
+  const bandHeight = Math.max(24, Math.round(height * CONFIG.BANNER_SCAN_RATIO));
+  const bands = [ { y:height-bandHeight, h:bandHeight, side:'bottom' }, { y:0, h:bandHeight, side:'top' } ];
+  const found = [];
+  bands.forEach(b => {
+    let data;
+    try { data = ctx.getImageData(0, b.y, width, b.h).data; } catch(e){ return; }
+    let dark=0, light=0, total=0;
+    for (let i=0;i<data.length;i+=16){
+      const v = (data[i]+data[i+1]+data[i+2])/3;
+      total++;
+      if (v < 60) dark++; else if (v > 200) light++;
+    }
+    const darkRatio = dark/total, lightRatio = light/total;
+    if (darkRatio > 0.25 && darkRatio < 0.9 && lightRatio > 0.015){
+      found.push({ x:0, y:b.y, w:width, h:b.h, side:b.side });
+    }
+  });
+  return found;
+}
+function removeBannerWatermark(ctx, canvas, band){
+  const srcY = band.side === 'bottom' ? Math.max(0, band.y - band.h) : Math.min(canvas.height - band.h, band.y + band.h);
+  ctx.drawImage(canvas, 0, srcY, band.w, band.h, band.x, band.y, band.w, band.h);
+}
 
-function typesetText(ctx, text, box, lang){
+// ---------------------- 8) تنظيف بشكل الفقاعة الحقيقي (Flood Fill) ----------------------
+function medianOf(arr){ const s=[...arr].sort((a,b)=>a-b); return s[Math.floor(s.length/2)]; }
+function sampleRingColor(ctx, box){
+  const pad=5;
+  const x=Math.max(0,Math.round(box.x0-pad)), y=Math.max(0,Math.round(box.y0-pad));
+  const w=Math.max(1,Math.round((box.x1-box.x0)+pad*2)), h=Math.max(1,Math.round((box.y1-box.y0)+pad*2));
+  let data; try{ data = ctx.getImageData(x,y,w,h).data; }catch(e){ return null; }
+  const border=[];
+  for (let i=0;i<w;i++){ border.push([i,0]); border.push([i,h-1]); }
+  for (let j=0;j<h;j++){ border.push([0,j]); border.push([w-1,j]); }
+  let rs=[],gs=[],bs=[];
+  border.forEach(([bx,by])=>{ const idx=(by*w+bx)*4; rs.push(data[idx]); gs.push(data[idx+1]); bs.push(data[idx+2]); });
+  return { r: medianOf(rs), g: medianOf(gs), b: medianOf(bs) };
+}
+function floodFillOnData(data, w, h, sx, sy, target, tolerance, maxCount){
+  const visited = new Uint8Array(w*h);
+  const stack = [sy*w+sx];
+  const mask = [];
+  let minX=sx,maxX=sx,minY=sy,maxY=sy;
+  while (stack.length && mask.length < maxCount){
+    const p = stack.pop();
+    if (visited[p]) continue;
+    visited[p] = 1;
+    const x = p % w, y = (p - x) / w;
+    const idx = p*4;
+    const dr=data[idx]-target.r, dg=data[idx+1]-target.g, db=data[idx+2]-target.b;
+    if (Math.sqrt(dr*dr+dg*dg+db*db) > tolerance) continue;
+    mask.push(p);
+    if (x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y;
+    if (x>0 && !visited[p-1]) stack.push(p-1);
+    if (x<w-1 && !visited[p+1]) stack.push(p+1);
+    if (y>0 && !visited[p-w]) stack.push(p-w);
+    if (y<h-1 && !visited[p+w]) stack.push(p+w);
+  }
+  return { mask, count:mask.length, bounds:{minX,maxX,minY,maxY} };
+}
+// خط أمان: تعبئة مستطيلة تقليدية — تُستخدم فقط إذا فشل الملء الذكي
+function fallbackRectClean(ctx, box){
+  const pad=4;
+  const x=Math.max(0,Math.round(box.x0-pad)), y=Math.max(0,Math.round(box.y0-pad));
+  const w=Math.max(1,Math.round((box.x1-box.x0)+pad*2)), h=Math.max(1,Math.round((box.y1-box.y0)+pad*2));
+  const bg = sampleRingColor(ctx, box) || {r:255,g:255,b:255};
+  ctx.fillStyle = `rgb(${bg.r},${bg.g},${bg.b})`;
+  ctx.fillRect(x,y,w,h);
+  return { x, y, w, h };
+}
+// التنظيف الرئيسي: يملأ شكل الفقاعة الحقيقي بدل رسم مربع فوق النص
+function cleanDialogueShaped(ctx, box, pageW, pageH){
+  const bw = box.x1-box.x0, bh = box.y1-box.y0;
+  const pad = Math.max(bw,bh)*0.9 + 30;
+  const rx = Math.max(0, Math.round(box.x0-pad));
+  const ry = Math.max(0, Math.round(box.y0-pad));
+  const rw = Math.min(pageW-rx, Math.round(bw+pad*2));
+  const rh = Math.min(pageH-ry, Math.round(bh+pad*2));
+  const bg = sampleRingColor(ctx, box);
+  if (!bg || rw<=0 || rh<=0) return fallbackRectClean(ctx, box);
+
+  let imgData;
+  try{ imgData = ctx.getImageData(rx, ry, rw, rh); } catch(e){ return fallbackRectClean(ctx, box); }
+  const data = imgData.data;
+  const localX0 = box.x0-rx, localY0 = box.y0-ry, localX1 = box.x1-rx, localY1 = box.y1-ry;
+  const seeds = [
+    [Math.round(localX0-6), Math.round(localY0-6)],
+    [Math.round((localX0+localX1)/2), Math.max(2, Math.round(localY0-10))],
+    [Math.round((localX0+localX1)/2), Math.min(rh-2, Math.round(localY1+10))],
+    [Math.max(2, Math.round(localX0-10)), Math.round((localY0+localY1)/2)],
+    [Math.min(rw-2, Math.round(localX1+10)), Math.round((localY0+localY1)/2)],
+  ];
+  let best = null;
+  for (const [sx,sy] of seeds){
+    if (sx<0||sy<0||sx>=rw||sy>=rh) continue;
+    const idx0 = (sy*rw+sx)*4;
+    const dr=data[idx0]-bg.r, dg=data[idx0+1]-bg.g, db=data[idx0+2]-bg.b;
+    if (Math.sqrt(dr*dr+dg*dg+db*db) > CONFIG.FLOOD_TOLERANCE) continue;
+    const res = floodFillOnData(data, rw, rh, sx, sy, bg, CONFIG.FLOOD_TOLERANCE, Math.round(rw*rh*0.85));
+    if (res && res.count > (bw*bh*0.25) && (!best || res.count > best.count)) best = res;
+  }
+  if (!best) return fallbackRectClean(ctx, box);
+
+  for (let k=0;k<best.mask.length;k++){
+    const p = best.mask[k]*4;
+    data[p]=bg.r; data[p+1]=bg.g; data[p+2]=bg.b;
+  }
+  ctx.putImageData(imgData, rx, ry);
+  return {
+    x: rx+best.bounds.minX, y: ry+best.bounds.minY,
+    w: Math.max(1, best.bounds.maxX-best.bounds.minX),
+    h: Math.max(1, best.bounds.maxY-best.bounds.minY)
+  };
+}
+
+// ---------------------- 9) التنضيد (خط أثخن وأوضح) ----------------------
+function typesetText(ctx, text, box, lang, fontFamily){
   const isRTL = lang === 'ar';
   ctx.save();
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#111111';
   ctx.direction = isRTL ? 'rtl' : 'ltr';
   ctx.textAlign = 'center';
-  let fontSize = Math.max(14, Math.min(26, Math.floor(box.h / 4)));
+  const family = fontFamily ? `${fontFamily}, Tajawal, sans-serif` : `Tajawal, sans-serif`;
+  const minFontSize = 15;
+  let fontSize = Math.max(18, Math.min(34, Math.floor(box.h/3.2)));
   function wrapLines(size){
-    ctx.font = `${size}px Tajawal, sans-serif`;
+    ctx.font = `700 ${size}px ${family}`;
     const words = text.split(' ');
-    const lines = []; let line = '';
+    const lines = []; let line='';
     words.forEach(word => {
-      const test = line ? line + ' ' + word : word;
-      if (ctx.measureText(test).width > box.w - 12 && line){ lines.push(line); line = word; }
+      const test = line ? line+' '+word : word;
+      if (ctx.measureText(test).width > box.w-14 && line){ lines.push(line); line=word; }
       else line = test;
     });
     if (line) lines.push(line);
     return lines;
   }
   let lines = wrapLines(fontSize);
-  while (lines.length * (fontSize*1.25) > box.h && fontSize > 10){ fontSize--; lines = wrapLines(fontSize); }
-  const lineHeight = fontSize*1.25;
+  while (lines.length*(fontSize*1.2) > box.h && fontSize > minFontSize){ fontSize--; lines = wrapLines(fontSize); }
+  ctx.font = `700 ${fontSize}px ${family}`;
+  ctx.lineWidth = Math.max(2, fontSize*0.06);
+  ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+  ctx.fillStyle = '#0d0d0d';
+  const lineHeight = fontSize*1.2;
   const startY = box.y + box.h/2 - (lines.length-1)*lineHeight/2;
-  lines.forEach((ln,i) => ctx.fillText(ln, box.x + box.w/2, startY + i*lineHeight));
+  lines.forEach((ln,i) => {
+    const yy = startY + i*lineHeight;
+    ctx.strokeText(ln, box.x+box.w/2, yy);
+    ctx.fillText(ln, box.x+box.w/2, yy);
+  });
   ctx.restore();
 }
 
-// ---------------------- 6) أداة الإزالة اليدوية للعلامة المائية ----------------------
+// ---------------------- 10) أداة الإزالة اليدوية للعلامة المائية ----------------------
 let eraserRect = null, eraserDrag = null;
 function refreshEraserOptions(){
   els.eraserImageSelect.innerHTML = '';
@@ -615,22 +744,19 @@ async function drawEraserPreview(index){
     const file = state.files[index];
     if (!file) return;
     const { canvas } = await loadImageToCanvas(file);
-    state.pages[index] = { file, name: file.name, canvas, ctx: canvas.getContext('2d'), status:'pending' };
+    state.pages[index] = { file, name:file.name, canvas, ctx:canvas.getContext('2d'), status:'pending' };
   }
   const page = state.pages[index];
-  const prevCanvas = els.eraserCanvas;
   const maxW = 500;
-  const scale = Math.min(1, maxW / page.canvas.width);
-  prevCanvas.width = page.canvas.width * scale;
-  prevCanvas.height = page.canvas.height * scale;
-  prevCanvas.dataset.scale = scale;
-  prevCanvas.dataset.index = index;
-  const pctx = prevCanvas.getContext('2d');
-  pctx.drawImage(page.canvas, 0, 0, prevCanvas.width, prevCanvas.height);
+  const scale = Math.min(1, maxW/page.canvas.width);
+  els.eraserCanvas.width = page.canvas.width*scale;
+  els.eraserCanvas.height = page.canvas.height*scale;
+  els.eraserCanvas.dataset.scale = scale;
+  els.eraserCanvas.dataset.index = index;
+  els.eraserCanvas.getContext('2d').drawImage(page.canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
   eraserRect = null;
 }
 els.eraserImageSelect.addEventListener('change', e => drawEraserPreview(Number(e.target.value)));
-
 els.eraserCanvas.addEventListener('mousedown', e => {
   const r = els.eraserCanvas.getBoundingClientRect();
   eraserDrag = { x0:e.clientX-r.left, y0:e.clientY-r.top };
@@ -638,12 +764,11 @@ els.eraserCanvas.addEventListener('mousedown', e => {
 els.eraserCanvas.addEventListener('mousemove', e => {
   if (!eraserDrag) return;
   const r = els.eraserCanvas.getBoundingClientRect();
-  const x1 = e.clientX-r.left, y1 = e.clientY-r.top;
+  const x1=e.clientX-r.left, y1=e.clientY-r.top;
   eraserRect = { x:Math.min(eraserDrag.x0,x1), y:Math.min(eraserDrag.y0,y1), w:Math.abs(x1-eraserDrag.x0), h:Math.abs(y1-eraserDrag.y0) };
   redrawEraserOverlay();
 });
 window.addEventListener('mouseup', () => { eraserDrag = null; });
-
 function redrawEraserOverlay(){
   const index = Number(els.eraserCanvas.dataset.index || 0);
   const page = state.pages[index];
@@ -658,19 +783,15 @@ function redrawEraserOverlay(){
     pctx.fillRect(eraserRect.x, eraserRect.y, eraserRect.w, eraserRect.h);
   }
 }
-
 function applyManualErase(index, rectOnCanvasScale, scale){
   const page = state.pages[index];
   if (!page) return;
   const rect = {
-    x: Math.round(rectOnCanvasScale.x / scale),
-    y: Math.round(rectOnCanvasScale.y / scale),
-    w: Math.round(rectOnCanvasScale.w / scale),
-    h: Math.round(rectOnCanvasScale.h / scale)
+    x: Math.round(rectOnCanvasScale.x/scale), y: Math.round(rectOnCanvasScale.y/scale),
+    w: Math.round(rectOnCanvasScale.w/scale), h: Math.round(rectOnCanvasScale.h/scale)
   };
   cloneStampFill(page.ctx, rect);
 }
-
 els.eraseBtn.addEventListener('click', () => {
   if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
   const index = Number(els.eraserCanvas.dataset.index || 0);
@@ -694,7 +815,7 @@ els.eraseAllBtn.addEventListener('click', async () => {
   drawEraserPreview(Number(els.eraserCanvas.dataset.index || 0));
 });
 
-// ---------------------- 7) دالة التشغيل الرئيسية ----------------------
+// ---------------------- 11) دالة التشغيل الرئيسية ----------------------
 els.runBtn.addEventListener('click', runPipeline);
 
 async function runPipeline(){
@@ -705,8 +826,8 @@ async function runPipeline(){
   const srcLang = document.getElementById('srcLang').value;
   const tgtLang = document.getElementById('tgtLang').value;
   const extraKeywords = els.extraWm.value.split(',').map(s=>s.trim()).filter(Boolean);
+  const chosenFont = els.fontSelect.value || null;
   const total = state.files.length;
-
   const totals = { dialogue:0, sfx:0, wm:0, noise:0, errors:0, pages:0 };
 
   logLine(`بدء التشغيل: ${total} صفحة — من "${srcLang}" إلى "${tgtLang}"`, 'ok');
@@ -720,7 +841,6 @@ async function runPipeline(){
     logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
 
     try{
-      // إعادة استخدام الصورة إذا كانت مفتوحة مسبقاً من أداة المسح اليدوي
       let page = state.pages[i];
       if (!page){
         const { canvas, ctx } = await loadImageToCanvas(file);
@@ -730,7 +850,6 @@ async function runPipeline(){
       const { canvas, ctx } = page;
       enhanceContrast(ctx, canvas.width, canvas.height);
 
-      // OCR على نسخة مصغّرة لتسريع الدفعات الكبيرة، ثم تحويل الإحداثيات للحجم الأصلي
       setStepState('ocr','active');
       const { canvas: ocrCanvas, scale } = makeOcrCanvas(canvas);
       const { data } = await worker.recognize(ocrCanvas);
@@ -742,46 +861,41 @@ async function runPipeline(){
       setStepState('merge','done', `${boxes.length} وحدة`);
 
       setStepState('classify','active');
-      const pageArea = canvas.width * canvas.height;
+      const pageArea = canvas.width*canvas.height;
       const classified = boxes.map(box => ({ box, cls: classifyBox(ctx, box, pageArea, extraKeywords) }));
       const dialogueBoxes = classified.filter(c => c.cls.type === 'dialogue');
       const sfxBoxes = classified.filter(c => c.cls.type === 'sfx');
       const wmBoxes = classified.filter(c => c.cls.type === 'watermark');
-      const noiseBoxes = classified.filter(c => c.cls.type === 'noise');
       setStepState('classify','done', `حوار:${dialogueBoxes.length} مؤثر:${sfxBoxes.length} علامة:${wmBoxes.length}`);
-      logLine(`  ✓ التصنيف: ${dialogueBoxes.length} حوار حقيقي، ${sfxBoxes.length} مؤثر صوتي (تم تجاهله)، ${wmBoxes.length} علامة مائية`, 'info');
+      logLine(`  ✓ التصنيف: ${dialogueBoxes.length} حوار حقيقي، ${sfxBoxes.length} مؤثر صوتي متجاهَل، ${wmBoxes.length} علامة نصية`, 'info');
 
-      // إزالة العلامات المائية النصية المكتشفة تلقائياً
       setStepState('watermark','active');
       wmBoxes.forEach(({box}) => {
         const rect = { x:Math.round(box.x0)-4, y:Math.round(box.y0)-4, w:Math.round(box.x1-box.x0)+8, h:Math.round(box.y1-box.y0)+8 };
         cloneStampFill(ctx, rect);
       });
-      setStepState('watermark','done', `${wmBoxes.length} أُزيلت`);
+      let bannerCount = 0;
+      if (els.autoWatermark.checked){
+        const banners = detectBannerWatermarks(ctx, canvas.width, canvas.height);
+        banners.forEach(b => { removeBannerWatermark(ctx, canvas, b); bannerCount++; });
+      }
+      setStepState('watermark','done', `${wmBoxes.length+bannerCount} أُزيلت`);
 
-      // تبييض فقاعات الحوار فقط
       setStepState('clean','active');
-      const cleanedBoxes = dialogueBoxes.map(({box}) => ({ box, cleaned: cleanDialogueBox(ctx, box) }));
+      const cleanedBoxes = dialogueBoxes.map(({box}) => ({ box, cleaned: cleanDialogueShaped(ctx, box, canvas.width, canvas.height) }));
       setStepState('clean','done');
 
-      // الترجمة
       setStepState('translate','active');
       for (const item of cleanedBoxes){
-        try{
-          item.translated = await translateText(item.box.text, srcLang, tgtLang);
-        } catch(err){
-          item.translated = item.box.text;
-          logLine(`    · تعذرت ترجمة فقاعة: ${err.message}`, 'warn');
-        }
+        try{ item.translated = await translateText(item.box.text, srcLang, tgtLang); }
+        catch(err){ item.translated = item.box.text; logLine(`    · تعذرت ترجمة فقاعة: ${err.message}`, 'warn'); }
       }
       setStepState('translate','done');
 
-      // التنضيد
       setStepState('typeset','active');
-      cleanedBoxes.forEach(item => typesetText(ctx, item.translated, item.cleaned, tgtLang));
+      cleanedBoxes.forEach(item => typesetText(ctx, item.translated, item.cleaned, tgtLang, chosenFont));
       setStepState('typeset','done');
 
-      // حفظ النتيجة
       const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
       const url = URL.createObjectURL(blob);
       const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
@@ -790,8 +904,7 @@ async function runPipeline(){
 
       totals.dialogue += dialogueBoxes.length;
       totals.sfx += sfxBoxes.length;
-      totals.wm += wmBoxes.length;
-      totals.noise += noiseBoxes.length;
+      totals.wm += wmBoxes.length + bannerCount;
       totals.pages++;
 
       addResultCard({ name: outName, url, status:'done' });
@@ -815,7 +928,7 @@ async function runPipeline(){
   els.runBtn.disabled = false;
 }
 
-// ---------------------- 8) الإحصائيات + بطاقات النتائج + التصدير ----------------------
+// ---------------------- 12) الإحصائيات + النتائج + التصدير ----------------------
 function updateSummary(totals){
   els.statPages.textContent = totals.pages;
   els.statDialogue.textContent = totals.dialogue;
@@ -823,12 +936,11 @@ function updateSummary(totals){
   els.statWm.textContent = totals.wm;
   els.statErrors.textContent = totals.errors;
 }
-
 function addResultCard({ name, url, status, errorMsg }){
   const card = document.createElement('div');
   card.className = 'result-card';
-  const badgeClass = status === 'done' ? 'done' : status === 'error' ? 'error' : 'processing';
-  const badgeText = status === 'done' ? 'تم' : status === 'error' ? 'فشل' : 'قيد المعالجة';
+  const badgeClass = status === 'done' ? 'done' : 'error';
+  const badgeText = status === 'done' ? 'تم' : 'فشل';
   card.innerHTML = `
     ${url ? `<img src="${url}">` : `<div style="padding:20px;font-size:12px;color:var(--pure-bad);">${errorMsg||'خطأ غير معروف'}</div>`}
     <div class="foot">
@@ -837,7 +949,6 @@ function addResultCard({ name, url, status, errorMsg }){
     </div>`;
   els.resultsGrid.appendChild(card);
 }
-
 els.zipBtn.addEventListener('click', async () => {
   logLine('تجهيز ملف ZIP لكل الصفحات…');
   const zip = new JSZip();
@@ -845,7 +956,7 @@ els.zipBtn.addEventListener('click', async () => {
   const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
   const a = document.createElement('a');
-  a.href = url; a.download = 'اداة_بيور_2_النتائج.zip'; a.click();
+  a.href = url; a.download = 'اداة_بيور_3_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
 });
 </script>
