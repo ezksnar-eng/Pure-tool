@@ -20,7 +20,7 @@ body{background:linear-gradient(180deg,var(--pure-cream) 0%, #FFFFFF 55%); color
   font-family:'Tajawal',sans-serif; line-height:1.6; min-height:100vh;}
 ::selection{background:var(--pure-pink); color:var(--pure-plum);}
 a{color:var(--pure-magenta);}
-.wrap{max-width:1120px; margin:0 auto; padding:28px 20px 80px;}
+.wrap{max-width:1080px; margin:0 auto; padding:28px 20px 80px;}
 
 header.hero{display:flex; align-items:center; gap:22px; padding:22px 26px;
   background:var(--pure-white); border:1px solid var(--pure-line); border-radius:24px; margin-bottom:28px;}
@@ -35,6 +35,12 @@ section.card{background:var(--pure-white); border:1px solid var(--pure-line); bo
   padding:26px; margin-bottom:22px;}
 section.card > h2{margin:0 0 6px; font-size:19px;}
 section.card > .hint{margin:0 0 20px; font-size:13.5px; color:#9A7288;}
+
+.conn-row{display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap;}
+.conn-row .field{flex:1; min-width:260px;}
+.conn-status{font-size:13px; margin-top:10px; padding:8px 12px; border-radius:10px; display:none;}
+.conn-status.ok{display:block; background:#E4F5EC; color:var(--pure-ok);}
+.conn-status.bad{display:block; background:#FBE4E1; color:var(--pure-bad);}
 
 #dropzone{border:2px dashed var(--pure-pink); border-radius:14px; padding:30px 20px; text-align:center;
   background:var(--pure-cream); cursor:pointer;}
@@ -54,19 +60,9 @@ section.card > .hint{margin:0 0 20px; font-size:13.5px; color:#9A7288;}
 .settings-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
 @media (max-width:640px){.settings-grid{grid-template-columns:1fr;}}
 .field label{display:block; font-size:13px; color:#7A5468; margin-bottom:6px;}
-.field select, .field input[type="text"], .field input[type="range"], .field textarea{width:100%; padding:10px 12px; border-radius:10px;
+.field select, .field input[type="text"], .field input[type="range"]{width:100%; padding:10px 12px; border-radius:10px;
   border:1px solid var(--pure-line); font-family:inherit; font-size:14px; background:#fff; color:var(--pure-plum);}
-.field textarea{resize:vertical; min-height:54px;}
 .toggle-row{display:flex; align-items:center; gap:8px; margin:10px 0 0; font-size:13.5px; color:#7A5468;}
-#hfFields, #classifierFields{display:none; margin-top:12px;}
-#hfFields.show, #classifierFields.show{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
-
-.mode-picker{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px;}
-@media (max-width:640px){.mode-picker{grid-template-columns:1fr;}}
-.mode-opt{border:1.5px solid var(--pure-line); border-radius:12px; padding:12px 14px; cursor:pointer; background:#fff;}
-.mode-opt.active{border-color:var(--pure-magenta); background:var(--pure-cream);}
-.mode-opt .mo-title{font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px;}
-.mode-opt .mo-sub{font-size:12px; color:#9A7288; margin-top:4px;}
 
 .actions{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
 button.primary{background:var(--pure-magenta); color:#fff; border:none; padding:12px 26px;
@@ -101,8 +97,6 @@ ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff
 
 #eraserWrap{position:relative; display:inline-block; max-width:100%; border:1px solid var(--pure-line); border-radius:10px; overflow:hidden;}
 #eraserCanvas{max-width:100%; display:block; cursor:crosshair;}
-.angle-row{display:flex; align-items:center; gap:10px; margin-top:10px;}
-.angle-row span{font-size:12.5px; color:#7A5468; min-width:70px;}
 
 #resultsGrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;}
 .result-card{border:1px solid var(--pure-line); border-radius:12px; overflow:hidden; background:#fff;}
@@ -117,9 +111,6 @@ ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff
 .stat-box{background:var(--pure-cream); border:1px solid var(--pure-line); border-radius:12px; padding:14px; text-align:center;}
 .stat-box .num{font-size:22px; font-weight:900; color:var(--pure-magenta);}
 .stat-box .lbl{font-size:12px; color:#9A7288; margin-top:2px;}
-
-.fontlist{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
-.fontchip{background:var(--pure-pink-light); color:var(--pure-magenta); font-size:12.5px; padding:5px 12px; border-radius:var(--radius-pill);}
 
 footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;}
 </style>
@@ -137,254 +128,144 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     </div>
     <div class="hero-text">
       <h1>أداة بيور 8</h1>
-      <p>يدعم الآن الترجمة عبر خادم manga-image-translator الخارجي (Colab) بجانب المحرك المحلي — فريق بيور</p>
+      <p>واجهة ترفع الصور فعلياً لسيرفر manga-image-translator الحقيقي (Colab) وتستلم النتيجة المُترجَمة والمُبيَّضة — فريق بيور</p>
     </div>
   </header>
 
-  <!-- 1) رفع الصور -->
+  <!-- 1) رابط السيرفر (يتغير كل جلسة Colab) -->
   <section class="card">
-    <h2>1. رفع صفحات المانهوا</h2>
+    <h2>1. رابط السيرفر (Backend)</h2>
+    <p class="hint">رابط Colab يتغير كل ما تُعاد تشغيل الجلسة — حدّثه هنا وقت ما يتغير، بدون الحاجة لتعديل الكود.</p>
+    <div class="conn-row">
+      <div class="field">
+        <label>رابط السيرفر</label>
+        <input type="text" id="backendUrl" value="https://5003-gpu-t4-s-kkb-usw4a0-1j1s4ft57l5ah-a.us-west4-0.prod.colab.dev">
+      </div>
+      <button class="secondary" id="testBtn">🔌 اختبار الاتصال</button>
+    </div>
+    <div class="conn-status" id="connStatus"></div>
+  </section>
+
+  <!-- 2) رفع الصور -->
+  <section class="card">
+    <h2>2. رفع صفحات المانهوا</h2>
     <p class="hint">يدعم حتى <b>70</b> صورة. الملفات المكررة تُرفض تلقائياً.</p>
     <div id="dropzone">
       <p class="big">📥 اسحب الصور هنا أو اضغط للاختيار</p>
-      <p class="small">كل المعالجة تتم محلياً داخل متصفحك — لا رفع لأي خادم خارجي</p>
+      <p class="small">تُرفع الصور مباشرة لسيرفر الـ Colab أعلاه للمعالجة — تأكد إنه شغّال قبل البدء</p>
     </div>
     <input id="fileInput" type="file" accept="image/*" multiple>
     <div id="fileCountWarn"></div>
     <div id="thumbs"></div>
   </section>
 
-  <!-- 2) وضع المعالجة -->
+  <!-- 3) إعدادات الترجمة -->
   <section class="card">
-    <h2>2. وضع المعالجة</h2>
-    <p class="hint">مستعجل؟ استخدم "خام" ليضمن معالجة كل نص بلا تخطي، وقت ما تحتاج سرعة أكثر من الدقة.</p>
-    <div class="mode-picker">
-      <label class="mode-opt active" id="modeSmartLbl">
-        <input type="radio" name="procMode" value="smart" checked style="display:none;">
-        <div class="mo-title">🧠 وضع ذكي (بخوارزميات فحص)</div>
-        <div class="mo-sub">فحص متعدد المسافات يدعم فقاعات الحواف المسننة/السحابية، مع تمرير تلقائي للنصوص الطويلة عالية الثقة</div>
-      </label>
-      <label class="mode-opt" id="modeRawLbl">
-        <input type="radio" name="procMode" value="raw" style="display:none;">
-        <div class="mo-title">⚡ وضع خام (بدون فحص)</div>
-        <div class="mo-sub">يعامل كل نص مكتشَف كحوار — يبقي فقط فلترة العلامات المائية والضوضاء القصيرة</div>
-      </label>
-    </div>
-    <div class="toggle-row"><input type="checkbox" id="useClassifier">
-      <label for="useClassifier">تفعيل تصنيف AI حقيقي إضافي للحالات الغامضة فقط (عبر Hugging Face، يتطلب توكن مجاني)</label></div>
-    <div class="settings-grid" id="classifierFields">
-      <div class="field"><label>HF API Token (للتصنيف)</label><input type="text" id="classifierToken" placeholder="hf_xxxxxxxxxxxxxxxx"></div>
-    </div>
-  </section>
-
-  <!-- 2.5) خادم الترجمة الخارجي (manga-image-translator عبر Colab) -->
-  <section class="card">
-    <h2>2.5. خادم الترجمة الخارجي (Backend Proxy — manga-image-translator)</h2>
-    <p class="hint">إذا فعّلته، تُرسَل كل صورة كما هي مباشرة إلى الخادم (رفع + كشف + ترجمة + تنضيد بالكامل هناك)، وتتجاوز أداة OCR/الترجمة/التنضيد المحلية بالأسفل بالكامل.</p>
-    <div class="toggle-row"><input type="checkbox" id="useBackend">
-      <label for="useBackend">استخدام خادم الترجمة الخارجي بدل المعالجة المحلية</label></div>
-    <div class="settings-grid" id="backendFields" style="margin-top:12px;">
-      <div class="field" style="grid-column:1/-1;">
-        <label>رابط الخادم (Backend Proxy URL)</label>
-        <input type="text" id="backendUrl" value="https://5003-gpu-t4-s-kkb-usw4a0-1j1s4ft57l5ah-a.us-west4-0.prod.colab.dev" placeholder="https://xxxx.prod.colab.dev">
-      </div>
-      <div class="field">
-        <label>محرك الترجمة على الخادم</label>
-        <select id="backendTranslator">
-          <option value="offline" selected>تلقائي بدون اتصال (offline)</option>
-          <option value="nllb">NLLB (متعدد اللغات)</option>
-          <option value="nllb_big">NLLB Big</option>
-          <option value="sakura">Sakura (يتطلب SAKURA_API_BASE على الخادم)</option>
-          <option value="chatgpt">ChatGPT (يتطلب OPENAI_API_KEY على الخادم)</option>
-          <option value="gemini">Gemini (يتطلب GEMINI_API_KEY على الخادم)</option>
-          <option value="deepseek">DeepSeek (يتطلب DEEPSEEK_API_KEY على الخادم)</option>
-          <option value="groq">Groq (يتطلب GROQ_API_KEY على الخادم)</option>
-          <option value="custom_openai">Custom OpenAI / Ollama (يتطلب إعداد على الخادم)</option>
-          <option value="none">بدون ترجمة (تنظيف الفقاعات فقط)</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>لغة الهدف المُرسلة للخادم</label>
-        <select id="backendTgtLang">
-          <option value="ARA" selected>العربية (ARA)</option>
-          <option value="ENG">English (ENG)</option>
-        </select>
-      </div>
-    </div>
-    <div class="actions">
-      <button class="secondary" id="testBackendBtn">🔌 اختبار الاتصال بالخادم</button>
-    </div>
-  </section>
-
-  <!-- 3) الإعدادات -->
-  <section class="card">
-    <h2>3. إعدادات الترجمة والعلامة المائية</h2>
+    <h2>3. إعدادات الترجمة (تُرسَل كإعداد config للسيرفر)</h2>
     <div class="settings-grid">
-      <div class="field">
-        <label>لغة النص الأصلي (OCR)</label>
-        <select id="srcLang">
-          <option value="eng">إنجليزي (Eng)</option>
-          <option value="jpn">ياباني (Jpn)</option>
-          <option value="kor">كوري (Kor)</option>
-        </select>
-      </div>
       <div class="field">
         <label>لغة الترجمة الهدف</label>
         <select id="tgtLang">
-          <option value="ar" selected>العربية</option>
-          <option value="en">English</option>
+          <option value="ARA" selected>العربية (ARA)</option>
+          <option value="ENG">English (ENG)</option>
+          <option value="CHS">صيني مبسّط (CHS)</option>
+          <option value="CHT">صيني تقليدي (CHT)</option>
+          <option value="JPN">ياباني (JPN)</option>
+          <option value="KOR">كوري (KOR)</option>
         </select>
       </div>
+      <div class="field">
+        <label>محرك الترجمة (translator)</label>
+        <input type="text" id="translatorEngine" value="offline">
+      </div>
     </div>
-    <div class="toggle-row"><input type="checkbox" id="autoWatermark" checked>
-      <label for="autoWatermark">إزالة العلامات المائية تلقائياً (نصوص واضحة + أشرطة شعارات داكنة)</label></div>
-    <div class="field" style="margin-top:12px;">
-      <label>كلمات علامة مائية إضافية (اختياري، افصل بينها بفاصلة)</label>
-      <textarea id="extraWm" placeholder="مثال: mysite.com, فريق كذا, scan by"></textarea>
-    </div>
-    <div class="toggle-row"><input type="checkbox" id="useHF">
-      <label for="useHF">استخدام Hugging Face للترجمة الأدق (اختياري)</label></div>
-    <div class="settings-grid" id="hfFields">
-      <div class="field"><label>HF API Token (للترجمة)</label><input type="text" id="hfToken" placeholder="hf_xxxxxxxxxxxxxxxx"></div>
-      <div class="field"><label>معرّف النموذج</label><input type="text" id="hfModel" value="Helsinki-NLP/opus-mt-en-ar"></div>
-    </div>
+    <p class="hint" style="margin-top:10px;">"offline" يشتغل بدون أي مفتاح API (نموذج NLLB محلي على السيرفر). محركات مثل deepl/openai/gemini/deepseek تحتاج مفاتيح مُعدّة على السيرفر نفسه — إذا مو مُعدّة هناك، خلّيها "offline".</p>
   </section>
 
-  <!-- 4) خطوط مخصصة -->
+  <!-- 4) خط الإنتاج -->
   <section class="card">
-    <h2>4. رفع حزمة خطوط مخصصة (ZIP)</h2>
-    <p class="hint">ارفع ZIP يحتوي خطوط (.ttf/.otf/.woff/.woff2). خط باسمه "حوار" أو "رئيسي" أو "أساسي" يُختار تلقائياً.</p>
-    <input type="file" id="fontZipInput" accept=".zip">
-    <div class="field" style="margin-top:12px;">
-      <label>الخط المستخدم في التنضيد</label>
-      <select id="fontSelect"><option value="">افتراضي (Tajawal)</option></select>
-    </div>
-    <div class="fontlist" id="fontList"></div>
-  </section>
-
-  <!-- 5) خط الإنتاج -->
-  <section class="card">
-    <h2>5. خط الإنتاج (Pipeline)</h2>
+    <h2>4. خط الإنتاج (Pipeline الحقيقي)</h2>
+    <p class="hint">كل صورة تُرفع للسيرفر، ويرجع السيرفر نفسه الصورة بعد الكشف + OCR + التبييض (Inpainting) + الترجمة + التنضيد — كلها نماذج AI فعلية تشتغل هناك، لا خوارزميات تخمين محلية.</p>
     <ol class="pipeline" id="pipelineList">
-      <li data-key="prep"><div><div class="step-title">تحضير وحماية الصورة</div><div class="step-sub">تحسين تباين + منع تكرار الملف + تصغير آمن للصفحات الطويلة</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="ocr"><div><div class="step-title">كشف واستخراج النص</div><div class="step-sub">Tesseract.js مع درجة ثقة لكل كلمة</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="merge"><div><div class="step-title">تجميع الفقاعات</div><div class="step-sub">دمج الكلمات + تقدير عدد الأسطر الأصلية</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="classify"><div><div class="step-title">تصنيف المحتوى</div><div class="step-sub">فحص خلفية متعدد المسافات (يدعم الحواف المسننة) + تمرير تلقائي للنصوص الطويلة</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="watermark"><div><div class="step-title">إزالة العلامات المائية</div><div class="step-sub">كلمات مفتاحية + شريط شعار داكن + يدوي مائل إن وُجد</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="clean"><div><div class="step-title">تنظيف مضمون للفقاعة</div><div class="step-sub">شكل الفقاعة الحقيقي + تغطية إجبارية لكامل صندوق النص الأصلي</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="translate"><div><div class="step-title">الترجمة</div><div class="step-sub">فقاعات الحوار فقط</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="typeset"><div><div class="step-title">التنضيد</div><div class="step-sub">حجم خط يقارب كثافة الأسطر الأصلية</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="export"><div><div class="step-title">التصدير والإحصائيات</div><div class="step-sub">ZIP + أرقام حقيقية فقط</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="connect"><div><div class="step-title">التحقق من السيرفر</div><div class="step-sub">فحص أن الرابط يستجيب قبل رفع أي صورة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="upload"><div><div class="step-title">رفع الصورة للسيرفر</div><div class="step-sub">إرسال multipart/form-data لنقطة /translate/with-form/image</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="process"><div><div class="step-title">المعالجة على السيرفر</div><div class="step-sub">كشف + OCR + تبييض + ترجمة + تنضيد (نماذج AI حقيقية)</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="receive"><div><div class="step-title">استلام الصورة الناتجة</div><div class="step-sub">استقبال PNG جاهز من رد السيرفر</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="export"><div><div class="step-title">التصدير</div><div class="step-sub">ZIP لكل الصفحات الناجحة</div></div><div class="step-state">بالانتظار</div></li>
     </ol>
     <div id="progressWrap">
       <div id="progressBar"><div id="progressFill"></div></div>
       <div id="progressLabel">لم يبدأ التشغيل بعد</div>
     </div>
     <div class="actions">
-      <button class="primary" id="runBtn" disabled>▶ تشغيل خط الإنتاج</button>
+      <button class="primary" id="runBtn" disabled>▶ رفع ومعالجة كل الصور</button>
       <button class="secondary" id="resetBtn">إعادة تعيين</button>
     </div>
   </section>
 
-  <!-- 6) إزالة علامة مائية يدوياً -->
+  <!-- 5) تنظيف يدوي إضافي على النتائج -->
   <section class="card">
-    <h2>6. إزالة علامة مائية يدوياً (يدعم الزاوية المائلة)</h2>
-    <p class="hint">للعلامات المائية الشفافة أو المائلة التي لا يقرأها OCR.</p>
-    <div class="field"><label>اختر الصفحة للمعاينة</label><select id="eraserImageSelect"></select></div>
+    <h2>5. تنظيف يدوي إضافي (اختياري)</h2>
+    <p class="hint">إذا السيرفر ترك أي أثر (شعار/علامة) بالنتيجة، اختر الصفحة وامسحها يدوياً هنا قبل التنزيل.</p>
+    <div class="field"><label>اختر صفحة ناتجة للمعاينة</label><select id="eraserImageSelect"></select></div>
     <div id="eraserWrap"><canvas id="eraserCanvas"></canvas></div>
-    <div class="angle-row">
-      <span>زاوية الميلان</span>
-      <input type="range" id="eraserAngle" min="-45" max="45" value="0">
-      <span id="eraserAngleVal">0°</span>
-    </div>
     <div class="actions">
-      <button class="secondary" id="eraseBtn">🧹 امسح المنطقة المحددة</button>
-      <button class="secondary" id="eraseAllBtn">🧹 طبّق على كل الصفحات</button>
+      <button class="secondary" id="eraseBtn">🧹 امسح المنطقة المحددة (من هذي الصفحة)</button>
     </div>
   </section>
 
-  <!-- 7) السجل -->
+  <!-- 6) السجل -->
   <section class="card">
-    <h2>7. سجل التنفيذ المباشر</h2>
-    <div id="log"><div class="line">بانتظار رفع الصور والضغط على "تشغيل خط الإنتاج"…</div></div>
+    <h2>6. سجل التنفيذ المباشر</h2>
+    <div id="log"><div class="line">بانتظار رفع الصور والضغط على "رفع ومعالجة كل الصور"…</div></div>
   </section>
 
-  <!-- 8) النتائج -->
+  <!-- 7) النتائج -->
   <section class="card">
-    <h2>8. الصفحات الناتجة والإحصائيات</h2>
+    <h2>7. الصفحات الناتجة</h2>
     <div id="summaryGrid">
-      <div class="stat-box"><div class="num" id="statPages">0</div><div class="lbl">صفحة مُعالجة</div></div>
-      <div class="stat-box"><div class="num" id="statDialogue">0</div><div class="lbl">فقاعة حوار تُرجمت</div></div>
-      <div class="stat-box"><div class="num" id="statSfx">0</div><div class="lbl">مؤثر صوتي تم تجاهله</div></div>
-      <div class="stat-box"><div class="num" id="statWm">0</div><div class="lbl">علامة مائية أُزيلت</div></div>
+      <div class="stat-box"><div class="num" id="statPages">0</div><div class="lbl">صفحة ناجحة</div></div>
       <div class="stat-box"><div class="num" id="statErrors">0</div><div class="lbl">صفحة فشلت</div></div>
     </div>
     <div id="resultsGrid" style="margin-top:18px;"></div>
     <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
   </section>
 
-  <footer class="note">أداة بيور 8 — فريق بيور · تعمل داخل المتصفح، مع دعم اختياري للترجمة عبر خادم خارجي</footer>
+  <footer class="note">أداة بيور 8 — فريق بيور · واجهة رفع فقط؛ كل المعالجة الفعلية تتم على سيرفر manga-image-translator الخاص بكم</footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
 <script>
 /* =====================================================================
-   أداة بيور 6 — نفس أقسام النسخة 5، مع تحسين أساسي واحد:
-   فحص "انتظام الخلفية" صار يجرّب عدة مسافات حول النص بدل مسافة واحدة،
-   لأن فقاعات الحواف المسننة/السحابية (تفكير أو سرد) تكسر القياس عند مسافة ثابتة.
-   بالإضافة لتمرير تلقائي لأي نص طويل (3+ كلمات) بثقة معقولة كحوار مباشرة.
+   أداة بيور 8 — الأقسام:
+   0) الحالة   1) عناصر الواجهة   2) رفع الصور (منع تكرار)   3) اختبار الاتصال
+   4) التشغيل الرئيسي: رفع كل صورة لسيرفر manga-image-translator الحقيقي
+      عبر POST متعدد الأجزاء (multipart/form-data) إلى:
+      {backendUrl}/translate/with-form/image
+      مع config JSON بصيغة:
+      { "translator": { "translator": "<engine>", "target_lang": "<lang>" } }
+      وهذا التنسيق مأخوذ من كود سيرفر manga-image-translator نفسه (server/main.py + manga_translator/config.py)
+   5) التنظيف اليدوي الإضافي على الصور الناتجة   6) الإحصائيات والتصدير
    ===================================================================== */
 
-// ---------------------- 0) CONFIG ----------------------
-const CONFIG = {
-  MAX_IMAGES: 70,
-  MIN_WORD_CONF: 42,
-  MIN_TEXT_LEN: 2,
-  BG_UNIFORMITY_SPREAD: 82,
-  UNIFORMITY_PADS: [8, 14, 22, 32],   // مسافات متعددة تُجرَّب بالترتيب لتجاوز الحواف المسننة
-  MAX_BUBBLE_AREA_RATIO: 0.34,
-  OCR_MAX_WIDTH: 1400,
-  FLOOD_TOLERANCE: 36,
-  BANNER_SCAN_RATIO: 0.06,
-  MAX_SAFE_HEIGHT: 12000,
-  MAX_SAFE_PIXELS: 30000000,
-  WATERMARK_KEYWORDS: [
-    'read this series at','support us','scan by','scanlation','translated by',
-    'kaynscan','likemanga','like manga','mangadex','asura','reaper','flame scans',
-    'zeroscans','webtoon','tapas','.com','.net','.org','discord.gg'
-  ]
-};
+// ---------------------- 0) الحالة ----------------------
+const state = { files: [], results: [] }; // results: [{ name, blob, url, canvas }]
 
-// ---------------------- 1) الحالة ----------------------
-const state = { files: [], pages: [], results: [] };
-const customFonts = [];
-
-// ---------------------- 2) عناصر الواجهة ----------------------
+// ---------------------- 1) عناصر الواجهة ----------------------
 const els = {
+  backendUrl: document.getElementById('backendUrl'), testBtn: document.getElementById('testBtn'),
+  connStatus: document.getElementById('connStatus'),
   dropzone: document.getElementById('dropzone'), fileInput: document.getElementById('fileInput'),
   fileCountWarn: document.getElementById('fileCountWarn'), thumbs: document.getElementById('thumbs'),
+  tgtLang: document.getElementById('tgtLang'), translatorEngine: document.getElementById('translatorEngine'),
   runBtn: document.getElementById('runBtn'), resetBtn: document.getElementById('resetBtn'),
   log: document.getElementById('log'), progressFill: document.getElementById('progressFill'),
   progressLabel: document.getElementById('progressLabel'), pipelineList: document.getElementById('pipelineList'),
   resultsGrid: document.getElementById('resultsGrid'), zipBtn: document.getElementById('zipBtn'),
-  useHF: document.getElementById('useHF'), hfFields: document.getElementById('hfFields'),
-  useClassifier: document.getElementById('useClassifier'), classifierFields: document.getElementById('classifierFields'),
-  classifierToken: document.getElementById('classifierToken'),
-  autoWatermark: document.getElementById('autoWatermark'), extraWm: document.getElementById('extraWm'),
-  fontZipInput: document.getElementById('fontZipInput'), fontSelect: document.getElementById('fontSelect'),
-  fontList: document.getElementById('fontList'),
   eraserImageSelect: document.getElementById('eraserImageSelect'), eraserCanvas: document.getElementById('eraserCanvas'),
-  eraserAngle: document.getElementById('eraserAngle'), eraserAngleVal: document.getElementById('eraserAngleVal'),
-  eraseBtn: document.getElementById('eraseBtn'), eraseAllBtn: document.getElementById('eraseAllBtn'),
-  statPages: document.getElementById('statPages'), statDialogue: document.getElementById('statDialogue'),
-  statSfx: document.getElementById('statSfx'), statWm: document.getElementById('statWm'),
-  statErrors: document.getElementById('statErrors'),
-  modeSmartLbl: document.getElementById('modeSmartLbl'), modeRawLbl: document.getElementById('modeRawLbl'),
-  useBackend: document.getElementById('useBackend'), backendFields: document.getElementById('backendFields'),
-  backendUrl: document.getElementById('backendUrl'), backendTranslator: document.getElementById('backendTranslator'),
-  backendTgtLang: document.getElementById('backendTgtLang'), testBackendBtn: document.getElementById('testBackendBtn'),
+  eraseBtn: document.getElementById('eraseBtn'),
+  statPages: document.getElementById('statPages'), statErrors: document.getElementById('statErrors'),
 };
 
 function logLine(text, cls){
@@ -405,52 +286,10 @@ function setStepState(key, mode, note){
   if (mode) li.classList.add(mode);
   li.querySelector('.step-state').textContent = note || (mode === 'active' ? 'جارٍ التنفيذ…' : mode === 'done' ? 'تم' : 'بالانتظار');
 }
-els.useHF.addEventListener('change', () => els.hfFields.classList.toggle('show', els.useHF.checked));
-els.useClassifier.addEventListener('change', () => els.classifierFields.classList.toggle('show', els.useClassifier.checked));
-els.backendFields.style.opacity = '0.5';
-els.useBackend.addEventListener('change', () => {
-  els.backendFields.style.opacity = els.useBackend.checked ? '1' : '0.5';
-});
+function cleanUrl(){ return els.backendUrl.value.trim().replace(/\/+$/,''); }
 
-// ---------------------- 2.5) خادم الترجمة الخارجي ----------------------
-function normalizeBackendUrl(){
-  return els.backendUrl.value.trim().replace(/\/+$/, '');
-}
-els.testBackendBtn.addEventListener('click', async () => {
-  const base = normalizeBackendUrl();
-  if (!base){ logLine('أدخل رابط الخادم أولاً.', 'warn'); return; }
-  logLine(`جارٍ اختبار الاتصال بـ: ${base} …`, 'info');
-  try{
-    const res = await fetch(`${base}/docs`, { method:'GET', mode:'cors' });
-    if (res.ok) logLine(`✓ الخادم يستجيب (HTTP ${res.status}) — يبدو متصلاً.`, 'ok');
-    else logLine(`⚠ الخادم استجاب لكن بحالة غير متوقعة (HTTP ${res.status}).`, 'warn');
-  } catch(err){
-    logLine(`✗ تعذّر الوصول للخادم مباشرة من المتصفح (${err.message}). هذا قد يكون بسبب CORS حتى لو الرابط شغّال — جرّب فتح الرابط في تبويب جديد للتأكد أنه لا يزال حياً، ثم اضغط "تشغيل خط الإنتاج" مباشرة لتجربة الترجمة الفعلية.`, 'warn');
-  }
-});
-async function translateImageViaBackend(file){
-  const base = normalizeBackendUrl();
-  if (!base) throw new Error('رابط الخادم فارغ');
-  const config = {
-    translator: { translator: els.backendTranslator.value, target_lang: els.backendTgtLang.value },
-    render: { rtl: els.backendTgtLang.value === 'ARA' }
-  };
-  const formData = new FormData();
-  formData.append('image', file, file.name);
-  formData.append('config', JSON.stringify(config));
-  const res = await fetch(`${base}/translate/with-form/image`, { method:'POST', body: formData });
-  if (!res.ok){
-    let detail = '';
-    try{ detail = await res.text(); } catch(e){}
-    throw new Error(`فشل الخادم (HTTP ${res.status})${detail ? ' — ' + detail.slice(0,200) : ''}`);
-  }
-  const blob = await res.blob();
-  if (!blob || blob.size === 0) throw new Error('رد فارغ من الخادم — لم تُستلم صورة');
-  return blob;
-}
-els.eraserAngle.addEventListener('input', () => { els.eraserAngleVal.textContent = els.eraserAngle.value + '°'; redrawEraserOverlay(); });
-
-// ---------------------- 3) رفع الصور (مع منع التكرار) ----------------------
+// ---------------------- 2) رفع الصور (منع التكرار) ----------------------
+const MAX_IMAGES = 70;
 function isDuplicateFile(f){
   return state.files.some(x => x.name===f.name && x.size===f.size && x.lastModified===f.lastModified);
 }
@@ -459,10 +298,10 @@ function addFiles(fileList){
   let dupCount = 0;
   const unique = [];
   incoming.forEach(f => { if (isDuplicateFile(f)) dupCount++; else unique.push(f); });
-  let room = CONFIG.MAX_IMAGES - state.files.length;
+  let room = MAX_IMAGES - state.files.length;
   if (unique.length > room || dupCount){
     els.fileCountWarn.style.display = 'block';
-    els.fileCountWarn.textContent = `${dupCount ? `تم تجاهل ${dupCount} ملف مكرر. ` : ''}${unique.length > room ? `تم قبول ${Math.max(0, room)} صورة فقط — الحد الأقصى ${CONFIG.MAX_IMAGES}.` : ''}`;
+    els.fileCountWarn.textContent = `${dupCount ? `تم تجاهل ${dupCount} ملف مكرر. ` : ''}${unique.length > room ? `تم قبول ${Math.max(0, room)} صورة فقط — الحد الأقصى ${MAX_IMAGES}.` : ''}`;
   }
   unique.slice(0, Math.max(0, room)).forEach(f => {
     state.files.push(f);
@@ -475,12 +314,10 @@ function addFiles(fileList){
       if (idx > -1) state.files.splice(idx, 1);
       wrap.remove();
       els.runBtn.disabled = state.files.length === 0;
-      refreshEraserOptions();
     });
     els.thumbs.appendChild(wrap);
   });
   els.runBtn.disabled = state.files.length === 0;
-  refreshEraserOptions();
 }
 els.dropzone.addEventListener('click', () => els.fileInput.click());
 els.fileInput.addEventListener('change', e => { addFiles(e.target.files); e.target.value=''; });
@@ -489,414 +326,139 @@ els.fileInput.addEventListener('change', e => { addFiles(e.target.files); e.targ
 els.dropzone.addEventListener('drop', e => addFiles(e.dataTransfer.files));
 els.resetBtn.addEventListener('click', () => location.reload());
 
-// ---------------------- 4) وضع المعالجة ----------------------
-document.querySelectorAll('input[name="procMode"]').forEach(radio => {
-  radio.addEventListener('change', () => {
-    const v = document.querySelector('input[name="procMode"]:checked').value;
-    els.modeSmartLbl.classList.toggle('active', v==='smart');
-    els.modeRawLbl.classList.toggle('active', v==='raw');
-  });
-});
-els.modeSmartLbl.addEventListener('click', () => { document.querySelector('input[value="smart"]').checked=true; els.modeSmartLbl.classList.add('active'); els.modeRawLbl.classList.remove('active'); });
-els.modeRawLbl.addEventListener('click', () => { document.querySelector('input[value="raw"]').checked=true; els.modeRawLbl.classList.add('active'); els.modeSmartLbl.classList.remove('active'); });
-function isSmartMode(){ return document.querySelector('input[name="procMode"]:checked').value === 'smart'; }
-
-// ---------------------- 5) رفع حزمة الخطوط (ZIP) ----------------------
-els.fontZipInput.addEventListener('change', async e => {
-  const file = e.target.files[0];
-  if (!file) return;
+// ---------------------- 3) اختبار الاتصال بالسيرفر ----------------------
+els.testBtn.addEventListener('click', async () => {
+  const url = cleanUrl();
+  els.connStatus.className = 'conn-status';
+  els.connStatus.textContent = 'جارٍ الفحص…';
+  els.connStatus.style.display = 'block';
   try{
-    const zip = await JSZip.loadAsync(file);
-    let count = 0, skipped = 0;
-    for (const relPath in zip.files){
-      const entry = zip.files[relPath];
-      if (entry.dir) continue;
-      if (relPath.includes('__MACOSX') || relPath.split('/').pop().startsWith('._')) { skipped++; continue; }
-      if (!/\.(ttf|otf|woff2?)$/i.test(relPath)) continue;
-      const buf = await entry.async('arraybuffer');
-      if (!buf || buf.byteLength < 100){ logLine(`تم تجاهل ملف فارغ/تالف: ${relPath}`, 'warn'); continue; }
-      const baseName = relPath.split('/').pop().replace(/\.[^.]+$/, '');
-      const familySlug = 'pureFont' + (customFonts.length + 1);
-      try{
-        const face = new FontFace(familySlug, buf);
-        await face.load();
-        document.fonts.add(face);
-        customFonts.push({ label: baseName, family: familySlug });
-        count++;
-        logLine(`✓ تم تحميل الخط: ${baseName}`, 'ok');
-      } catch(err){ logLine(`✗ تعذّر تحميل الخط "${baseName}": ${err.message}`, 'bad'); }
-    }
-    refreshFontSelect();
-    autoSelectFont();
-    logLine(`انتهت قراءة حزمة الخطوط: ${count} خط${skipped ? `، ${skipped} ملف نظام تم تجاهله` : ''}.`, 'ok');
-  } catch(err){ logLine(`تعذّر قراءة ملف ZIP للخطوط: ${err.message}`, 'bad'); }
+    const res = await fetch(`${url}/queue-size`, { method:'POST' });
+    if (!res.ok) throw new Error(`رمز الحالة ${res.status}`);
+    const size = await res.json();
+    els.connStatus.className = 'conn-status ok';
+    els.connStatus.textContent = `✓ السيرفر يستجيب — حجم الطابور الحالي: ${size}`;
+  } catch(err){
+    els.connStatus.className = 'conn-status bad';
+    els.connStatus.textContent = `✗ تعذّر الاتصال بالسيرفر: ${err.message} — تأكد أن جلسة Colab شغّالة والرابط صحيح`;
+  }
 });
-function refreshFontSelect(){
-  els.fontSelect.innerHTML = '<option value="">افتراضي (Tajawal)</option>';
-  els.fontList.innerHTML = '';
-  customFonts.forEach(f => {
-    const opt = document.createElement('option'); opt.value=f.family; opt.textContent=f.label;
-    els.fontSelect.appendChild(opt);
-    const chip = document.createElement('span'); chip.className='fontchip'; chip.textContent=f.label; chip.style.fontFamily=f.family;
-    els.fontList.appendChild(chip);
-  });
-}
-function autoSelectFont(){
-  const preferred = customFonts.find(f => /حوار|dialogue|رئيسي|اساسي|أساسي|main/i.test(f.label));
-  if (preferred){ els.fontSelect.value = preferred.family; logLine(`تم اختيار "${preferred.label}" تلقائياً كخط افتراضي للحوار`, 'info'); }
-}
 
-// ---------------------- 6) محرك الترجمة ----------------------
-const translationCache = new Map();
-async function translateFree(text, srcLang, tgtLang){
-  const langpair = `${srcLang === 'eng' ? 'en' : srcLang}|${tgtLang}`;
-  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langpair}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  return (data && data.responseData && data.responseData.translatedText) || text;
-}
-async function translateHF(text, token, model){
-  const res = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
-    method:'POST', headers:{ 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json' },
-    body: JSON.stringify({ inputs: text })
-  });
-  const data = await res.json();
-  if (Array.isArray(data) && data[0] && data[0].translation_text) return data[0].translation_text;
-  throw new Error('تعذّر الحصول على ترجمة من Hugging Face — تحقق من التوكن أو معرّف النموذج');
-}
-async function translateText(text, srcLang, tgtLang){
-  const cacheKey = srcLang + '|' + tgtLang + '|' + text;
-  if (translationCache.has(cacheKey)) return translationCache.get(cacheKey);
-  let out;
-  if (els.useHF.checked){
-    const token = document.getElementById('hfToken').value.trim();
-    const model = document.getElementById('hfModel').value.trim();
-    if (!token) throw new Error('الرجاء إدخال HF API Token أو إلغاء تفعيل الخيار');
-    out = await translateHF(text, token, model);
-  } else out = await translateFree(text, srcLang, tgtLang);
-  translationCache.set(cacheKey, out);
-  return out;
-}
+// ---------------------- 4) التشغيل الرئيسي: رفع حقيقي لسيرفر manga-image-translator ----------------------
+els.runBtn.addEventListener('click', runPipeline);
 
-// ---------------------- 7) تصنيف AI اختياري (Hugging Face zero-shot) ----------------------
-const classifierCache = new Map();
-async function classifyViaHF(text, token){
-  if (classifierCache.has(text)) return classifierCache.get(text);
-  const res = await fetch('https://api-inference.huggingface.co/models/facebook/bart-large-mnli', {
-    method:'POST',
-    headers:{ 'Authorization':`Bearer ${token}`, 'Content-Type':'application/json' },
-    body: JSON.stringify({ inputs:text, parameters:{ candidate_labels:['حوار منطوق بين شخصيات','مؤثر صوتي أو نص زخرفي غير حواري'] } })
-  });
-  const data = await res.json();
-  if (data && data.labels && data.labels[0]){
-    const out = data.labels[0].includes('حوار') ? 'dialogue' : 'sfx';
-    classifierCache.set(text, out);
-    return out;
+async function translateOnServer(file, backendUrl, targetLang, engine){
+  const config = JSON.stringify({ translator: { translator: engine, target_lang: targetLang } });
+  const form = new FormData();
+  form.append('image', file, file.name);
+  form.append('config', config);
+
+  const res = await fetch(`${backendUrl}/translate/with-form/image`, { method:'POST', body: form });
+  if (!res.ok){
+    let detail = '';
+    try{ detail = await res.text(); } catch(e){}
+    throw new Error(`رمز الحالة ${res.status}${detail ? ' — ' + detail.slice(0,200) : ''}`);
   }
-  throw new Error('رد غير متوقع من مصنف Hugging Face');
+  return await res.blob(); // PNG image بالنتيجة النهائية جاهزة من السيرفر
 }
 
-// ---------------------- 8) تحضير وحماية الصورة ----------------------
-function loadImageToCanvas(file){
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width; canvas.height = img.height;
-      canvas.getContext('2d').drawImage(img, 0, 0);
-      resolve({ canvas, width: img.width, height: img.height });
-    };
-    img.onerror = () => reject(new Error('تعذّر فتح الصورة — الملف قد يكون تالفاً'));
-    img.src = URL.createObjectURL(file);
-  });
-}
-function safeguardCanvas(canvas){
-  const totalPx = canvas.width * canvas.height;
-  const tooTall = canvas.height > CONFIG.MAX_SAFE_HEIGHT;
-  const tooBig = totalPx > CONFIG.MAX_SAFE_PIXELS;
-  if (!tooTall && !tooBig) return { canvas, resized:false };
-  let scale = 1;
-  if (tooTall) scale = Math.min(scale, CONFIG.MAX_SAFE_HEIGHT / canvas.height);
-  if (tooBig) scale = Math.min(scale, Math.sqrt(CONFIG.MAX_SAFE_PIXELS / totalPx));
-  const safe = document.createElement('canvas');
-  safe.width = Math.round(canvas.width*scale); safe.height = Math.round(canvas.height*scale);
-  safe.getContext('2d').drawImage(canvas, 0, 0, safe.width, safe.height);
-  return { canvas: safe, resized:true, scale };
-}
-function enhanceContrast(ctx, w, h){
-  const imgData = ctx.getImageData(0, 0, w, h);
-  const d = imgData.data;
-  const factor = 1.15;
-  for (let i=0;i<d.length;i+=4){ for (let c=0;c<3;c++){ let v=(d[i+c]-128)*factor+128; d[i+c]=Math.max(0,Math.min(255,v)); } }
-  ctx.putImageData(imgData, 0, 0);
-}
+async function runPipeline(){
+  const backendUrl = cleanUrl();
+  if (!backendUrl){ logLine('أدخل رابط السيرفر أولاً', 'bad'); return; }
 
-// ---------------------- 9) OCR / تجميع / تصنيف ----------------------
-function makeOcrCanvas(sourceCanvas){
-  const w = sourceCanvas.width, h = sourceCanvas.height;
-  if (w <= CONFIG.OCR_MAX_WIDTH) return { canvas: sourceCanvas, scale: 1 };
-  const scale = CONFIG.OCR_MAX_WIDTH / w;
-  const small = document.createElement('canvas');
-  small.width = Math.round(w*scale); small.height = Math.round(h*scale);
-  small.getContext('2d').drawImage(sourceCanvas, 0, 0, small.width, small.height);
-  return { canvas: small, scale };
-}
-function mergeBoxes(words, invScale){
-  const boxes = words.map(w => ({ x0:w.bbox.x0*invScale, y0:w.bbox.y0*invScale, x1:w.bbox.x1*invScale, y1:w.bbox.y1*invScale, text:w.text, conf:w.confidence }));
-  const used = new Array(boxes.length).fill(false);
-  const merged = [];
-  const closeEnough = (a,b) => { const gapX=22*invScale, gapY=16*invScale; return !(a.x1+gapX<b.x0 || b.x1+gapX<a.x0 || a.y1+gapY<b.y0 || b.y1+gapY<a.y0); };
-  for (let i=0;i<boxes.length;i++){
-    if (used[i]) continue;
-    let group = { ...boxes[i], words:[boxes[i]], confs:[boxes[i].conf] };
-    used[i]=true; let grown=true;
-    while (grown){
-      grown=false;
-      for (let j=0;j<boxes.length;j++){
-        if (used[j]) continue;
-        if (closeEnough(group, boxes[j])){
-          group.x0=Math.min(group.x0,boxes[j].x0); group.y0=Math.min(group.y0,boxes[j].y0);
-          group.x1=Math.max(group.x1,boxes[j].x1); group.y1=Math.max(group.y1,boxes[j].y1);
-          group.words.push(boxes[j]); group.confs.push(boxes[j].conf);
-          used[j]=true; grown=true;
-        }
-      }
+  els.runBtn.disabled = true;
+  els.resultsGrid.innerHTML = '';
+  state.results = [];
+
+  const targetLang = els.tgtLang.value;
+  const engine = els.translatorEngine.value.trim() || 'offline';
+  const total = state.files.length;
+  let success = 0, failed = 0;
+
+  logLine(`بدء الرفع: ${total} صفحة إلى ${backendUrl}`, 'ok');
+
+  setStepState('connect','active');
+  try{
+    const res = await fetch(`${backendUrl}/queue-size`, { method:'POST' });
+    if (!res.ok) throw new Error(`رمز الحالة ${res.status}`);
+    setStepState('connect','done');
+  } catch(err){
+    setStepState('connect','done', 'فشل — تابع بالمحاولة المباشرة');
+    logLine(`⚠ فشل فحص الاتصال المبدئي (${err.message}) — سأحاول رفع الصور مباشرة بأي حال`, 'warn');
+  }
+
+  for (let i=0;i<total;i++){
+    const file = state.files[i];
+    setProgress((i/total)*100, `معالجة الصفحة ${i+1} من ${total}: ${file.name}`);
+    logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
+
+    try{
+      setStepState('upload','active');
+      setStepState('process','active');
+      const blob = await translateOnServer(file, backendUrl, targetLang, engine);
+      setStepState('upload','done'); setStepState('process','done');
+
+      setStepState('receive','active');
+      const url = URL.createObjectURL(blob);
+      const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
+      state.results.push({ name: outName, blob, url });
+      setStepState('receive','done');
+
+      addResultCard({ name: outName, url, status:'done' });
+      logLine(`  ✓ استُلمت الصفحة المترجمة من السيرفر`, 'ok');
+      success++;
+    } catch(err){
+      failed++;
+      logLine(`  ✗ فشلت معالجة ${file.name}: ${err.message}`, 'bad');
+      addResultCard({ name:file.name, url:null, status:'error', errorMsg: err.message });
     }
-    const avgConf = group.confs.reduce((a,b)=>a+b,0)/group.confs.length;
-    const centers = group.words.map(w => (w.y0+w.y1)/2).sort((a,b)=>a-b);
-    let lineCount = 1;
-    const avgWordH = group.words.reduce((a,w)=>a+(w.y1-w.y0),0)/group.words.length;
-    for (let k=1;k<centers.length;k++){ if (centers[k]-centers[k-1] > avgWordH*0.6) lineCount++; }
-    merged.push({ x0:group.x0, y0:group.y0, x1:group.x1, y1:group.y1, text:group.words.map(w=>w.text).join(' '), avgConf, lineCount, wordCount: group.words.length });
-  }
-  return merged;
-}
-// فحص انتظام الخلفية بعدة مسافات — يتجاوز الحواف المسننة/السحابية اللي تكسر القياس بمسافة ثابتة
-function ringSpread(ctx, box, pad){
-  const x=Math.max(0,Math.round(box.x0-pad)), y=Math.max(0,Math.round(box.y0-pad));
-  const w=Math.max(1,Math.round((box.x1-box.x0)+pad*2)), h=Math.max(1,Math.round((box.y1-box.y0)+pad*2));
-  let data; try{ data = ctx.getImageData(x,y,w,h).data; }catch(e){ return null; }
-  const border=[];
-  for (let i=0;i<w;i++){ border.push([i,0]); border.push([i,h-1]); }
-  for (let j=0;j<h;j++){ border.push([0,j]); border.push([w-1,j]); }
-  const vals = border.map(([bx,by])=>{ const idx=(by*w+bx)*4; return (data[idx]+data[idx+1]+data[idx+2])/3; }).sort((a,b)=>a-b);
-  const lo = vals[Math.floor(vals.length*0.1)], hi = vals[Math.floor(vals.length*0.9)];
-  return hi-lo;
-}
-function backgroundUniformity(ctx, box){
-  let best = null;
-  for (const pad of CONFIG.UNIFORMITY_PADS){
-    const spread = ringSpread(ctx, box, pad);
-    if (spread === null) continue;
-    if (best === null || spread < best) best = spread;
-    if (spread <= CONFIG.BG_UNIFORMITY_SPREAD) return { uniform:true, spread }; // أول مسافة ناجحة تكفي
-  }
-  return { uniform:false, spread: best===null?999:best };
-}
-async function classifyBox(ctx, box, pageArea, extraKeywords, smart, useClassifier, classifierToken){
-  const lower = box.text.toLowerCase().replace(/\s+/g,'');
-  const allKeywords = CONFIG.WATERMARK_KEYWORDS.concat(extraKeywords).map(k=>k.toLowerCase().replace(/\s+/g,''));
-  if (els.autoWatermark.checked && allKeywords.some(k => k && lower.includes(k))){
-    return { type:'watermark', reason:'مطابقة كلمة مفتاحية لعلامة مائية' };
-  }
-  const cleanLen = box.text.replace(/[^\p{L}\p{N}]/gu,'').length;
-  if (cleanLen < CONFIG.MIN_TEXT_LEN) return { type:'noise', reason:'نص قصير جداً/ضوضاء OCR' };
-  if (!smart) return { type:'dialogue', reason:'الوضع الخام: بلا فحص إضافي' };
 
-  const boxArea = (box.x1-box.x0)*(box.y1-box.y0);
-  if (boxArea/pageArea > CONFIG.MAX_BUBBLE_AREA_RATIO) return { type:'sfx', reason:'مساحة كبيرة جداً بالنسبة للصفحة' };
-
-  const aspect = (box.x1-box.x0) / Math.max(1,(box.y1-box.y0));
-  const shapeOk = aspect > 0.35 && aspect < 6;
-
-  // تمرير تلقائي: نص طويل (3+ كلمات) بثقة معقولة = حوار سردي غالباً حتى لو الحافة غير منتظمة
-  if (box.wordCount >= 3 && box.avgConf >= 55 && shapeOk){
-    return { type:'dialogue', reason:'نص طويل بثقة معقولة (تمرير تلقائي)' };
+    els.statPages.textContent = success; els.statErrors.textContent = failed;
+    setProgress(((i+1)/total)*100, `تم الانتهاء من ${i+1} من ${total}`);
   }
 
-  const bg = backgroundUniformity(ctx, box);
-  if (bg.uniform && shapeOk) return { type:'dialogue', reason:'خلفية موحدة (فحص متعدد المسافات) وشكل منطقي' };
-  if (box.avgConf >= 70 && shapeOk) return { type:'dialogue', reason:'ثقة OCR عالية جداً (تجاوز فحص الخلفية)' };
-
-  if (useClassifier && classifierToken){
-    try{
-      const label = await classifyViaHF(box.text, classifierToken);
-      if (label === 'dialogue') return { type:'dialogue', reason:'صنّفه مصنّف AI كحوار' };
-      return { type:'sfx', reason:'صنّفه مصنّف AI كمؤثر/زخرفة' };
-    } catch(e){ /* تجاهل فشل المصنّف الذكي، استمر للتصنيف الافتراضي */ }
-  }
-  if (box.avgConf < CONFIG.MIN_WORD_CONF) return { type:'sfx', reason:`ثقة منخفضة (${Math.round(box.avgConf)}%)` };
-  return { type:'sfx', reason:'خلفية غير موحّدة وشكل غير نمطي' };
+  setStepState('export','done');
+  if (state.results.length) els.zipBtn.style.display = 'inline-flex';
+  setProgress(100, 'اكتمل التشغيل ✅');
+  logLine(`انتهى التشغيل — ${success} صفحة ناجحة، ${failed} صفحة فشلت.`, failed ? 'warn' : 'ok');
+  refreshEraserOptions();
+  els.runBtn.disabled = false;
 }
 
-// ---------------------- 10) إزالة العلامات المائية ----------------------
-function cloneStampFill(ctx, rect){
-  const { x, y, w, h } = rect;
-  const srcY = Math.max(0, y-h-4);
-  ctx.drawImage(ctx.canvas, x, srcY, w, h, x, y, w, h);
-}
-function detectBannerWatermarks(ctx, width, height){
-  const bandHeight = Math.max(24, Math.round(height*CONFIG.BANNER_SCAN_RATIO));
-  const bands = [ { y:height-bandHeight, h:bandHeight, side:'bottom' }, { y:0, h:bandHeight, side:'top' } ];
-  const found = [];
-  bands.forEach(b => {
-    let data; try{ data = ctx.getImageData(0,b.y,width,b.h).data; }catch(e){ return; }
-    let dark=0, light=0, total=0;
-    for (let i=0;i<data.length;i+=16){ const v=(data[i]+data[i+1]+data[i+2])/3; total++; if(v<60)dark++; else if(v>200)light++; }
-    const darkRatio=dark/total, lightRatio=light/total;
-    if (darkRatio>0.25 && darkRatio<0.9 && lightRatio>0.015) found.push({ x:0, y:b.y, w:width, h:b.h, side:b.side });
-  });
-  return found;
-}
-function removeBannerWatermark(ctx, canvas, band){
-  const srcY = band.side==='bottom' ? Math.max(0, band.y-band.h) : Math.min(canvas.height-band.h, band.y+band.h);
-  ctx.drawImage(canvas, 0, srcY, band.w, band.h, band.x, band.y, band.w, band.h);
-}
-
-// ---------------------- 11) التنظيف المضمون (Flood Fill + تغطية إجبارية) ----------------------
-function medianOf(arr){ const s=[...arr].sort((a,b)=>a-b); return s[Math.floor(s.length/2)]; }
-function sampleRingColor(ctx, box){
-  const pad=5;
-  const x=Math.max(0,Math.round(box.x0-pad)), y=Math.max(0,Math.round(box.y0-pad));
-  const w=Math.max(1,Math.round((box.x1-box.x0)+pad*2)), h=Math.max(1,Math.round((box.y1-box.y0)+pad*2));
-  let data; try{ data = ctx.getImageData(x,y,w,h).data; }catch(e){ return null; }
-  const border=[];
-  for (let i=0;i<w;i++){ border.push([i,0]); border.push([i,h-1]); }
-  for (let j=0;j<h;j++){ border.push([0,j]); border.push([w-1,j]); }
-  let rs=[],gs=[],bs=[];
-  border.forEach(([bx,by])=>{ const idx=(by*w+bx)*4; rs.push(data[idx]); gs.push(data[idx+1]); bs.push(data[idx+2]); });
-  return { r: medianOf(rs), g: medianOf(gs), b: medianOf(bs) };
-}
-function floodFillOnData(data, w, h, sx, sy, target, tolerance, maxCount){
-  const visited = new Uint8Array(w*h);
-  const stack = [sy*w+sx];
-  const mask = [];
-  let minX=sx,maxX=sx,minY=sy,maxY=sy;
-  while (stack.length && mask.length < maxCount){
-    const p = stack.pop();
-    if (visited[p]) continue;
-    visited[p]=1;
-    const x=p%w, y=(p-x)/w;
-    const idx=p*4;
-    const dr=data[idx]-target.r, dg=data[idx+1]-target.g, db=data[idx+2]-target.b;
-    if (Math.sqrt(dr*dr+dg*dg+db*db) > tolerance) continue;
-    mask.push(p);
-    if (x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y;
-    if (x>0 && !visited[p-1]) stack.push(p-1);
-    if (x<w-1 && !visited[p+1]) stack.push(p+1);
-    if (y>0 && !visited[p-w]) stack.push(p-w);
-    if (y<h-1 && !visited[p+w]) stack.push(p+w);
-  }
-  return { mask, count:mask.length, bounds:{minX,maxX,minY,maxY} };
-}
-function cleanDialogueShaped(ctx, box, pageW, pageH, logFail){
-  const bw = box.x1-box.x0, bh = box.y1-box.y0;
-  const bg = sampleRingColor(ctx, box) || { r:255, g:255, b:255 };
-  let shapedBounds = null;
-
-  const pad = Math.max(bw,bh)*0.9 + 30;
-  const rx = Math.max(0, Math.round(box.x0-pad)), ry = Math.max(0, Math.round(box.y0-pad));
-  const rw = Math.min(pageW-rx, Math.round(bw+pad*2)), rh = Math.min(pageH-ry, Math.round(bh+pad*2));
-
-  if (rw>0 && rh>0){
-    try{
-      const imgData = ctx.getImageData(rx, ry, rw, rh);
-      const data = imgData.data;
-      const localX0=box.x0-rx, localY0=box.y0-ry, localX1=box.x1-rx, localY1=box.y1-ry;
-      const seeds = [
-        [Math.round(localX0-6), Math.round(localY0-6)],
-        [Math.round((localX0+localX1)/2), Math.max(2, Math.round(localY0-10))],
-        [Math.round((localX0+localX1)/2), Math.min(rh-2, Math.round(localY1+10))],
-        [Math.max(2, Math.round(localX0-10)), Math.round((localY0+localY1)/2)],
-        [Math.min(rw-2, Math.round(localX1+10)), Math.round((localY0+localY1)/2)],
-      ];
-      let best = null;
-      for (const [sx,sy] of seeds){
-        if (sx<0||sy<0||sx>=rw||sy>=rh) continue;
-        const idx0=(sy*rw+sx)*4;
-        const dr=data[idx0]-bg.r, dg=data[idx0+1]-bg.g, db=data[idx0+2]-bg.b;
-        if (Math.sqrt(dr*dr+dg*dg+db*db) > CONFIG.FLOOD_TOLERANCE) continue;
-        const res = floodFillOnData(data, rw, rh, sx, sy, bg, CONFIG.FLOOD_TOLERANCE, Math.round(rw*rh*0.85));
-        if (res && res.count > (bw*bh*0.25) && (!best || res.count>best.count)) best = res;
-      }
-      if (best){
-        for (let k=0;k<best.mask.length;k++){ const p=best.mask[k]*4; data[p]=bg.r; data[p+1]=bg.g; data[p+2]=bg.b; }
-        ctx.putImageData(imgData, rx, ry);
-        shapedBounds = { x: rx+best.bounds.minX, y: ry+best.bounds.minY, w: Math.max(1,best.bounds.maxX-best.bounds.minX), h: Math.max(1,best.bounds.maxY-best.bounds.minY) };
-      } else if (logFail) logFail('تعذّر إيجاد بذرة داخل خلفية موحّدة — استُخدمت التغطية الإجبارية فقط');
-    } catch(e){ if (logFail) logFail('فشل قراءة منطقة الفقاعة — استُخدمت التغطية الإجبارية فقط'); }
-  }
-
-  const guardPad = 3;
-  const gx = Math.max(0, Math.round(box.x0-guardPad)), gy = Math.max(0, Math.round(box.y0-guardPad));
-  const gw = Math.max(1, Math.round(bw+guardPad*2)), gh = Math.max(1, Math.round(bh+guardPad*2));
-  ctx.fillStyle = `rgb(${bg.r},${bg.g},${bg.b})`;
-  ctx.fillRect(gx, gy, gw, gh);
-
-  if (!shapedBounds) return { x:gx, y:gy, w:gw, h:gh };
-  const ux0 = Math.min(shapedBounds.x, gx), uy0 = Math.min(shapedBounds.y, gy);
-  const ux1 = Math.max(shapedBounds.x+shapedBounds.w, gx+gw), uy1 = Math.max(shapedBounds.y+shapedBounds.h, gy+gh);
-  return { x:ux0, y:uy0, w:ux1-ux0, h:uy1-uy0 };
-}
-
-// ---------------------- 12) التنضيد ----------------------
-function typesetText(ctx, text, box, lang, fontFamily, originalLineCount){
-  const isRTL = lang === 'ar';
-  ctx.save();
-  ctx.textBaseline = 'middle'; ctx.direction = isRTL?'rtl':'ltr'; ctx.textAlign='center';
-  const family = fontFamily ? `${fontFamily}, Tajawal, sans-serif` : `Tajawal, sans-serif`;
-  const minFontSize = 15;
-  const lineBasedGuess = originalLineCount ? Math.floor(box.h / (originalLineCount*1.3)) : 0;
-  let fontSize = Math.max(18, Math.min(34, lineBasedGuess || Math.floor(box.h/3.2)));
-  function wrapLines(size){
-    ctx.font = `700 ${size}px ${family}`;
-    const words = text.split(' ');
-    const lines = []; let line='';
-    words.forEach(word => {
-      const test = line?line+' '+word:word;
-      if (ctx.measureText(test).width > box.w-14 && line){ lines.push(line); line=word; } else line=test;
-    });
-    if (line) lines.push(line);
-    return lines;
-  }
-  let lines = wrapLines(fontSize);
-  while (lines.length*(fontSize*1.2) > box.h && fontSize>minFontSize){ fontSize--; lines=wrapLines(fontSize); }
-  ctx.font = `700 ${fontSize}px ${family}`;
-  ctx.lineWidth = Math.max(2, fontSize*0.06);
-  ctx.strokeStyle = 'rgba(255,255,255,0.92)';
-  ctx.fillStyle = '#0d0d0d';
-  const lineHeight = fontSize*1.2;
-  const startY = box.y + box.h/2 - (lines.length-1)*lineHeight/2;
-  lines.forEach((ln,i)=>{ const yy=startY+i*lineHeight; ctx.strokeText(ln, box.x+box.w/2, yy); ctx.fillText(ln, box.x+box.w/2, yy); });
-  ctx.restore();
-}
-
-// ---------------------- 13) الإزالة اليدوية (بزاوية) ----------------------
+// ---------------------- 5) تنظيف يدوي إضافي على الصور الناتجة ----------------------
 let eraserRect = null, eraserDrag = null;
 function refreshEraserOptions(){
   els.eraserImageSelect.innerHTML = '';
-  state.files.forEach((f,i) => {
-    const opt = document.createElement('option'); opt.value=i; opt.textContent=`صفحة ${i+1}: ${f.name}`;
+  state.results.forEach((r,i) => {
+    const opt = document.createElement('option'); opt.value=i; opt.textContent = r.name;
     els.eraserImageSelect.appendChild(opt);
   });
-  if (state.files.length) drawEraserPreview(0);
+  if (state.results.length) drawEraserPreview(0);
 }
-async function ensurePage(index){
-  if (state.pages[index]) return state.pages[index];
-  const file = state.files[index];
-  const { canvas: raw } = await loadImageToCanvas(file);
-  const { canvas, resized } = safeguardCanvas(raw);
-  const page = { file, name:file.name, canvas, ctx:canvas.getContext('2d'), status:'pending', resized };
-  state.pages[index] = page;
-  return page;
+async function ensureResultCanvas(index){
+  const r = state.results[index];
+  if (!r) return null;
+  if (r.canvas) return r;
+  const img = await new Promise((resolve,reject) => {
+    const im = new Image();
+    im.onload = () => resolve(im);
+    im.onerror = reject;
+    im.src = r.url;
+  });
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width; canvas.height = img.height;
+  canvas.getContext('2d').drawImage(img, 0, 0);
+  r.canvas = canvas; r.ctx = canvas.getContext('2d');
+  return r;
 }
 async function drawEraserPreview(index){
-  const page = await ensurePage(index);
+  const r = await ensureResultCanvas(index);
+  if (!r) return;
   const maxW = 500;
-  const scale = Math.min(1, maxW/page.canvas.width);
-  els.eraserCanvas.width = page.canvas.width*scale; els.eraserCanvas.height = page.canvas.height*scale;
+  const scale = Math.min(1, maxW/r.canvas.width);
+  els.eraserCanvas.width = r.canvas.width*scale; els.eraserCanvas.height = r.canvas.height*scale;
   els.eraserCanvas.dataset.scale = scale; els.eraserCanvas.dataset.index = index;
-  els.eraserCanvas.getContext('2d').drawImage(page.canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
+  els.eraserCanvas.getContext('2d').drawImage(r.canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
   eraserRect = null;
 }
 els.eraserImageSelect.addEventListener('change', e => drawEraserPreview(Number(e.target.value)));
@@ -905,227 +467,34 @@ els.eraserCanvas.addEventListener('mousemove', e => {
   if (!eraserDrag) return;
   const r=els.eraserCanvas.getBoundingClientRect(); const x1=e.clientX-r.left, y1=e.clientY-r.top;
   eraserRect = { x:Math.min(eraserDrag.x0,x1), y:Math.min(eraserDrag.y0,y1), w:Math.abs(x1-eraserDrag.x0), h:Math.abs(y1-eraserDrag.y0) };
-  redrawEraserOverlay();
+  const pctx = els.eraserCanvas.getContext('2d');
+  const idx = Number(els.eraserCanvas.dataset.index||0);
+  pctx.drawImage(state.results[idx].canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
+  pctx.strokeStyle='#C23E86'; pctx.lineWidth=2; pctx.strokeRect(eraserRect.x,eraserRect.y,eraserRect.w,eraserRect.h);
+  pctx.fillStyle='rgba(194,62,134,.15)'; pctx.fillRect(eraserRect.x,eraserRect.y,eraserRect.w,eraserRect.h);
 });
 window.addEventListener('mouseup', () => { eraserDrag = null; });
-function redrawEraserOverlay(){
+els.eraseBtn.addEventListener('click', async () => {
+  if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
   const index = Number(els.eraserCanvas.dataset.index||0);
-  const page = state.pages[index]; if (!page) return;
   const scale = Number(els.eraserCanvas.dataset.scale||1);
-  const pctx = els.eraserCanvas.getContext('2d');
-  pctx.drawImage(page.canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
-  if (eraserRect){
-    const angle = Number(els.eraserAngle.value||0) * Math.PI/180;
-    const cx = eraserRect.x+eraserRect.w/2, cy = eraserRect.y+eraserRect.h/2;
-    pctx.save();
-    pctx.translate(cx,cy); pctx.rotate(angle); pctx.translate(-cx,-cy);
-    pctx.strokeStyle='#C23E86'; pctx.lineWidth=2; pctx.strokeRect(eraserRect.x,eraserRect.y,eraserRect.w,eraserRect.h);
-    pctx.fillStyle='rgba(194,62,134,.15)'; pctx.fillRect(eraserRect.x,eraserRect.y,eraserRect.w,eraserRect.h);
-    pctx.restore();
-  }
-}
-function applyManualErase(index, rectOnCanvasScale, scale, angleDeg){
-  const page = state.pages[index]; if (!page) return;
-  const rect = { x:Math.round(rectOnCanvasScale.x/scale), y:Math.round(rectOnCanvasScale.y/scale), w:Math.round(rectOnCanvasScale.w/scale), h:Math.round(rectOnCanvasScale.h/scale) };
-  const ctx = page.ctx;
-  if (!angleDeg){ cloneStampFill(ctx, rect); return; }
-  const cx = rect.x+rect.w/2, cy = rect.y+rect.h/2;
-  ctx.save();
-  ctx.translate(cx,cy); ctx.rotate(angleDeg*Math.PI/180); ctx.translate(-cx,-cy);
-  cloneStampFill(ctx, rect);
-  ctx.restore();
-}
-els.eraseBtn.addEventListener('click', () => {
-  if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
-  const index = Number(els.eraserCanvas.dataset.index||0), scale = Number(els.eraserCanvas.dataset.scale||1);
-  applyManualErase(index, eraserRect, scale, Number(els.eraserAngle.value||0));
-  logLine(`تم مسح المنطقة المحددة يدوياً من الصفحة ${index+1}`, 'ok');
+  const r = state.results[index];
+  const rect = { x:Math.round(eraserRect.x/scale), y:Math.round(eraserRect.y/scale), w:Math.round(eraserRect.w/scale), h:Math.round(eraserRect.h/scale) };
+  const srcY = Math.max(0, rect.y - rect.h - 4);
+  r.ctx.drawImage(r.canvas, rect.x, srcY, rect.w, rect.h, rect.x, rect.y, rect.w, rect.h);
+  // تحديث الـ blob والرابط بعد التعديل اليدوي
+  const blob = await new Promise(res => r.canvas.toBlob(res, 'image/png'));
+  r.blob = blob; r.url = URL.createObjectURL(blob);
+  // تحديث بطاقة النتيجة المعروضة
+  refreshResultsGrid();
   drawEraserPreview(index);
-});
-els.eraseAllBtn.addEventListener('click', async () => {
-  if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
-  const scale = Number(els.eraserCanvas.dataset.scale||1), angle = Number(els.eraserAngle.value||0);
-  for (let i=0;i<state.files.length;i++){ await ensurePage(i); applyManualErase(i, eraserRect, scale, angle); }
-  logLine(`تم تطبيق نفس إحداثيات المسح (بزاوية ${angle}°) على كل الصفحات (${state.files.length})`, 'ok');
-  drawEraserPreview(Number(els.eraserCanvas.dataset.index||0));
+  logLine(`تم تعديل الصفحة "${r.name}" يدوياً`, 'ok');
 });
 
-// ---------------------- 14) التشغيل الرئيسي ----------------------
-els.runBtn.addEventListener('click', runPipeline);
-
-async function runPipeline(){
-  if (els.useBackend.checked) return runBackendPipeline();
-  return runLocalPipeline();
-}
-
-// ---------------------- 14-ب) التشغيل عبر الخادم الخارجي (manga-image-translator) ----------------------
-async function runBackendPipeline(){
-  els.runBtn.disabled = true;
+// ---------------------- 6) الإحصائيات + بطاقات النتائج + التصدير ----------------------
+function refreshResultsGrid(){
   els.resultsGrid.innerHTML = '';
-  state.results = [];
-
-  const total = state.files.length;
-  const totals = { dialogue:0, sfx:0, wm:0, noise:0, errors:0, pages:0 };
-  const base = normalizeBackendUrl();
-
-  logLine(`بدء التشغيل عبر الخادم الخارجي: ${total} صفحة — ${base} — محرك: ${els.backendTranslator.value} — هدف: ${els.backendTgtLang.value}`, 'ok');
-  ['prep','ocr','merge','classify','watermark','clean','translate','typeset'].forEach(k => setStepState(k,null,'—'));
-  setStepState('prep','done','تم — لا معالجة محلية، كل الصفحات تُرسل للخادم');
-
-  for (let i=0;i<total;i++){
-    const file = state.files[i];
-    setProgress((i/total)*100, `رفع وترجمة الصفحة ${i+1} من ${total}: ${file.name}`);
-    logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
-    setStepState('ocr','active','جارٍ الرفع والترجمة عبر الخادم…');
-
-    try{
-      if (!base) throw new Error('رابط الخادم فارغ — أدخله في قسم "2.5"');
-      const blob = await translateImageViaBackend(file);
-      const url = URL.createObjectURL(blob);
-      const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
-      state.results.push({ name: outName, blob, url });
-
-      ['ocr','merge','classify','watermark','clean','translate','typeset'].forEach(k => setStepState(k,'done','تم عبر الخادم'));
-      totals.pages++;
-      addResultCard({ name: outName, url, status:'done' });
-      logLine(`  ✓ اكتملت الصفحة عبر الخادم الخارجي`, 'ok');
-
-    } catch(err){
-      totals.errors++;
-      const hint = /Failed to fetch|NetworkError|CORS/i.test(err.message)
-        ? ' — تحقّق أن رابط Colab لا يزال يعمل، وأنه يسمح بطلبات CORS من المتصفح'
-        : '';
-      logLine(`  ✗ فشلت معالجة ${file.name} عبر الخادم: ${err.message}${hint}`, 'bad');
-      addResultCard({ name:file.name, url:null, status:'error', errorMsg: err.message });
-    }
-
-    setProgress(((i+1)/total)*100, `تم الانتهاء من ${i+1} من ${total}`);
-    updateSummary(totals);
-  }
-
-  setStepState('export','done');
-  if (state.results.length) els.zipBtn.style.display = 'inline-flex';
-  setProgress(100, 'اكتمل تشغيل خط الإنتاج ✅');
-  logLine(`انتهى التشغيل — ${totals.pages} صفحة ناجحة، ${totals.errors} صفحة فشلت.`, totals.errors ? 'warn' : 'ok');
-  els.runBtn.disabled = false;
-}
-
-// ---------------------- 14-أ) التشغيل المحلي (Tesseract + محرك محلي) ----------------------
-async function runLocalPipeline(){
-  els.runBtn.disabled = true;
-  els.resultsGrid.innerHTML = '';
-  state.results = [];
-
-  const srcLang = document.getElementById('srcLang').value;
-  const tgtLang = document.getElementById('tgtLang').value;
-  const extraKeywords = els.extraWm.value.split(',').map(s=>s.trim()).filter(Boolean);
-  const chosenFont = els.fontSelect.value || null;
-  const smart = isSmartMode();
-  const useClassifier = els.useClassifier.checked;
-  const classifierToken = els.classifierToken.value.trim();
-  const total = state.files.length;
-  const totals = { dialogue:0, sfx:0, wm:0, noise:0, errors:0, pages:0 };
-
-  logLine(`بدء التشغيل: ${total} صفحة — وضع ${smart?'ذكي':'خام'}${useClassifier?' + مصنف AI للحالات الغامضة':''} — من "${srcLang}" إلى "${tgtLang}"`, 'ok');
-  setStepState('prep','active');
-  const worker = await Tesseract.createWorker(srcLang);
-  setStepState('prep','done');
-
-  for (let i=0;i<total;i++){
-    const file = state.files[i];
-    setProgress((i/total)*100, `معالجة الصفحة ${i+1} من ${total}: ${file.name}`);
-    logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
-
-    try{
-      const page = await ensurePage(i);
-      const { canvas, ctx } = page;
-      if (page.resized) logLine(`  ⚠ الصورة كانت طويلة/كبيرة جداً — صُغّرت بأمان تلقائياً لتفادي انقطاعها`, 'warn');
-      enhanceContrast(ctx, canvas.width, canvas.height);
-
-      setStepState('ocr','active');
-      const { canvas: ocrCanvas, scale } = makeOcrCanvas(canvas);
-      const { data } = await worker.recognize(ocrCanvas);
-      const words = (data.words || []).filter(w => w.text.trim().length > 0);
-      setStepState('ocr','done', `${words.length} كلمة`);
-
-      setStepState('merge','active');
-      const boxes = mergeBoxes(words, 1/scale);
-      setStepState('merge','done', `${boxes.length} وحدة`);
-
-      setStepState('classify','active');
-      const pageArea = canvas.width*canvas.height;
-      const classified = await Promise.all(boxes.map(async box => ({ box, cls: await classifyBox(ctx, box, pageArea, extraKeywords, smart, useClassifier, classifierToken) })));
-      const dialogueBoxes = classified.filter(c => c.cls.type==='dialogue');
-      const sfxBoxes = classified.filter(c => c.cls.type==='sfx');
-      const wmBoxes = classified.filter(c => c.cls.type==='watermark');
-      setStepState('classify','done', `حوار:${dialogueBoxes.length} مؤثر:${sfxBoxes.length} علامة:${wmBoxes.length}`);
-      logLine(`  ✓ التصنيف: ${dialogueBoxes.length} حوار، ${sfxBoxes.length} مؤثر متجاهَل، ${wmBoxes.length} علامة`, 'info');
-
-      setStepState('watermark','active');
-      wmBoxes.forEach(({box}) => {
-        const rect = { x:Math.round(box.x0)-4, y:Math.round(box.y0)-4, w:Math.round(box.x1-box.x0)+8, h:Math.round(box.y1-box.y0)+8 };
-        cloneStampFill(ctx, rect);
-      });
-      let bannerCount = 0;
-      if (els.autoWatermark.checked){
-        detectBannerWatermarks(ctx, canvas.width, canvas.height).forEach(b => { removeBannerWatermark(ctx, canvas, b); bannerCount++; });
-      }
-      setStepState('watermark','done', `${wmBoxes.length+bannerCount} أُزيلت`);
-
-      setStepState('clean','active');
-      const cleanedBoxes = dialogueBoxes.map(({box}) => {
-        const cleaned = cleanDialogueShaped(ctx, box, canvas.width, canvas.height, msg => logLine('    · '+msg, 'warn'));
-        return { box, cleaned };
-      });
-      setStepState('clean','done', 'تغطية إجبارية مضمونة لكل الفقاعات');
-
-      setStepState('translate','active');
-      for (const item of cleanedBoxes){
-        try{ item.translated = await translateText(item.box.text, srcLang, tgtLang); }
-        catch(err){ item.translated = item.box.text; logLine(`    · تعذرت ترجمة فقاعة: ${err.message}`, 'warn'); }
-      }
-      setStepState('translate','done');
-
-      setStepState('typeset','active');
-      cleanedBoxes.forEach(item => typesetText(ctx, item.translated, item.cleaned, tgtLang, chosenFont, item.box.lineCount));
-      setStepState('typeset','done');
-
-      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-      const url = URL.createObjectURL(blob);
-      const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
-      state.results.push({ name: outName, blob, url });
-      page.status = 'done';
-
-      totals.dialogue += dialogueBoxes.length;
-      totals.sfx += sfxBoxes.length;
-      totals.wm += wmBoxes.length + bannerCount;
-      totals.pages++;
-
-      addResultCard({ name: outName, url, status:'done' });
-      logLine(`  ✓ اكتملت الصفحة (${dialogueBoxes.length} فقاعة حوار مترجمة فعلياً)`, 'ok');
-
-    } catch(err){
-      totals.errors++;
-      logLine(`  ✗ فشلت معالجة ${file.name}: ${err.message}`, 'bad');
-      addResultCard({ name:file.name, url:null, status:'error', errorMsg: err.message });
-    }
-
-    setProgress(((i+1)/total)*100, `تم الانتهاء من ${i+1} من ${total}`);
-    updateSummary(totals);
-  }
-
-  await worker.terminate();
-  setStepState('export','done');
-  if (state.results.length) els.zipBtn.style.display = 'inline-flex';
-  setProgress(100, 'اكتمل تشغيل خط الإنتاج ✅');
-  logLine(`انتهى التشغيل — ${totals.pages} صفحة ناجحة، ${totals.errors} صفحة فشلت.`, totals.errors ? 'warn' : 'ok');
-  els.runBtn.disabled = false;
-}
-
-// ---------------------- 15) الإحصائيات + النتائج + التصدير ----------------------
-function updateSummary(totals){
-  els.statPages.textContent = totals.pages; els.statDialogue.textContent = totals.dialogue;
-  els.statSfx.textContent = totals.sfx; els.statWm.textContent = totals.wm; els.statErrors.textContent = totals.errors;
+  state.results.forEach(r => addResultCard({ name:r.name, url:r.url, status:'done' }));
 }
 function addResultCard({ name, url, status, errorMsg }){
   const card = document.createElement('div'); card.className='result-card';
@@ -1144,7 +513,7 @@ els.zipBtn.addEventListener('click', async () => {
   state.results.forEach(r => zip.file(r.name, r.blob));
   const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
-  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_6_النتائج.zip'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_8_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
 });
 </script>
