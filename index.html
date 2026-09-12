@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 6 | Pure Tool 6</title>
+<title>أداة بيور 8 | Pure Tool 8</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -136,8 +136,8 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 6</h1>
-      <p>فحص خلفية متعدد المسافات يدعم فقاعات الحواف المسننة/السحابية + تمرير تلقائي للنصوص الطويلة عالية الثقة — فريق بيور</p>
+      <h1>أداة بيور 8</h1>
+      <p>يدعم الآن الترجمة عبر خادم manga-image-translator الخارجي (Colab) بجانب المحرك المحلي — فريق بيور</p>
     </div>
   </header>
 
@@ -174,6 +174,45 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       <label for="useClassifier">تفعيل تصنيف AI حقيقي إضافي للحالات الغامضة فقط (عبر Hugging Face، يتطلب توكن مجاني)</label></div>
     <div class="settings-grid" id="classifierFields">
       <div class="field"><label>HF API Token (للتصنيف)</label><input type="text" id="classifierToken" placeholder="hf_xxxxxxxxxxxxxxxx"></div>
+    </div>
+  </section>
+
+  <!-- 2.5) خادم الترجمة الخارجي (manga-image-translator عبر Colab) -->
+  <section class="card">
+    <h2>2.5. خادم الترجمة الخارجي (Backend Proxy — manga-image-translator)</h2>
+    <p class="hint">إذا فعّلته، تُرسَل كل صورة كما هي مباشرة إلى الخادم (رفع + كشف + ترجمة + تنضيد بالكامل هناك)، وتتجاوز أداة OCR/الترجمة/التنضيد المحلية بالأسفل بالكامل.</p>
+    <div class="toggle-row"><input type="checkbox" id="useBackend">
+      <label for="useBackend">استخدام خادم الترجمة الخارجي بدل المعالجة المحلية</label></div>
+    <div class="settings-grid" id="backendFields" style="margin-top:12px;">
+      <div class="field" style="grid-column:1/-1;">
+        <label>رابط الخادم (Backend Proxy URL)</label>
+        <input type="text" id="backendUrl" value="https://5003-gpu-t4-s-kkb-usw4a0-1j1s4ft57l5ah-a.us-west4-0.prod.colab.dev" placeholder="https://xxxx.prod.colab.dev">
+      </div>
+      <div class="field">
+        <label>محرك الترجمة على الخادم</label>
+        <select id="backendTranslator">
+          <option value="offline" selected>تلقائي بدون اتصال (offline)</option>
+          <option value="nllb">NLLB (متعدد اللغات)</option>
+          <option value="nllb_big">NLLB Big</option>
+          <option value="sakura">Sakura (يتطلب SAKURA_API_BASE على الخادم)</option>
+          <option value="chatgpt">ChatGPT (يتطلب OPENAI_API_KEY على الخادم)</option>
+          <option value="gemini">Gemini (يتطلب GEMINI_API_KEY على الخادم)</option>
+          <option value="deepseek">DeepSeek (يتطلب DEEPSEEK_API_KEY على الخادم)</option>
+          <option value="groq">Groq (يتطلب GROQ_API_KEY على الخادم)</option>
+          <option value="custom_openai">Custom OpenAI / Ollama (يتطلب إعداد على الخادم)</option>
+          <option value="none">بدون ترجمة (تنظيف الفقاعات فقط)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>لغة الهدف المُرسلة للخادم</label>
+        <select id="backendTgtLang">
+          <option value="ARA" selected>العربية (ARA)</option>
+          <option value="ENG">English (ENG)</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="secondary" id="testBackendBtn">🔌 اختبار الاتصال بالخادم</button>
     </div>
   </section>
 
@@ -284,7 +323,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
   </section>
 
-  <footer class="note">أداة بيور 6 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
+  <footer class="note">أداة بيور 8 — فريق بيور · تعمل داخل المتصفح، مع دعم اختياري للترجمة عبر خادم خارجي</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -343,6 +382,9 @@ const els = {
   statSfx: document.getElementById('statSfx'), statWm: document.getElementById('statWm'),
   statErrors: document.getElementById('statErrors'),
   modeSmartLbl: document.getElementById('modeSmartLbl'), modeRawLbl: document.getElementById('modeRawLbl'),
+  useBackend: document.getElementById('useBackend'), backendFields: document.getElementById('backendFields'),
+  backendUrl: document.getElementById('backendUrl'), backendTranslator: document.getElementById('backendTranslator'),
+  backendTgtLang: document.getElementById('backendTgtLang'), testBackendBtn: document.getElementById('testBackendBtn'),
 };
 
 function logLine(text, cls){
@@ -365,6 +407,47 @@ function setStepState(key, mode, note){
 }
 els.useHF.addEventListener('change', () => els.hfFields.classList.toggle('show', els.useHF.checked));
 els.useClassifier.addEventListener('change', () => els.classifierFields.classList.toggle('show', els.useClassifier.checked));
+els.backendFields.style.opacity = '0.5';
+els.useBackend.addEventListener('change', () => {
+  els.backendFields.style.opacity = els.useBackend.checked ? '1' : '0.5';
+});
+
+// ---------------------- 2.5) خادم الترجمة الخارجي ----------------------
+function normalizeBackendUrl(){
+  return els.backendUrl.value.trim().replace(/\/+$/, '');
+}
+els.testBackendBtn.addEventListener('click', async () => {
+  const base = normalizeBackendUrl();
+  if (!base){ logLine('أدخل رابط الخادم أولاً.', 'warn'); return; }
+  logLine(`جارٍ اختبار الاتصال بـ: ${base} …`, 'info');
+  try{
+    const res = await fetch(`${base}/docs`, { method:'GET', mode:'cors' });
+    if (res.ok) logLine(`✓ الخادم يستجيب (HTTP ${res.status}) — يبدو متصلاً.`, 'ok');
+    else logLine(`⚠ الخادم استجاب لكن بحالة غير متوقعة (HTTP ${res.status}).`, 'warn');
+  } catch(err){
+    logLine(`✗ تعذّر الوصول للخادم مباشرة من المتصفح (${err.message}). هذا قد يكون بسبب CORS حتى لو الرابط شغّال — جرّب فتح الرابط في تبويب جديد للتأكد أنه لا يزال حياً، ثم اضغط "تشغيل خط الإنتاج" مباشرة لتجربة الترجمة الفعلية.`, 'warn');
+  }
+});
+async function translateImageViaBackend(file){
+  const base = normalizeBackendUrl();
+  if (!base) throw new Error('رابط الخادم فارغ');
+  const config = {
+    translator: { translator: els.backendTranslator.value, target_lang: els.backendTgtLang.value },
+    render: { rtl: els.backendTgtLang.value === 'ARA' }
+  };
+  const formData = new FormData();
+  formData.append('image', file, file.name);
+  formData.append('config', JSON.stringify(config));
+  const res = await fetch(`${base}/translate/with-form/image`, { method:'POST', body: formData });
+  if (!res.ok){
+    let detail = '';
+    try{ detail = await res.text(); } catch(e){}
+    throw new Error(`فشل الخادم (HTTP ${res.status})${detail ? ' — ' + detail.slice(0,200) : ''}`);
+  }
+  const blob = await res.blob();
+  if (!blob || blob.size === 0) throw new Error('رد فارغ من الخادم — لم تُستلم صورة');
+  return blob;
+}
 els.eraserAngle.addEventListener('input', () => { els.eraserAngleVal.textContent = els.eraserAngle.value + '°'; redrawEraserOverlay(); });
 
 // ---------------------- 3) رفع الصور (مع منع التكرار) ----------------------
@@ -871,6 +954,64 @@ els.eraseAllBtn.addEventListener('click', async () => {
 els.runBtn.addEventListener('click', runPipeline);
 
 async function runPipeline(){
+  if (els.useBackend.checked) return runBackendPipeline();
+  return runLocalPipeline();
+}
+
+// ---------------------- 14-ب) التشغيل عبر الخادم الخارجي (manga-image-translator) ----------------------
+async function runBackendPipeline(){
+  els.runBtn.disabled = true;
+  els.resultsGrid.innerHTML = '';
+  state.results = [];
+
+  const total = state.files.length;
+  const totals = { dialogue:0, sfx:0, wm:0, noise:0, errors:0, pages:0 };
+  const base = normalizeBackendUrl();
+
+  logLine(`بدء التشغيل عبر الخادم الخارجي: ${total} صفحة — ${base} — محرك: ${els.backendTranslator.value} — هدف: ${els.backendTgtLang.value}`, 'ok');
+  ['prep','ocr','merge','classify','watermark','clean','translate','typeset'].forEach(k => setStepState(k,null,'—'));
+  setStepState('prep','done','تم — لا معالجة محلية، كل الصفحات تُرسل للخادم');
+
+  for (let i=0;i<total;i++){
+    const file = state.files[i];
+    setProgress((i/total)*100, `رفع وترجمة الصفحة ${i+1} من ${total}: ${file.name}`);
+    logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
+    setStepState('ocr','active','جارٍ الرفع والترجمة عبر الخادم…');
+
+    try{
+      if (!base) throw new Error('رابط الخادم فارغ — أدخله في قسم "2.5"');
+      const blob = await translateImageViaBackend(file);
+      const url = URL.createObjectURL(blob);
+      const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
+      state.results.push({ name: outName, blob, url });
+
+      ['ocr','merge','classify','watermark','clean','translate','typeset'].forEach(k => setStepState(k,'done','تم عبر الخادم'));
+      totals.pages++;
+      addResultCard({ name: outName, url, status:'done' });
+      logLine(`  ✓ اكتملت الصفحة عبر الخادم الخارجي`, 'ok');
+
+    } catch(err){
+      totals.errors++;
+      const hint = /Failed to fetch|NetworkError|CORS/i.test(err.message)
+        ? ' — تحقّق أن رابط Colab لا يزال يعمل، وأنه يسمح بطلبات CORS من المتصفح'
+        : '';
+      logLine(`  ✗ فشلت معالجة ${file.name} عبر الخادم: ${err.message}${hint}`, 'bad');
+      addResultCard({ name:file.name, url:null, status:'error', errorMsg: err.message });
+    }
+
+    setProgress(((i+1)/total)*100, `تم الانتهاء من ${i+1} من ${total}`);
+    updateSummary(totals);
+  }
+
+  setStepState('export','done');
+  if (state.results.length) els.zipBtn.style.display = 'inline-flex';
+  setProgress(100, 'اكتمل تشغيل خط الإنتاج ✅');
+  logLine(`انتهى التشغيل — ${totals.pages} صفحة ناجحة، ${totals.errors} صفحة فشلت.`, totals.errors ? 'warn' : 'ok');
+  els.runBtn.disabled = false;
+}
+
+// ---------------------- 14-أ) التشغيل المحلي (Tesseract + محرك محلي) ----------------------
+async function runLocalPipeline(){
   els.runBtn.disabled = true;
   els.resultsGrid.innerHTML = '';
   state.results = [];
