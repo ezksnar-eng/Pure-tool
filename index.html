@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 5 | Pure Tool 5</title>
+<title>أداة بيور 6 | Pure Tool 6</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -136,15 +136,15 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 5</h1>
-      <p>تنظيف مضمون يغطي النص الأصلي بالكامل + تصنيف أكثر تسامحاً وذكاءً + مسح مائل للعلامات المائية — فريق بيور</p>
+      <h1>أداة بيور 6</h1>
+      <p>فحص خلفية متعدد المسافات يدعم فقاعات الحواف المسننة/السحابية + تمرير تلقائي للنصوص الطويلة عالية الثقة — فريق بيور</p>
     </div>
   </header>
 
   <!-- 1) رفع الصور -->
   <section class="card">
     <h2>1. رفع صفحات المانهوا</h2>
-    <p class="hint">يدعم حتى <b>70</b> صورة. الملفات المكررة (نفس الاسم والحجم) تُرفض تلقائياً لتفادي معالجة نفس الصفحة مرتين.</p>
+    <p class="hint">يدعم حتى <b>70</b> صورة. الملفات المكررة تُرفض تلقائياً.</p>
     <div id="dropzone">
       <p class="big">📥 اسحب الصور هنا أو اضغط للاختيار</p>
       <p class="small">كل المعالجة تتم محلياً داخل متصفحك — لا رفع لأي خادم خارجي</p>
@@ -157,11 +157,12 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
   <!-- 2) وضع المعالجة -->
   <section class="card">
     <h2>2. وضع المعالجة</h2>
+    <p class="hint">مستعجل؟ استخدم "خام" ليضمن معالجة كل نص بلا تخطي، وقت ما تحتاج سرعة أكثر من الدقة.</p>
     <div class="mode-picker">
       <label class="mode-opt active" id="modeSmartLbl">
         <input type="radio" name="procMode" value="smart" checked style="display:none;">
         <div class="mo-title">🧠 وضع ذكي (بخوارزميات فحص)</div>
-        <div class="mo-sub">يميّز الحوار عن المؤثرات الصوتية بشكل متعدد المعايير (ثقة + شكل + خلفية) بدل معيار واحد متشدد</div>
+        <div class="mo-sub">فحص متعدد المسافات يدعم فقاعات الحواف المسننة/السحابية، مع تمرير تلقائي للنصوص الطويلة عالية الثقة</div>
       </label>
       <label class="mode-opt" id="modeRawLbl">
         <input type="radio" name="procMode" value="raw" style="display:none;">
@@ -213,7 +214,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
   <!-- 4) خطوط مخصصة -->
   <section class="card">
     <h2>4. رفع حزمة خطوط مخصصة (ZIP)</h2>
-    <p class="hint">ارفع ZIP يحتوي خطوط (.ttf/.otf/.woff/.woff2). إذا سميت أحد الخطوط بكلمة تحتوي "حوار" أو "رئيسي" أو "أساسي"، يتم اختياره تلقائياً كخط افتراضي للتنضيد.</p>
+    <p class="hint">ارفع ZIP يحتوي خطوط (.ttf/.otf/.woff/.woff2). خط باسمه "حوار" أو "رئيسي" أو "أساسي" يُختار تلقائياً.</p>
     <input type="file" id="fontZipInput" accept=".zip">
     <div class="field" style="margin-top:12px;">
       <label>الخط المستخدم في التنضيد</label>
@@ -226,10 +227,10 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
   <section class="card">
     <h2>5. خط الإنتاج (Pipeline)</h2>
     <ol class="pipeline" id="pipelineList">
-      <li data-key="prep"><div><div class="step-title">تحضير وحماية الصورة</div><div class="step-sub">تحسين تباين + منع تكرار نفس الملف + تصغير آمن للصفحات الطويلة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="prep"><div><div class="step-title">تحضير وحماية الصورة</div><div class="step-sub">تحسين تباين + منع تكرار الملف + تصغير آمن للصفحات الطويلة</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="ocr"><div><div class="step-title">كشف واستخراج النص</div><div class="step-sub">Tesseract.js مع درجة ثقة لكل كلمة</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="merge"><div><div class="step-title">تجميع الفقاعات</div><div class="step-sub">دمج الكلمات + تقدير عدد الأسطر الأصلية</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="classify"><div><div class="step-title">تصنيف المحتوى</div><div class="step-sub">فحص متعدد المعايير + تصنيف AI اختياري للحالات الغامضة</div></div><div class="step-state">بالانتظار</div></li>
+      <li data-key="classify"><div><div class="step-title">تصنيف المحتوى</div><div class="step-sub">فحص خلفية متعدد المسافات (يدعم الحواف المسننة) + تمرير تلقائي للنصوص الطويلة</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="watermark"><div><div class="step-title">إزالة العلامات المائية</div><div class="step-sub">كلمات مفتاحية + شريط شعار داكن + يدوي مائل إن وُجد</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="clean"><div><div class="step-title">تنظيف مضمون للفقاعة</div><div class="step-sub">شكل الفقاعة الحقيقي + تغطية إجبارية لكامل صندوق النص الأصلي</div></div><div class="step-state">بالانتظار</div></li>
       <li data-key="translate"><div><div class="step-title">الترجمة</div><div class="step-sub">فقاعات الحوار فقط</div></div><div class="step-state">بالانتظار</div></li>
@@ -246,10 +247,10 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     </div>
   </section>
 
-  <!-- 6) إزالة علامة مائية يدوياً (بزاوية) -->
+  <!-- 6) إزالة علامة مائية يدوياً -->
   <section class="card">
     <h2>6. إزالة علامة مائية يدوياً (يدعم الزاوية المائلة)</h2>
-    <p class="hint">للعلامات المائية الشفافة أو المائلة التي لا يقرأها OCR. اختر صورة، ارسم مربعاً، اضبط الزاوية إذا كانت العلامة مائلة، ثم امسحها.</p>
+    <p class="hint">للعلامات المائية الشفافة أو المائلة التي لا يقرأها OCR.</p>
     <div class="field"><label>اختر الصفحة للمعاينة</label><select id="eraserImageSelect"></select></div>
     <div id="eraserWrap"><canvas id="eraserCanvas"></canvas></div>
     <div class="angle-row">
@@ -283,7 +284,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
   </section>
 
-  <footer class="note">أداة بيور 5 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
+  <footer class="note">أداة بيور 6 — فريق بيور · تعمل بالكامل داخل المتصفح، بدون خادم خلفي</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -291,13 +292,10 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
 
 <script>
 /* =====================================================================
-   أداة بيور 5 — الأقسام:
-   0) CONFIG   1) الحالة   2) عناصر الواجهة   3) رفع الصور (مع منع التكرار)
-   4) وضع المعالجة   5) رفع الخطوط (ZIP) + اختيار تلقائي   6) الترجمة
-   7) تصنيف AI اختياري (Hugging Face)   8) تحضير/حماية الصورة   9) OCR/تجميع/تصنيف
-   10) إزالة العلامات المائية   11) التنظيف المضمون (Flood Fill + تغطية إجبارية)
-   12) التنضيد (يقارب كثافة الأسطر الأصلية)   13) الإزالة اليدوية (بزاوية)
-   14) التشغيل الرئيسي   15) الإحصائيات والتصدير
+   أداة بيور 6 — نفس أقسام النسخة 5، مع تحسين أساسي واحد:
+   فحص "انتظام الخلفية" صار يجرّب عدة مسافات حول النص بدل مسافة واحدة،
+   لأن فقاعات الحواف المسننة/السحابية (تفكير أو سرد) تكسر القياس عند مسافة ثابتة.
+   بالإضافة لتمرير تلقائي لأي نص طويل (3+ كلمات) بثقة معقولة كحوار مباشرة.
    ===================================================================== */
 
 // ---------------------- 0) CONFIG ----------------------
@@ -305,7 +303,8 @@ const CONFIG = {
   MAX_IMAGES: 70,
   MIN_WORD_CONF: 42,
   MIN_TEXT_LEN: 2,
-  BG_UNIFORMITY_SPREAD: 82,     // نطاق (لا انحراف معياري خام) لمقاومة بكسلات حافة الفقاعة
+  BG_UNIFORMITY_SPREAD: 82,
+  UNIFORMITY_PADS: [8, 14, 22, 32],   // مسافات متعددة تُجرَّب بالترتيب لتجاوز الحواف المسننة
   MAX_BUBBLE_AREA_RATIO: 0.34,
   OCR_MAX_WIDTH: 1400,
   FLOOD_TOLERANCE: 36,
@@ -401,7 +400,7 @@ function addFiles(fileList){
   refreshEraserOptions();
 }
 els.dropzone.addEventListener('click', () => els.fileInput.click());
-els.fileInput.addEventListener('change', e => { addFiles(e.target.files); e.target.value = ''; });
+els.fileInput.addEventListener('change', e => { addFiles(e.target.files); e.target.value=''; });
 ['dragenter','dragover'].forEach(ev => els.dropzone.addEventListener(ev, e => { e.preventDefault(); els.dropzone.classList.add('drag'); }));
 ['dragleave','drop'].forEach(ev => els.dropzone.addEventListener(ev, e => { e.preventDefault(); els.dropzone.classList.remove('drag'); }));
 els.dropzone.addEventListener('drop', e => addFiles(e.dataTransfer.files));
@@ -559,7 +558,6 @@ function makeOcrCanvas(sourceCanvas){
   small.getContext('2d').drawImage(sourceCanvas, 0, 0, small.width, small.height);
   return { canvas: small, scale };
 }
-// دمج الكلمات + تقدير عدد الأسطر الأصلية (عبر تجميع مراكز Y للكلمات المكوّنة)
 function mergeBoxes(words, invScale){
   const boxes = words.map(w => ({ x0:w.bbox.x0*invScale, y0:w.bbox.y0*invScale, x1:w.bbox.x1*invScale, y1:w.bbox.y1*invScale, text:w.text, conf:w.confidence }));
   const used = new Array(boxes.length).fill(false);
@@ -582,27 +580,35 @@ function mergeBoxes(words, invScale){
       }
     }
     const avgConf = group.confs.reduce((a,b)=>a+b,0)/group.confs.length;
-    // تقدير عدد الأسطر الأصلية بتجميع مراكز Y للكلمات ضمن نطاق تسامح صغير
     const centers = group.words.map(w => (w.y0+w.y1)/2).sort((a,b)=>a-b);
     let lineCount = 1;
     const avgWordH = group.words.reduce((a,w)=>a+(w.y1-w.y0),0)/group.words.length;
     for (let k=1;k<centers.length;k++){ if (centers[k]-centers[k-1] > avgWordH*0.6) lineCount++; }
-    merged.push({ x0:group.x0, y0:group.y0, x1:group.x1, y1:group.y1, text:group.words.map(w=>w.text).join(' '), avgConf, lineCount });
+    merged.push({ x0:group.x0, y0:group.y0, x1:group.x1, y1:group.y1, text:group.words.map(w=>w.text).join(' '), avgConf, lineCount, wordCount: group.words.length });
   }
   return merged;
 }
-function backgroundUniformity(ctx, box){
-  const pad = 11; // هامش أوسع يتجاوز حدود إطار الفقاعة الرفيع بدل قياسه بالخطأ
+// فحص انتظام الخلفية بعدة مسافات — يتجاوز الحواف المسننة/السحابية اللي تكسر القياس بمسافة ثابتة
+function ringSpread(ctx, box, pad){
   const x=Math.max(0,Math.round(box.x0-pad)), y=Math.max(0,Math.round(box.y0-pad));
   const w=Math.max(1,Math.round((box.x1-box.x0)+pad*2)), h=Math.max(1,Math.round((box.y1-box.y0)+pad*2));
-  let data; try{ data = ctx.getImageData(x,y,w,h).data; }catch(e){ return { uniform:false, spread:999 }; }
+  let data; try{ data = ctx.getImageData(x,y,w,h).data; }catch(e){ return null; }
   const border=[];
   for (let i=0;i<w;i++){ border.push([i,0]); border.push([i,h-1]); }
   for (let j=0;j<h;j++){ border.push([0,j]); border.push([w-1,j]); }
   const vals = border.map(([bx,by])=>{ const idx=(by*w+bx)*4; return (data[idx]+data[idx+1]+data[idx+2])/3; }).sort((a,b)=>a-b);
   const lo = vals[Math.floor(vals.length*0.1)], hi = vals[Math.floor(vals.length*0.9)];
-  const spread = hi-lo; // نطاق مقاوم للقيم الشاذة (بدل انحراف معياري خام)
-  return { uniform: spread <= CONFIG.BG_UNIFORMITY_SPREAD, spread };
+  return hi-lo;
+}
+function backgroundUniformity(ctx, box){
+  let best = null;
+  for (const pad of CONFIG.UNIFORMITY_PADS){
+    const spread = ringSpread(ctx, box, pad);
+    if (spread === null) continue;
+    if (best === null || spread < best) best = spread;
+    if (spread <= CONFIG.BG_UNIFORMITY_SPREAD) return { uniform:true, spread }; // أول مسافة ناجحة تكفي
+  }
+  return { uniform:false, spread: best===null?999:best };
 }
 async function classifyBox(ctx, box, pageArea, extraKeywords, smart, useClassifier, classifierToken){
   const lower = box.text.toLowerCase().replace(/\s+/g,'');
@@ -617,15 +623,18 @@ async function classifyBox(ctx, box, pageArea, extraKeywords, smart, useClassifi
   const boxArea = (box.x1-box.x0)*(box.y1-box.y0);
   if (boxArea/pageArea > CONFIG.MAX_BUBBLE_AREA_RATIO) return { type:'sfx', reason:'مساحة كبيرة جداً بالنسبة للصفحة' };
 
-  const bg = backgroundUniformity(ctx, box);
   const aspect = (box.x1-box.x0) / Math.max(1,(box.y1-box.y0));
-  const shapeOk = aspect > 0.4 && aspect < 5; // شكل منطقي لفقاعة حوار (لا رفيع جداً ولا عريض جداً)
+  const shapeOk = aspect > 0.35 && aspect < 6;
 
-  // فحص متعدد المعايير: نجاح أي معيارين قويين كافٍ لاعتباره حواراً
-  if (bg.uniform && shapeOk) return { type:'dialogue', reason:'خلفية موحدة وشكل منطقي' };
+  // تمرير تلقائي: نص طويل (3+ كلمات) بثقة معقولة = حوار سردي غالباً حتى لو الحافة غير منتظمة
+  if (box.wordCount >= 3 && box.avgConf >= 55 && shapeOk){
+    return { type:'dialogue', reason:'نص طويل بثقة معقولة (تمرير تلقائي)' };
+  }
+
+  const bg = backgroundUniformity(ctx, box);
+  if (bg.uniform && shapeOk) return { type:'dialogue', reason:'خلفية موحدة (فحص متعدد المسافات) وشكل منطقي' };
   if (box.avgConf >= 70 && shapeOk) return { type:'dialogue', reason:'ثقة OCR عالية جداً (تجاوز فحص الخلفية)' };
 
-  // حالة غامضة — جرّب المصنّف الذكي إن كان مفعّلاً
   if (useClassifier && classifierToken){
     try{
       const label = await classifyViaHF(box.text, classifierToken);
@@ -735,8 +744,6 @@ function cleanDialogueShaped(ctx, box, pageW, pageH, logFail){
     } catch(e){ if (logFail) logFail('فشل قراءة منطقة الفقاعة — استُخدمت التغطية الإجبارية فقط'); }
   }
 
-  // طبقة تغطية مضمونة: نغطي دائماً صندوق النص الأصلي (بغض النظر عن نجاح الملء الذكي)
-  // هذا يضمن عدم بقاء أي حرف من النص الأصلي ظاهراً تحت الترجمة
   const guardPad = 3;
   const gx = Math.max(0, Math.round(box.x0-guardPad)), gy = Math.max(0, Math.round(box.y0-guardPad));
   const gw = Math.max(1, Math.round(bw+guardPad*2)), gh = Math.max(1, Math.round(bh+guardPad*2));
@@ -756,7 +763,6 @@ function typesetText(ctx, text, box, lang, fontFamily, originalLineCount){
   ctx.textBaseline = 'middle'; ctx.direction = isRTL?'rtl':'ltr'; ctx.textAlign='center';
   const family = fontFamily ? `${fontFamily}, Tajawal, sans-serif` : `Tajawal, sans-serif`;
   const minFontSize = 15;
-  // نبدأ من تقدير يقارب كثافة الأسطر الأصلية (إن توفرت) بدل صيغة عامة فقط
   const lineBasedGuess = originalLineCount ? Math.floor(box.h / (originalLineCount*1.3)) : 0;
   let fontSize = Math.max(18, Math.min(34, lineBasedGuess || Math.floor(box.h/3.2)));
   function wrapLines(size){
@@ -926,9 +932,8 @@ async function runPipeline(){
       setStepState('watermark','done', `${wmBoxes.length+bannerCount} أُزيلت`);
 
       setStepState('clean','active');
-      let fallbackCount = 0;
       const cleanedBoxes = dialogueBoxes.map(({box}) => {
-        const cleaned = cleanDialogueShaped(ctx, box, canvas.width, canvas.height, () => fallbackCount++);
+        const cleaned = cleanDialogueShaped(ctx, box, canvas.width, canvas.height, msg => logLine('    · '+msg, 'warn'));
         return { box, cleaned };
       });
       setStepState('clean','done', 'تغطية إجبارية مضمونة لكل الفقاعات');
@@ -998,7 +1003,7 @@ els.zipBtn.addEventListener('click', async () => {
   state.results.forEach(r => zip.file(r.name, r.blob));
   const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
-  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_5_النتائج.zip'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_6_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
 });
 </script>
