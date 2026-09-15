@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 11 | Pure Tool 11</title>
+<title>أداة بيور 14 | Pure Tool 14</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -117,7 +117,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 11</h1>
+      <h1>أداة بيور 14</h1>
       <p>الموقع يرسل كل شي لبوت بيور مباشرة (مو لسيرفر الترجمة) — والبوت يشتغل ويعرض حالته هنا لحظة بلحظة</p>
     </div>
   </header>
@@ -219,6 +219,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
             <option value="caiyun">caiyun</option>
           </optgroup>
         </select>
+        <p id="engineHint" style="margin:8px 0 0; font-size:12.5px; color:#9A7288; background:var(--pure-cream); border:1px solid var(--pure-line); border-radius:10px; padding:8px 10px;"></p>
       </div>
     </div>
     <p class="hint" style="margin-top:10px;">
@@ -255,16 +256,19 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
   <section class="card">
     <h2>8. الصفحات الناتجة</h2>
     <div id="resultsGrid"></div>
-    <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
+    <div class="actions">
+      <button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button>
+      <button class="secondary" id="downloadAllBtn" style="display:none;">⬇ تنزيل الكل (ملفات منفصلة بدون ZIP)</button>
+    </div>
   </section>
 
-  <footer class="note">أداة بيور 11 — فريق بيور · الموقع واجهة فقط؛ كل الذكاء والمعالجة تصير داخل بوت بيور نفسه</footer>
+  <footer class="note">أداة بيور 14 — فريق بيور · الموقع واجهة فقط؛ كل الذكاء والمعالجة تصير داخل بوت بيور نفسه</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 /* =====================================================================
-   أداة بيور 11 — كل طلب يروح لبوت بيور (أداة بوت ديسكورد بيور 11.py) مباشرة:
+   أداة بيور 14 — كل طلب يروح لبوت بيور (اداة_بوت_ديسكورد_14.py) مباشرة:
      GET  {botUrl}/api/status          → لوحة الحالة الحية
      POST {botUrl}/api/translate       → صورة وحدة (image + config JSON)
      POST {botUrl}/api/translate-zip   → فصل ZIP كامل
@@ -283,10 +287,12 @@ const els = {
   thumbs: document.getElementById('thumbs'),
   fontZipInput: document.getElementById('fontZipInput'), fontResult: document.getElementById('fontResult'),
   tgtLang: document.getElementById('tgtLang'), translatorEngine: document.getElementById('translatorEngine'),
+  engineHint: document.getElementById('engineHint'),
   runBtn: document.getElementById('runBtn'), resetBtn: document.getElementById('resetBtn'),
   log: document.getElementById('log'), progressFill: document.getElementById('progressFill'),
   progressLabel: document.getElementById('progressLabel'),
   resultsGrid: document.getElementById('resultsGrid'), zipBtn: document.getElementById('zipBtn'),
+  downloadAllBtn: document.getElementById('downloadAllBtn'),
   eraserImageSelect: document.getElementById('eraserImageSelect'), eraserCanvas: document.getElementById('eraserCanvas'),
   eraseBtn: document.getElementById('eraseBtn'),
 };
@@ -303,6 +309,61 @@ function setProgress(pct, label){
   if (label) els.progressLabel.textContent = label;
 }
 function cleanUrl(){ return els.botUrl.value.trim().replace(/\/+$/, ''); }
+
+// ---------------------- شرح كل محرك ترجمة ----------------------
+const ENGINE_DESCRIPTIONS = {
+  offline: 'الافتراضي — نموذج NLLB مصغّر يشتغل محلياً بجهاز البوت بدون إنترنت ولا مفتاح API. سريع ومتوازن لأغلب الحالات.',
+  nllb: 'نموذج NLLB الكامل من Meta — ترجمة أدق من offline بس أبطأ شوي، يدعم لغات كثيرة.',
+  nllb_big: 'نسخة NLLB الكبيرة — أعلى دقة بالعائلة بس أبطأ وتحتاج ذاكرة أكثر بجهاز البوت.',
+  sugoi: 'مخصص للترجمة من الياباني للإنجليزي بس — مبني على بيانات مانغا/أنمي، دقيق جداً بهذا الاتجاه تحديداً.',
+  jparacrawl: 'نموذج مبني على بيانات JParaCrawl (ياباني↔إنجليزي) — جودة جيدة للنصوص الطبيعية.',
+  jparacrawl_big: 'نسخة أكبر من jparacrawl — دقة أعلى، أبطأ بالمعالجة.',
+  m2m100: 'نموذج Many-to-Many من Facebook — يترجم مباشرة بين عشرات اللغات بدون المرور بالإنجليزي.',
+  m2m100_big: 'نسخة أكبر من m2m100 — دقة أعلى بس أثقل على المعالج.',
+  m2m100_hf: 'نفس m2m100 بس عبر مكتبة HuggingFace transformers.',
+  m2m100_hf_big: 'النسخة الكبيرة من m2m100_hf عبر HuggingFace.',
+  mbart50: 'نموذج mBART50 — يدعم 50 لغة، توازن جيد بين السرعة والدقة.',
+  qwen2: 'نموذج Qwen2 اللغوي — ترجمة بجودة نموذج لغوي حديث محلياً.',
+  qwen2_big: 'النسخة الكبيرة من Qwen2 — أدق بس أبطأ وتحتاج موارد أكثر.',
+  none: 'بدون ترجمة إطلاقاً — بس يبيّض/ينظف الفقاعات، يفيد إذا تريد تحط النص بنفسك يدوياً.',
+  original: 'يبقي النص الأصلي كما هو بدون ترجمة ولا حتى تبييض — يفيد للمعاينة فقط.',
+  deepl: '⚠ يحتاج مفتاح DeepL API معدّ مسبقاً بجهاز البوت — من أدق خدمات الترجمة التجارية.',
+  chatgpt: '⚠ يحتاج مفتاح OpenAI API بجهاز البوت — ترجمة بالذكاء الاصطناعي مع فهم للسياق.',
+  chatgpt_2stage: '⚠ يحتاج مفتاح OpenAI API — نفس ChatGPT بس بمرحلتين (استخراج ثم ترجمة) لدقة أعلى بالسياق.',
+  gemini: '⚠ يحتاج مفتاح Google Gemini API بجهاز البوت.',
+  gemini_2stage: '⚠ يحتاج مفتاح Gemini API — نفس gemini بس بمرحلتين لدقة أعلى.',
+  deepseek: '⚠ يحتاج مفتاح DeepSeek API بجهاز البوت.',
+  groq: '⚠ يحتاج مفتاح Groq API — استدلال سريع جداً لنماذج لغوية مفتوحة المصدر.',
+  sakura: '⚠ يحتاج سيرفر Sakura معدّ بجهاز البوت — نموذج مخصص لترجمة الروايات/المانغا اليابانية.',
+  custom_openai: '⚠ يحتاج رابط ومفتاح متوافقين مع OpenAI API معدّين بجهاز البوت (أي سيرفر متوافق).',
+  youdao: '⚠ يحتاج مفتاح Youdao API — خدمة ترجمة صينية معروفة.',
+  baidu: '⚠ يحتاج مفتاح Baidu Translate API.',
+  papago: '⚠ يحتاج مفتاح Papago API من Naver — قوي بالكوري تحديداً.',
+  caiyun: '⚠ يحتاج مفتاح Caiyun API — ترجمة صينية.',
+};
+function updateEngineHint(){
+  const v = els.translatorEngine.value;
+  els.engineHint.textContent = ENGINE_DESCRIPTIONS[v] || '';
+}
+els.translatorEngine.addEventListener('change', updateEngineHint);
+updateEngineHint();
+
+// ---------------------- إعادة محاولة تلقائية لطلبات الشبكة (Failed to fetch) ----------------------
+async function fetchWithRetry(url, options, attempts = 3){
+  let lastErr;
+  for (let i = 1; i <= attempts; i++){
+    try{
+      return await fetch(url, options);
+    } catch(err){
+      lastErr = err;
+      if (i < attempts){
+        logLine(`⚠ انقطع الاتصال (محاولة ${i}/${attempts}) — إعادة المحاولة...`, 'warn');
+        await new Promise(r => setTimeout(r, 1500 * i));
+      }
+    }
+  }
+  throw lastErr;
+}
 
 // ---------------------- لوحة الحالة الحية (تحديث تلقائي كل 3 ثواني) ----------------------
 async function pollStatus(){
@@ -379,7 +440,7 @@ els.fontZipInput.addEventListener('change', async e => {
   if (!url) { els.fontResult.textContent = '⚠ حدد رابط البوت أولاً'; return; }
   els.fontResult.textContent = 'جارٍ رفع الخطوط للبوت…';
   try{
-    const res = await fetch(`${url}/api/upload-fonts`, { method: 'POST', body: file });
+    const res = await fetchWithRetry(`${url}/api/upload-fonts`, { method: 'POST', body: file });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'فشل غير معروف');
     els.fontResult.innerHTML = `✅ ${data.saved.length} خط وصل للبوت.<br>الخط الفعّال الآن: <b>${data.active_font || 'بدون تغيير'}</b><br>` +
@@ -396,7 +457,7 @@ async function sendImageToBot(botUrl, file, targetLang, engine){
   const form = new FormData();
   form.append('image', file, file.name);
   form.append('config', JSON.stringify({ target_lang: targetLang, translator_engine: engine }));
-  const res = await fetch(`${botUrl}/api/translate`, { method: 'POST', body: form });
+  const res = await fetchWithRetry(`${botUrl}/api/translate`, { method: 'POST', body: form });
   if (!res.ok){
     let detail = ''; try{ detail = (await res.json()).error || ''; } catch(e){}
     throw new Error(detail || `رمز الحالة ${res.status}`);
@@ -405,7 +466,7 @@ async function sendImageToBot(botUrl, file, targetLang, engine){
 }
 
 async function sendZipToBot(botUrl, file){
-  const res = await fetch(`${botUrl}/api/translate-zip`, { method: 'POST', body: file });
+  const res = await fetchWithRetry(`${botUrl}/api/translate-zip`, { method: 'POST', body: file });
   if (!res.ok){
     let detail = ''; try{ detail = (await res.json()).error || ''; } catch(e){}
     throw new Error(detail || `رمز الحالة ${res.status}`);
@@ -419,6 +480,7 @@ async function runPipeline(){
 
   els.runBtn.disabled = true;
   els.resultsGrid.innerHTML = ''; state.results = [];
+  els.zipBtn.style.display = 'none'; els.downloadAllBtn.style.display = 'none';
   const targetLang = els.tgtLang.value, engine = els.translatorEngine.value.trim() || 'offline';
   const total = state.files.length;
   let success = 0, failed = 0;
@@ -458,7 +520,7 @@ async function runPipeline(){
     setProgress(((i+1)/total)*100, `${i+1} من ${total}`);
   }
 
-  if (state.results.length) els.zipBtn.style.display = 'inline-flex';
+  if (state.results.length){ els.zipBtn.style.display = 'inline-flex'; els.downloadAllBtn.style.display = 'inline-flex'; }
   setProgress(100, 'اكتمل ✅');
   logLine(`انتهى — ${success} نجح، ${failed} فشل`, failed ? 'warn' : 'ok');
   refreshEraserOptions();
@@ -533,8 +595,20 @@ els.zipBtn.addEventListener('click', async () => {
   state.results.forEach(r => zip.file(r.name, r.blob));
   const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
-  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_11_النتائج.zip'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_14_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
+});
+
+// تنزيل كل صفحة كملف منفصل (بدون ضغط ZIP) — بفاصل زمني بسيط حتى المتصفح ما يوقف التنزيلات المتعددة
+els.downloadAllBtn.addEventListener('click', async () => {
+  logLine(`تنزيل ${state.results.length} ملف منفصل بدون ZIP…`);
+  for (const r of state.results){
+    const a = document.createElement('a');
+    a.href = r.url; a.download = r.name;
+    document.body.appendChild(a); a.click(); a.remove();
+    await new Promise(res => setTimeout(res, 350));
+  }
+  logLine('تم تنزيل كل الملفات منفصلة.', 'ok');
 });
 </script>
 </body>
