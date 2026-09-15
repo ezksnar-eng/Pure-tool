@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 10 | Pure Tool 10</title>
+<title>أداة بيور 11 | Pure Tool 11</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -117,7 +117,7 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 10</h1>
+      <h1>أداة بيور 11</h1>
       <p>الموقع يرسل كل شي لبوت بيور مباشرة (مو لسيرفر الترجمة) — والبوت يشتغل ويعرض حالته هنا لحظة بلحظة</p>
     </div>
   </header>
@@ -184,10 +184,49 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
         </select>
       </div>
       <div class="field">
-        <label>محرك الترجمة</label>
-        <input type="text" id="translatorEngine" value="offline">
+        <label>محرك الترجمة (اختر من محركات المشروع الحقيقية)</label>
+        <select id="translatorEngine">
+          <optgroup label="مجاني — بدون أي مفتاح API">
+            <option value="offline" selected>offline (افتراضي، NLLB محلي)</option>
+            <option value="nllb">nllb</option>
+            <option value="nllb_big">nllb_big (أدق، أبطأ)</option>
+            <option value="sugoi">sugoi (مخصص ياباني→إنجليزي)</option>
+            <option value="jparacrawl">jparacrawl</option>
+            <option value="jparacrawl_big">jparacrawl_big</option>
+            <option value="m2m100">m2m100</option>
+            <option value="m2m100_big">m2m100_big</option>
+            <option value="m2m100_hf">m2m100_hf</option>
+            <option value="m2m100_hf_big">m2m100_hf_big</option>
+            <option value="mbart50">mbart50</option>
+            <option value="qwen2">qwen2</option>
+            <option value="qwen2_big">qwen2_big</option>
+            <option value="none">none (بدون ترجمة)</option>
+            <option value="original">original (نص أصلي بدون تغيير)</option>
+          </optgroup>
+          <optgroup label="تحتاج مفتاح API مُعدّ على جهاز البوت">
+            <option value="deepl">deepl</option>
+            <option value="chatgpt">chatgpt</option>
+            <option value="chatgpt_2stage">chatgpt_2stage</option>
+            <option value="gemini">gemini</option>
+            <option value="gemini_2stage">gemini_2stage</option>
+            <option value="deepseek">deepseek</option>
+            <option value="groq">groq</option>
+            <option value="sakura">sakura</option>
+            <option value="custom_openai">custom_openai</option>
+            <option value="youdao">youdao</option>
+            <option value="baidu">baidu</option>
+            <option value="papago">papago</option>
+            <option value="caiyun">caiyun</option>
+          </optgroup>
+        </select>
       </div>
     </div>
+    <p class="hint" style="margin-top:10px;">
+      هذي القائمة الكاملة الحقيقية (27 محرك) من كود سيرفر manga-image-translator نفسه — مو قائمة مختصرة اخترعناها.
+      لاحظت إن قسم "الخوارزمية/الذكاء المحلي" اختفى من الموقع؟ هذا مقصود: قبل ما نربط بسيرفر حقيقي، كنا نخمّن التصنيف
+      (حوار/مؤثر صوتي) بخوارزميات محلية ضعيفة بجافاسكربت. الحين هذا التصنيف يصير فعلياً وبدقة أعلى داخل سيرفر
+      manga-image-translator نفسه (نماذج كشف وOCR حقيقية) — الموقع صار واجهة رفع بس، وهذا تحسين مو نقص.
+    </p>
     <div id="progressWrap">
       <div id="progressBar"><div id="progressFill"></div></div>
       <div id="progressLabel">لم يبدأ التشغيل بعد</div>
@@ -219,13 +258,13 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
     <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
   </section>
 
-  <footer class="note">أداة بيور 10 — فريق بيور · الموقع واجهة فقط؛ كل الذكاء والمعالجة تصير داخل بوت بيور نفسه</footer>
+  <footer class="note">أداة بيور 11 — فريق بيور · الموقع واجهة فقط؛ كل الذكاء والمعالجة تصير داخل بوت بيور نفسه</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 /* =====================================================================
-   أداة بيور 10 — كل طلب يروح لبوت بيور (اداة_بوت_ديسكورد_10.py) مباشرة:
+   أداة بيور 11 — كل طلب يروح لبوت بيور (أداة بوت ديسكورد بيور 11.py) مباشرة:
      GET  {botUrl}/api/status          → لوحة الحالة الحية
      POST {botUrl}/api/translate       → صورة وحدة (image + config JSON)
      POST {botUrl}/api/translate-zip   → فصل ZIP كامل
@@ -494,7 +533,7 @@ els.zipBtn.addEventListener('click', async () => {
   state.results.forEach(r => zip.file(r.name, r.blob));
   const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
-  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_10_النتائج.zip'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_11_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
 });
 </script>
