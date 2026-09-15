@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداة بيور 8 | Pure Tool 8</title>
+<title>أداة بيور 10 | Pure Tool 10</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
@@ -42,15 +42,24 @@ section.card > .hint{margin:0 0 20px; font-size:13.5px; color:#9A7288;}
 .conn-status.ok{display:block; background:#E4F5EC; color:var(--pure-ok);}
 .conn-status.bad{display:block; background:#FBE4E1; color:var(--pure-bad);}
 
+/* لوحة الحالة الحية */
+#liveDash{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px;}
+.live-box{background:var(--pure-cream); border:1px solid var(--pure-line); border-radius:12px; padding:14px; text-align:center;}
+.live-box .val{font-size:18px; font-weight:900; color:var(--pure-magenta); word-break:break-all;}
+.live-box .lbl{font-size:12px; color:#9A7288; margin-top:4px;}
+.live-dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-left:6px;}
+.live-dot.on{background:var(--pure-ok); box-shadow:0 0 0 3px #E4F5EC;}
+.live-dot.off{background:var(--pure-bad); box-shadow:0 0 0 3px #FBE4E1;}
+#liveLog{background:#2C1522; color:#F6D9E7; border-radius:12px; padding:12px 14px; height:160px;
+  overflow-y:auto; font-size:11.5px; line-height:1.8; margin-top:14px; direction:ltr; text-align:left;}
+
 #dropzone{border:2px dashed var(--pure-pink); border-radius:14px; padding:30px 20px; text-align:center;
   background:var(--pure-cream); cursor:pointer;}
 #dropzone.drag{background:#FDEBF3; border-color:var(--pure-magenta);}
 #dropzone .big{font-size:16px; font-weight:700; color:var(--pure-magenta); margin:6px 0;}
 #dropzone .small{font-size:13px; color:#A883A0; margin:4px 0;}
 #fileInput{display:none;}
-#fileCountWarn{font-size:12.5px; color:var(--pure-warn); margin-top:8px; display:none;}
-
-#thumbs{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; max-height:300px; overflow-y:auto;}
+#thumbs{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; max-height:280px; overflow-y:auto;}
 #thumbs .th{width:58px; height:80px; border-radius:7px; overflow:hidden; border:1px solid var(--pure-line);
   position:relative; background:#eee;}
 #thumbs .th img{width:100%; height:100%; object-fit:cover;}
@@ -60,9 +69,8 @@ section.card > .hint{margin:0 0 20px; font-size:13.5px; color:#9A7288;}
 .settings-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
 @media (max-width:640px){.settings-grid{grid-template-columns:1fr;}}
 .field label{display:block; font-size:13px; color:#7A5468; margin-bottom:6px;}
-.field select, .field input[type="text"], .field input[type="range"]{width:100%; padding:10px 12px; border-radius:10px;
+.field select, .field input[type="text"]{width:100%; padding:10px 12px; border-radius:10px;
   border:1px solid var(--pure-line); font-family:inherit; font-size:14px; background:#fff; color:var(--pure-plum);}
-.toggle-row{display:flex; align-items:center; gap:8px; margin:10px 0 0; font-size:13.5px; color:#7A5468;}
 
 .actions{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;}
 button.primary{background:var(--pure-magenta); color:#fff; border:none; padding:12px 26px;
@@ -71,29 +79,16 @@ button.primary:disabled{background:#E3B9CE; cursor:not-allowed;}
 button.secondary{background:transparent; color:var(--pure-magenta); border:1.5px solid var(--pure-pink);
   padding:11px 22px; border-radius:var(--radius-pill); font-family:inherit; font-weight:700; font-size:14px; cursor:pointer;}
 
-ol.pipeline{list-style:none; margin:0; padding:0; counter-reset:step;}
-ol.pipeline li{counter-increment:step; display:grid; grid-template-columns:36px 1fr auto; align-items:center;
-  gap:12px; padding:10px 6px; border-bottom:1px solid var(--pure-line);}
-ol.pipeline li:last-child{border-bottom:none;}
-ol.pipeline li::before{content:counter(step); width:30px; height:30px; border-radius:50%;
-  background:var(--pure-pink-light); color:var(--pure-magenta); display:flex; align-items:center;
-  justify-content:center; font-weight:700; font-size:13px;}
-ol.pipeline li.active::before{background:var(--pure-magenta); color:#fff;}
-ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff;}
-.step-title{font-weight:700; font-size:14px;}
-.step-sub{font-size:12px; color:#9A7288; margin-top:2px;}
-.step-state{font-size:12px; color:#B993AA; white-space:nowrap;}
-
 #progressWrap{margin-top:16px;}
 #progressBar{height:10px; border-radius:var(--radius-pill); background:var(--pure-pink-light); overflow:hidden;}
 #progressFill{height:100%; width:0%; background:linear-gradient(90deg,var(--pure-pink),var(--pure-magenta));
   transition:width .2s ease;}
 #progressLabel{font-size:13px; color:#7A5468; margin-top:8px;}
 
-#log{background:#2C1522; color:#F6D9E7; border-radius:12px; padding:14px 16px; height:210px; overflow-y:auto;
+#log{background:#2C1522; color:#F6D9E7; border-radius:12px; padding:14px 16px; height:180px; overflow-y:auto;
   font-size:12px; line-height:1.85;}
 #log .line{direction:ltr; text-align:left; unicode-bidi:plaintext;}
-#log .ok{color:#9BE3C4;} #log .warn{color:#F3C382;} #log .bad{color:#F0A0A0;} #log .info{color:#B9C7F6;}
+#log .ok{color:#9BE3C4;} #log .warn{color:#F3C382;} #log .bad{color:#F0A0A0;}
 
 #eraserWrap{position:relative; display:inline-block; max-width:100%; border:1px solid var(--pure-line); border-radius:10px; overflow:hidden;}
 #eraserCanvas{max-width:100%; display:block; cursor:crosshair;}
@@ -106,11 +101,6 @@ ol.pipeline li.done::before{content:"✓"; background:var(--pure-ok); color:#fff
 .badge-status{font-size:10.5px; padding:2px 8px; border-radius:var(--radius-pill); font-weight:700;}
 .badge-status.done{background:#E4F5EC; color:var(--pure-ok);}
 .badge-status.error{background:#FBE4E1; color:var(--pure-bad);}
-
-#summaryGrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:14px;}
-.stat-box{background:var(--pure-cream); border:1px solid var(--pure-line); border-radius:12px; padding:14px; text-align:center;}
-.stat-box .num{font-size:22px; font-weight:900; color:var(--pure-magenta);}
-.stat-box .lbl{font-size:12px; color:#9A7288; margin-top:2px;}
 
 footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;}
 </style>
@@ -127,145 +117,139 @@ footer.note{text-align:center; font-size:12.5px; color:#B993AA; margin-top:26px;
       </svg>
     </div>
     <div class="hero-text">
-      <h1>أداة بيور 8</h1>
-      <p>واجهة ترفع الصور فعلياً لسيرفر manga-image-translator الحقيقي (Colab) وتستلم النتيجة المُترجَمة والمُبيَّضة — فريق بيور</p>
+      <h1>أداة بيور 10</h1>
+      <p>الموقع يرسل كل شي لبوت بيور مباشرة (مو لسيرفر الترجمة) — والبوت يشتغل ويعرض حالته هنا لحظة بلحظة</p>
     </div>
   </header>
 
-  <!-- 1) رابط السيرفر (يتغير كل جلسة Colab) -->
+  <!-- 1) رابط بوت بيور -->
   <section class="card">
-    <h2>1. رابط السيرفر (Backend)</h2>
-    <p class="hint">رابط Colab يتغير كل ما تُعاد تشغيل الجلسة — حدّثه هنا وقت ما يتغير، بدون الحاجة لتعديل الكود.</p>
+    <h2>1. رابط بوت بيور (Discord Bot API)</h2>
+    <p class="hint">هذا رابط واجهة API الخاصة بالبوت (مو رابط سيرفر الترجمة مباشرة). البوت هو اللي يتصل بسيرفر الترجمة نيابةً عنك، ويثبّت الخطوط، ويعرض حالته هنا.</p>
     <div class="conn-row">
       <div class="field">
-        <label>رابط السيرفر</label>
-        <input type="text" id="backendUrl" value="https://5003-gpu-t4-s-kkb-usw4a0-1j1s4ft57l5ah-a.us-west4-0.prod.colab.dev">
+        <label>رابط البوت</label>
+        <input type="text" id="botUrl" placeholder="https://xxxx.trycloudflare.com">
       </div>
       <button class="secondary" id="testBtn">🔌 اختبار الاتصال</button>
     </div>
     <div class="conn-status" id="connStatus"></div>
   </section>
 
-  <!-- 2) رفع الصور -->
+  <!-- 2) لوحة حالة البوت الحية -->
   <section class="card">
-    <h2>2. رفع صفحات المانهوا</h2>
-    <p class="hint">يدعم حتى <b>70</b> صورة. الملفات المكررة تُرفض تلقائياً.</p>
-    <div id="dropzone">
-      <p class="big">📥 اسحب الصور هنا أو اضغط للاختيار</p>
-      <p class="small">تُرفع الصور مباشرة لسيرفر الـ Colab أعلاه للمعالجة — تأكد إنه شغّال قبل البدء</p>
+    <h2>2. 🔴 حالة بوت بيور المباشرة</h2>
+    <p class="hint">تتحدّث تلقائياً كل 3 ثواني — تكدر تفتحها وتتفرج بس، مو لازم تسوي شي.</p>
+    <div id="liveDash">
+      <div class="live-box"><div class="val" id="liveConn"><span class="live-dot off"></span>غير متصل</div><div class="lbl">الاتصال</div></div>
+      <div class="live-box"><div class="val" id="liveFile">—</div><div class="lbl">الملف الجاري معالجته</div></div>
+      <div class="live-box"><div class="val" id="liveQueue">0</div><div class="lbl">بالطابور</div></div>
+      <div class="live-box"><div class="val" id="liveTotal">0</div><div class="lbl">الإجمالي منذ التشغيل</div></div>
+      <div class="live-box"><div class="val" id="liveSource">—</div><div class="lbl">آخر مصدر طلب</div></div>
     </div>
-    <input id="fileInput" type="file" accept="image/*" multiple>
-    <div id="fileCountWarn"></div>
+    <div id="liveLog"><div>بانتظار الاتصال بالبوت...</div></div>
+  </section>
+
+  <!-- 3) رفع الصور -->
+  <section class="card">
+    <h2>3. رفع صفحات المانهوا</h2>
+    <p class="hint">يدعم حتى 70 صورة، أو ملف ZIP لفصل كامل.</p>
+    <div id="dropzone">
+      <p class="big">📥 اسحب الصور أو ملف ZIP هنا أو اضغط للاختيار</p>
+      <p class="small">تُرسل مباشرة لبوت بيور، وهو يتولى الباقي</p>
+    </div>
+    <input id="fileInput" type="file" accept="image/*,.zip" multiple>
     <div id="thumbs"></div>
   </section>
 
-  <!-- 3) إعدادات الترجمة -->
+  <!-- 4) رفع خطوط -->
   <section class="card">
-    <h2>3. إعدادات الترجمة (تُرسَل كإعداد config للسيرفر)</h2>
+    <h2>4. رفع حزمة خطوط (ZIP) — تُثبَّت فعلياً على جهاز البوت</h2>
+    <p class="hint">البوت يستلم الخطوط، يستخرج اسمها الحقيقي، ويثبّتها بنظامه مباشرة إذا كان بنفس جهاز سيرفر الترجمة — حل حقيقي مو محاكاة.</p>
+    <input type="file" id="fontZipInput" accept=".zip">
+    <div id="fontResult" style="margin-top:10px; font-size:13px; color:#7A5468;"></div>
+  </section>
+
+  <!-- 5) الإعدادات + التشغيل -->
+  <section class="card">
+    <h2>5. إعدادات الترجمة</h2>
     <div class="settings-grid">
       <div class="field">
         <label>لغة الترجمة الهدف</label>
         <select id="tgtLang">
           <option value="ARA" selected>العربية (ARA)</option>
           <option value="ENG">English (ENG)</option>
-          <option value="CHS">صيني مبسّط (CHS)</option>
-          <option value="CHT">صيني تقليدي (CHT)</option>
           <option value="JPN">ياباني (JPN)</option>
           <option value="KOR">كوري (KOR)</option>
         </select>
       </div>
       <div class="field">
-        <label>محرك الترجمة (translator)</label>
+        <label>محرك الترجمة</label>
         <input type="text" id="translatorEngine" value="offline">
       </div>
     </div>
-    <p class="hint" style="margin-top:10px;">"offline" يشتغل بدون أي مفتاح API (نموذج NLLB محلي على السيرفر). محركات مثل deepl/openai/gemini/deepseek تحتاج مفاتيح مُعدّة على السيرفر نفسه — إذا مو مُعدّة هناك، خلّيها "offline".</p>
-  </section>
-
-  <!-- 4) خط الإنتاج -->
-  <section class="card">
-    <h2>4. خط الإنتاج (Pipeline الحقيقي)</h2>
-    <p class="hint">كل صورة تُرفع للسيرفر، ويرجع السيرفر نفسه الصورة بعد الكشف + OCR + التبييض (Inpainting) + الترجمة + التنضيد — كلها نماذج AI فعلية تشتغل هناك، لا خوارزميات تخمين محلية.</p>
-    <ol class="pipeline" id="pipelineList">
-      <li data-key="connect"><div><div class="step-title">التحقق من السيرفر</div><div class="step-sub">فحص أن الرابط يستجيب قبل رفع أي صورة</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="upload"><div><div class="step-title">رفع الصورة للسيرفر</div><div class="step-sub">إرسال multipart/form-data لنقطة /translate/with-form/image</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="process"><div><div class="step-title">المعالجة على السيرفر</div><div class="step-sub">كشف + OCR + تبييض + ترجمة + تنضيد (نماذج AI حقيقية)</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="receive"><div><div class="step-title">استلام الصورة الناتجة</div><div class="step-sub">استقبال PNG جاهز من رد السيرفر</div></div><div class="step-state">بالانتظار</div></li>
-      <li data-key="export"><div><div class="step-title">التصدير</div><div class="step-sub">ZIP لكل الصفحات الناجحة</div></div><div class="step-state">بالانتظار</div></li>
-    </ol>
     <div id="progressWrap">
       <div id="progressBar"><div id="progressFill"></div></div>
       <div id="progressLabel">لم يبدأ التشغيل بعد</div>
     </div>
     <div class="actions">
-      <button class="primary" id="runBtn" disabled>▶ رفع ومعالجة كل الصور</button>
+      <button class="primary" id="runBtn" disabled>▶ أرسل للبوت وابدأ الترجمة</button>
       <button class="secondary" id="resetBtn">إعادة تعيين</button>
     </div>
   </section>
 
-  <!-- 5) تنظيف يدوي إضافي على النتائج -->
+  <!-- 6) تنظيف يدوي إضافي -->
   <section class="card">
-    <h2>5. تنظيف يدوي إضافي (اختياري)</h2>
-    <p class="hint">إذا السيرفر ترك أي أثر (شعار/علامة) بالنتيجة، اختر الصفحة وامسحها يدوياً هنا قبل التنزيل.</p>
+    <h2>6. تنظيف يدوي إضافي (اختياري)</h2>
     <div class="field"><label>اختر صفحة ناتجة للمعاينة</label><select id="eraserImageSelect"></select></div>
     <div id="eraserWrap"><canvas id="eraserCanvas"></canvas></div>
-    <div class="actions">
-      <button class="secondary" id="eraseBtn">🧹 امسح المنطقة المحددة (من هذي الصفحة)</button>
-    </div>
+    <div class="actions"><button class="secondary" id="eraseBtn">🧹 امسح المنطقة المحددة</button></div>
   </section>
 
-  <!-- 6) السجل -->
+  <!-- 7) السجل -->
   <section class="card">
-    <h2>6. سجل التنفيذ المباشر</h2>
-    <div id="log"><div class="line">بانتظار رفع الصور والضغط على "رفع ومعالجة كل الصور"…</div></div>
+    <h2>7. سجل هذا المتصفح</h2>
+    <div id="log"><div class="line">بانتظار البدء…</div></div>
   </section>
 
-  <!-- 7) النتائج -->
+  <!-- 8) النتائج -->
   <section class="card">
-    <h2>7. الصفحات الناتجة</h2>
-    <div id="summaryGrid">
-      <div class="stat-box"><div class="num" id="statPages">0</div><div class="lbl">صفحة ناجحة</div></div>
-      <div class="stat-box"><div class="num" id="statErrors">0</div><div class="lbl">صفحة فشلت</div></div>
-    </div>
-    <div id="resultsGrid" style="margin-top:18px;"></div>
+    <h2>8. الصفحات الناتجة</h2>
+    <div id="resultsGrid"></div>
     <div class="actions"><button class="primary" id="zipBtn" style="display:none;">⬇ تنزيل الكل (ZIP)</button></div>
   </section>
 
-  <footer class="note">أداة بيور 8 — فريق بيور · واجهة رفع فقط؛ كل المعالجة الفعلية تتم على سيرفر manga-image-translator الخاص بكم</footer>
+  <footer class="note">أداة بيور 10 — فريق بيور · الموقع واجهة فقط؛ كل الذكاء والمعالجة تصير داخل بوت بيور نفسه</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-
 <script>
 /* =====================================================================
-   أداة بيور 8 — الأقسام:
-   0) الحالة   1) عناصر الواجهة   2) رفع الصور (منع تكرار)   3) اختبار الاتصال
-   4) التشغيل الرئيسي: رفع كل صورة لسيرفر manga-image-translator الحقيقي
-      عبر POST متعدد الأجزاء (multipart/form-data) إلى:
-      {backendUrl}/translate/with-form/image
-      مع config JSON بصيغة:
-      { "translator": { "translator": "<engine>", "target_lang": "<lang>" } }
-      وهذا التنسيق مأخوذ من كود سيرفر manga-image-translator نفسه (server/main.py + manga_translator/config.py)
-   5) التنظيف اليدوي الإضافي على الصور الناتجة   6) الإحصائيات والتصدير
+   أداة بيور 10 — كل طلب يروح لبوت بيور (اداة_بوت_ديسكورد_10.py) مباشرة:
+     GET  {botUrl}/api/status          → لوحة الحالة الحية
+     POST {botUrl}/api/translate       → صورة وحدة (image + config JSON)
+     POST {botUrl}/api/translate-zip   → فصل ZIP كامل
+     POST {botUrl}/api/upload-fonts    → خطوط ZIP (تُثبَّت فعلياً على البوت)
    ===================================================================== */
 
-// ---------------------- 0) الحالة ----------------------
-const state = { files: [], results: [] }; // results: [{ name, blob, url, canvas }]
+const state = { files: [], results: [] };
 
-// ---------------------- 1) عناصر الواجهة ----------------------
 const els = {
-  backendUrl: document.getElementById('backendUrl'), testBtn: document.getElementById('testBtn'),
+  botUrl: document.getElementById('botUrl'), testBtn: document.getElementById('testBtn'),
   connStatus: document.getElementById('connStatus'),
+  liveConn: document.getElementById('liveConn'), liveFile: document.getElementById('liveFile'),
+  liveQueue: document.getElementById('liveQueue'), liveTotal: document.getElementById('liveTotal'),
+  liveSource: document.getElementById('liveSource'), liveLog: document.getElementById('liveLog'),
   dropzone: document.getElementById('dropzone'), fileInput: document.getElementById('fileInput'),
-  fileCountWarn: document.getElementById('fileCountWarn'), thumbs: document.getElementById('thumbs'),
+  thumbs: document.getElementById('thumbs'),
+  fontZipInput: document.getElementById('fontZipInput'), fontResult: document.getElementById('fontResult'),
   tgtLang: document.getElementById('tgtLang'), translatorEngine: document.getElementById('translatorEngine'),
   runBtn: document.getElementById('runBtn'), resetBtn: document.getElementById('resetBtn'),
   log: document.getElementById('log'), progressFill: document.getElementById('progressFill'),
-  progressLabel: document.getElementById('progressLabel'), pipelineList: document.getElementById('pipelineList'),
+  progressLabel: document.getElementById('progressLabel'),
   resultsGrid: document.getElementById('resultsGrid'), zipBtn: document.getElementById('zipBtn'),
   eraserImageSelect: document.getElementById('eraserImageSelect'), eraserCanvas: document.getElementById('eraserCanvas'),
   eraseBtn: document.getElementById('eraseBtn'),
-  statPages: document.getElementById('statPages'), statErrors: document.getElementById('statErrors'),
 };
 
 function logLine(text, cls){
@@ -279,43 +263,66 @@ function setProgress(pct, label){
   els.progressFill.style.width = Math.max(0, Math.min(100, pct)) + '%';
   if (label) els.progressLabel.textContent = label;
 }
-function setStepState(key, mode, note){
-  const li = els.pipelineList.querySelector(`[data-key="${key}"]`);
-  if (!li) return;
-  li.classList.remove('active','done');
-  if (mode) li.classList.add(mode);
-  li.querySelector('.step-state').textContent = note || (mode === 'active' ? 'جارٍ التنفيذ…' : mode === 'done' ? 'تم' : 'بالانتظار');
-}
-function cleanUrl(){ return els.backendUrl.value.trim().replace(/\/+$/,''); }
+function cleanUrl(){ return els.botUrl.value.trim().replace(/\/+$/, ''); }
 
-// ---------------------- 2) رفع الصور (منع التكرار) ----------------------
-const MAX_IMAGES = 70;
-function isDuplicateFile(f){
-  return state.files.some(x => x.name===f.name && x.size===f.size && x.lastModified===f.lastModified);
-}
-function addFiles(fileList){
-  const incoming = [...fileList].filter(f => f.type.startsWith('image/'));
-  let dupCount = 0;
-  const unique = [];
-  incoming.forEach(f => { if (isDuplicateFile(f)) dupCount++; else unique.push(f); });
-  let room = MAX_IMAGES - state.files.length;
-  if (unique.length > room || dupCount){
-    els.fileCountWarn.style.display = 'block';
-    els.fileCountWarn.textContent = `${dupCount ? `تم تجاهل ${dupCount} ملف مكرر. ` : ''}${unique.length > room ? `تم قبول ${Math.max(0, room)} صورة فقط — الحد الأقصى ${MAX_IMAGES}.` : ''}`;
+// ---------------------- لوحة الحالة الحية (تحديث تلقائي كل 3 ثواني) ----------------------
+async function pollStatus(){
+  const url = cleanUrl();
+  if (!url) { els.liveConn.innerHTML = '<span class="live-dot off"></span>ما اكو رابط'; return; }
+  try{
+    const res = await fetch(`${url}/api/status`);
+    if (!res.ok) throw new Error('حالة ' + res.status);
+    const data = await res.json();
+    els.liveConn.innerHTML = '<span class="live-dot on"></span>متصل';
+    els.liveFile.textContent = data.current_file || '—';
+    els.liveQueue.textContent = data.queue_size ?? 0;
+    els.liveTotal.textContent = data.processed_total ?? 0;
+    els.liveSource.textContent = data.source === 'discord' ? 'ديسكورد' : data.source === 'website' ? 'الموقع' : '—';
+    if (Array.isArray(data.log)){
+      els.liveLog.innerHTML = data.log.map(l => `<div>${l}</div>`).join('');
+      els.liveLog.scrollTop = els.liveLog.scrollHeight;
+    }
+  } catch(err){
+    els.liveConn.innerHTML = '<span class="live-dot off"></span>غير متصل';
   }
-  unique.slice(0, Math.max(0, room)).forEach(f => {
+}
+setInterval(pollStatus, 3000);
+pollStatus();
+
+els.testBtn.addEventListener('click', async () => {
+  const url = cleanUrl();
+  els.connStatus.className = 'conn-status'; els.connStatus.style.display = 'block';
+  els.connStatus.textContent = 'جارٍ الفحص…';
+  try{
+    const res = await fetch(`${url}/api/status`);
+    if (!res.ok) throw new Error('حالة ' + res.status);
+    els.connStatus.className = 'conn-status ok';
+    els.connStatus.textContent = '✓ البوت يستجيب ومتصل';
+  } catch(err){
+    els.connStatus.className = 'conn-status bad';
+    els.connStatus.textContent = `✗ تعذّر الاتصال بالبوت: ${err.message}`;
+  }
+});
+
+// ---------------------- رفع الصور / ZIP ----------------------
+function addFiles(fileList){
+  [...fileList].forEach(f => {
     state.files.push(f);
-    const url = URL.createObjectURL(f);
-    const wrap = document.createElement('div');
-    wrap.className = 'th';
-    wrap.innerHTML = `<img src="${url}"><button class="rm" title="إزالة">×</button>`;
-    wrap.querySelector('.rm').addEventListener('click', () => {
-      const idx = state.files.indexOf(f);
-      if (idx > -1) state.files.splice(idx, 1);
-      wrap.remove();
-      els.runBtn.disabled = state.files.length === 0;
-    });
-    els.thumbs.appendChild(wrap);
+    if (f.type.startsWith('image/')){
+      const url = URL.createObjectURL(f);
+      const wrap = document.createElement('div'); wrap.className = 'th';
+      wrap.innerHTML = `<img src="${url}"><button class="rm">×</button>`;
+      wrap.querySelector('.rm').addEventListener('click', () => {
+        const idx = state.files.indexOf(f); if (idx > -1) state.files.splice(idx, 1);
+        wrap.remove(); els.runBtn.disabled = state.files.length === 0;
+      });
+      els.thumbs.appendChild(wrap);
+    } else {
+      const wrap = document.createElement('div'); wrap.className = 'th';
+      wrap.style.display = 'flex'; wrap.style.alignItems = 'center'; wrap.style.justifyContent = 'center';
+      wrap.style.fontSize = '10px'; wrap.textContent = '📦 ' + f.name;
+      els.thumbs.appendChild(wrap);
+    }
   });
   els.runBtn.disabled = state.files.length === 0;
 }
@@ -326,136 +333,121 @@ els.fileInput.addEventListener('change', e => { addFiles(e.target.files); e.targ
 els.dropzone.addEventListener('drop', e => addFiles(e.dataTransfer.files));
 els.resetBtn.addEventListener('click', () => location.reload());
 
-// ---------------------- 3) اختبار الاتصال بالسيرفر ----------------------
-els.testBtn.addEventListener('click', async () => {
+// ---------------------- رفع خطوط للبوت ----------------------
+els.fontZipInput.addEventListener('change', async e => {
+  const file = e.target.files[0]; if (!file) return;
   const url = cleanUrl();
-  els.connStatus.className = 'conn-status';
-  els.connStatus.textContent = 'جارٍ الفحص…';
-  els.connStatus.style.display = 'block';
+  if (!url) { els.fontResult.textContent = '⚠ حدد رابط البوت أولاً'; return; }
+  els.fontResult.textContent = 'جارٍ رفع الخطوط للبوت…';
   try{
-    const res = await fetch(`${url}/queue-size`, { method:'POST' });
-    if (!res.ok) throw new Error(`رمز الحالة ${res.status}`);
-    const size = await res.json();
-    els.connStatus.className = 'conn-status ok';
-    els.connStatus.textContent = `✓ السيرفر يستجيب — حجم الطابور الحالي: ${size}`;
+    const res = await fetch(`${url}/api/upload-fonts`, { method: 'POST', body: file });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'فشل غير معروف');
+    els.fontResult.innerHTML = `✅ ${data.saved.length} خط وصل للبوت.<br>الخط الفعّال الآن: <b>${data.active_font || 'بدون تغيير'}</b><br>` +
+      (data.installed_for_real ? '🟢 تم التثبيت الفعلي على جهاز البوت' : '🟡 حُفظ، لكن التفعيل الفعلي غير مضمون (سيرفر الترجمة بجهاز خارجي)');
   } catch(err){
-    els.connStatus.className = 'conn-status bad';
-    els.connStatus.textContent = `✗ تعذّر الاتصال بالسيرفر: ${err.message} — تأكد أن جلسة Colab شغّالة والرابط صحيح`;
+    els.fontResult.textContent = '✗ فشل رفع الخطوط: ' + err.message;
   }
 });
 
-// ---------------------- 4) التشغيل الرئيسي: رفع حقيقي لسيرفر manga-image-translator ----------------------
+// ---------------------- التشغيل الرئيسي ----------------------
 els.runBtn.addEventListener('click', runPipeline);
 
-async function translateOnServer(file, backendUrl, targetLang, engine){
-  const config = JSON.stringify({ translator: { translator: engine, target_lang: targetLang } });
+async function sendImageToBot(botUrl, file, targetLang, engine){
   const form = new FormData();
   form.append('image', file, file.name);
-  form.append('config', config);
-
-  const res = await fetch(`${backendUrl}/translate/with-form/image`, { method:'POST', body: form });
+  form.append('config', JSON.stringify({ target_lang: targetLang, translator_engine: engine }));
+  const res = await fetch(`${botUrl}/api/translate`, { method: 'POST', body: form });
   if (!res.ok){
-    let detail = '';
-    try{ detail = await res.text(); } catch(e){}
-    throw new Error(`رمز الحالة ${res.status}${detail ? ' — ' + detail.slice(0,200) : ''}`);
+    let detail = ''; try{ detail = (await res.json()).error || ''; } catch(e){}
+    throw new Error(detail || `رمز الحالة ${res.status}`);
   }
-  return await res.blob(); // PNG image بالنتيجة النهائية جاهزة من السيرفر
+  return await res.blob();
+}
+
+async function sendZipToBot(botUrl, file){
+  const res = await fetch(`${botUrl}/api/translate-zip`, { method: 'POST', body: file });
+  if (!res.ok){
+    let detail = ''; try{ detail = (await res.json()).error || ''; } catch(e){}
+    throw new Error(detail || `رمز الحالة ${res.status}`);
+  }
+  return await res.blob();
 }
 
 async function runPipeline(){
-  const backendUrl = cleanUrl();
-  if (!backendUrl){ logLine('أدخل رابط السيرفر أولاً', 'bad'); return; }
+  const botUrl = cleanUrl();
+  if (!botUrl){ logLine('حدد رابط البوت أولاً', 'bad'); return; }
 
   els.runBtn.disabled = true;
-  els.resultsGrid.innerHTML = '';
-  state.results = [];
-
-  const targetLang = els.tgtLang.value;
-  const engine = els.translatorEngine.value.trim() || 'offline';
+  els.resultsGrid.innerHTML = ''; state.results = [];
+  const targetLang = els.tgtLang.value, engine = els.translatorEngine.value.trim() || 'offline';
   const total = state.files.length;
   let success = 0, failed = 0;
 
-  logLine(`بدء الرفع: ${total} صفحة إلى ${backendUrl}`, 'ok');
+  logLine(`بدء الإرسال لبوت بيور: ${total} عنصر`, 'ok');
 
-  setStepState('connect','active');
-  try{
-    const res = await fetch(`${backendUrl}/queue-size`, { method:'POST' });
-    if (!res.ok) throw new Error(`رمز الحالة ${res.status}`);
-    setStepState('connect','done');
-  } catch(err){
-    setStepState('connect','done', 'فشل — تابع بالمحاولة المباشرة');
-    logLine(`⚠ فشل فحص الاتصال المبدئي (${err.message}) — سأحاول رفع الصور مباشرة بأي حال`, 'warn');
-  }
-
-  for (let i=0;i<total;i++){
+  for (let i = 0; i < total; i++){
     const file = state.files[i];
-    setProgress((i/total)*100, `معالجة الصفحة ${i+1} من ${total}: ${file.name}`);
-    logLine(`— الصفحة ${i+1}/${total}: ${file.name}`);
-
+    setProgress((i/total)*100, `معالجة ${i+1} من ${total}: ${file.name}`);
+    logLine(`— ${file.name}`);
     try{
-      setStepState('upload','active');
-      setStepState('process','active');
-      const blob = await translateOnServer(file, backendUrl, targetLang, engine);
-      setStepState('upload','done'); setStepState('process','done');
-
-      setStepState('receive','active');
-      const url = URL.createObjectURL(blob);
-      const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
-      state.results.push({ name: outName, blob, url });
-      setStepState('receive','done');
-
-      addResultCard({ name: outName, url, status:'done' });
-      logLine(`  ✓ استُلمت الصفحة المترجمة من السيرفر`, 'ok');
-      success++;
+      if (file.name.toLowerCase().endsWith('.zip')){
+        const zipBlob = await sendZipToBot(botUrl, file);
+        const zip = await JSZip.loadAsync(zipBlob);
+        for (const relPath in zip.files){
+          if (zip.files[relPath].dir) continue;
+          const blob = await zip.files[relPath].async('blob');
+          const url = URL.createObjectURL(blob);
+          state.results.push({ name: relPath, blob, url });
+          addResultCard({ name: relPath, url, status: 'done' });
+          success++;
+        }
+      } else {
+        const blob = await sendImageToBot(botUrl, file, targetLang, engine);
+        const outName = file.name.replace(/\.[^.]+$/, '') + '_pure.png';
+        const url = URL.createObjectURL(blob);
+        state.results.push({ name: outName, blob, url });
+        addResultCard({ name: outName, url, status: 'done' });
+        success++;
+      }
+      logLine(`  ✓ نجحت`, 'ok');
     } catch(err){
       failed++;
-      logLine(`  ✗ فشلت معالجة ${file.name}: ${err.message}`, 'bad');
-      addResultCard({ name:file.name, url:null, status:'error', errorMsg: err.message });
+      logLine(`  ✗ فشلت: ${err.message}`, 'bad');
+      addResultCard({ name: file.name, url: null, status: 'error', errorMsg: err.message });
     }
-
-    els.statPages.textContent = success; els.statErrors.textContent = failed;
-    setProgress(((i+1)/total)*100, `تم الانتهاء من ${i+1} من ${total}`);
+    setProgress(((i+1)/total)*100, `${i+1} من ${total}`);
   }
 
-  setStepState('export','done');
   if (state.results.length) els.zipBtn.style.display = 'inline-flex';
-  setProgress(100, 'اكتمل التشغيل ✅');
-  logLine(`انتهى التشغيل — ${success} صفحة ناجحة، ${failed} صفحة فشلت.`, failed ? 'warn' : 'ok');
+  setProgress(100, 'اكتمل ✅');
+  logLine(`انتهى — ${success} نجح، ${failed} فشل`, failed ? 'warn' : 'ok');
   refreshEraserOptions();
   els.runBtn.disabled = false;
 }
 
-// ---------------------- 5) تنظيف يدوي إضافي على الصور الناتجة ----------------------
+// ---------------------- تنظيف يدوي إضافي ----------------------
 let eraserRect = null, eraserDrag = null;
 function refreshEraserOptions(){
   els.eraserImageSelect.innerHTML = '';
   state.results.forEach((r,i) => {
-    const opt = document.createElement('option'); opt.value=i; opt.textContent = r.name;
+    const opt = document.createElement('option'); opt.value = i; opt.textContent = r.name;
     els.eraserImageSelect.appendChild(opt);
   });
   if (state.results.length) drawEraserPreview(0);
 }
 async function ensureResultCanvas(index){
-  const r = state.results[index];
-  if (!r) return null;
+  const r = state.results[index]; if (!r) return null;
   if (r.canvas) return r;
-  const img = await new Promise((resolve,reject) => {
-    const im = new Image();
-    im.onload = () => resolve(im);
-    im.onerror = reject;
-    im.src = r.url;
-  });
-  const canvas = document.createElement('canvas');
-  canvas.width = img.width; canvas.height = img.height;
+  const img = await new Promise((resolve,reject) => { const im = new Image(); im.onload=()=>resolve(im); im.onerror=reject; im.src=r.url; });
+  const canvas = document.createElement('canvas'); canvas.width = img.width; canvas.height = img.height;
   canvas.getContext('2d').drawImage(img, 0, 0);
   r.canvas = canvas; r.ctx = canvas.getContext('2d');
   return r;
 }
 async function drawEraserPreview(index){
-  const r = await ensureResultCanvas(index);
-  if (!r) return;
-  const maxW = 500;
-  const scale = Math.min(1, maxW/r.canvas.width);
+  const r = await ensureResultCanvas(index); if (!r) return;
+  const maxW = 500, scale = Math.min(1, maxW/r.canvas.width);
   els.eraserCanvas.width = r.canvas.width*scale; els.eraserCanvas.height = r.canvas.height*scale;
   els.eraserCanvas.dataset.scale = scale; els.eraserCanvas.dataset.index = index;
   els.eraserCanvas.getContext('2d').drawImage(r.canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
@@ -467,53 +459,42 @@ els.eraserCanvas.addEventListener('mousemove', e => {
   if (!eraserDrag) return;
   const r=els.eraserCanvas.getBoundingClientRect(); const x1=e.clientX-r.left, y1=e.clientY-r.top;
   eraserRect = { x:Math.min(eraserDrag.x0,x1), y:Math.min(eraserDrag.y0,y1), w:Math.abs(x1-eraserDrag.x0), h:Math.abs(y1-eraserDrag.y0) };
-  const pctx = els.eraserCanvas.getContext('2d');
   const idx = Number(els.eraserCanvas.dataset.index||0);
+  const pctx = els.eraserCanvas.getContext('2d');
   pctx.drawImage(state.results[idx].canvas, 0, 0, els.eraserCanvas.width, els.eraserCanvas.height);
   pctx.strokeStyle='#C23E86'; pctx.lineWidth=2; pctx.strokeRect(eraserRect.x,eraserRect.y,eraserRect.w,eraserRect.h);
   pctx.fillStyle='rgba(194,62,134,.15)'; pctx.fillRect(eraserRect.x,eraserRect.y,eraserRect.w,eraserRect.h);
 });
 window.addEventListener('mouseup', () => { eraserDrag = null; });
 els.eraseBtn.addEventListener('click', async () => {
-  if (!eraserRect){ logLine('حدد منطقة أولاً بالسحب على الصورة', 'warn'); return; }
-  const index = Number(els.eraserCanvas.dataset.index||0);
-  const scale = Number(els.eraserCanvas.dataset.scale||1);
+  if (!eraserRect){ logLine('حدد منطقة أولاً', 'warn'); return; }
+  const index = Number(els.eraserCanvas.dataset.index||0), scale = Number(els.eraserCanvas.dataset.scale||1);
   const r = state.results[index];
   const rect = { x:Math.round(eraserRect.x/scale), y:Math.round(eraserRect.y/scale), w:Math.round(eraserRect.w/scale), h:Math.round(eraserRect.h/scale) };
   const srcY = Math.max(0, rect.y - rect.h - 4);
   r.ctx.drawImage(r.canvas, rect.x, srcY, rect.w, rect.h, rect.x, rect.y, rect.w, rect.h);
-  // تحديث الـ blob والرابط بعد التعديل اليدوي
   const blob = await new Promise(res => r.canvas.toBlob(res, 'image/png'));
   r.blob = blob; r.url = URL.createObjectURL(blob);
-  // تحديث بطاقة النتيجة المعروضة
-  refreshResultsGrid();
+  els.resultsGrid.innerHTML = '';
+  state.results.forEach(x => addResultCard({ name:x.name, url:x.url, status:'done' }));
   drawEraserPreview(index);
-  logLine(`تم تعديل الصفحة "${r.name}" يدوياً`, 'ok');
 });
 
-// ---------------------- 6) الإحصائيات + بطاقات النتائج + التصدير ----------------------
-function refreshResultsGrid(){
-  els.resultsGrid.innerHTML = '';
-  state.results.forEach(r => addResultCard({ name:r.name, url:r.url, status:'done' }));
-}
 function addResultCard({ name, url, status, errorMsg }){
   const card = document.createElement('div'); card.className='result-card';
   const badgeClass = status==='done'?'done':'error', badgeText = status==='done'?'تم':'فشل';
   card.innerHTML = `
     ${url ? `<img src="${url}">` : `<div style="padding:20px;font-size:12px;color:var(--pure-bad);">${errorMsg||'خطأ غير معروف'}</div>`}
-    <div class="foot">
-      <span class="badge-status ${badgeClass}">${badgeText}</span>
-      ${url ? `<a href="${url}" download="${name}">تنزيل</a>` : ''}
-    </div>`;
+    <div class="foot"><span class="badge-status ${badgeClass}">${badgeText}</span>${url ? `<a href="${url}" download="${name}">تنزيل</a>` : ''}</div>`;
   els.resultsGrid.appendChild(card);
 }
 els.zipBtn.addEventListener('click', async () => {
-  logLine('تجهيز ملف ZIP لكل الصفحات…');
+  logLine('تجهيز ملف ZIP…');
   const zip = new JSZip();
   state.results.forEach(r => zip.file(r.name, r.blob));
   const content = await zip.generateAsync({ type:'blob' });
   const url = URL.createObjectURL(content);
-  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_8_النتائج.zip'; a.click();
+  const a = document.createElement('a'); a.href=url; a.download='اداة_بيور_10_النتائج.zip'; a.click();
   logLine('تم تنزيل ملف ZIP.', 'ok');
 });
 </script>
